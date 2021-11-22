@@ -60,7 +60,7 @@
 
       <!-- Window content -->
       <div class="x_content">
-
+        
         <!-- Selections for the table -->
 
         <div class="form-group row">
@@ -75,8 +75,8 @@
             </select>
           </div>
           <div class="col-xs-2">
-            <label for="month" class="control-label">Month</label>
-            <select class="form-control select2" id="month" name="month" data-placeholder="Select a month">
+            <label for="month" class="control-label">Week</label>
+            <select class="form-control select2" id="month" name="month" data-placeholder="Select a week">
               @foreach(config('select.month_names') as $key => $value)
               <option value="{{ $key }}">
                 {{ $value }}
@@ -120,12 +120,12 @@
         @can('tools-activity-new')
         <div class="row button_in_row">
           <div class="col-md-12">
-            <button id="new_project" class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New Project</span></button>
+            <button id="new_project" class="btn btn-info btn-xs" align="left"><span class="glyphicon glyphicon-plus"> New Project</span></button>
           </div>
         </div>
         @endcan
         <!-- Create new button -->
-
+        
         <!-- Main table -->
         <table id="activitiesTable" class="table table-striped table-hover table-bordered mytable" width="100%">
           <thead>
@@ -278,6 +278,7 @@
   // switchery
   var small = document.querySelector('.js-switch-small');
   var switchery = new Switchery(small, { size: 'small' });
+  // console.log(activity_list);
 
   function ajaxData(){
     var obj = {
@@ -327,11 +328,14 @@
 
   $(document).ready(function() {
 
+
+
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
+
 
     //region Selection
     // SELECTIONS START
@@ -470,14 +474,14 @@
     function update_headers() {
       months_from_selection = [];
       months_name = [
-        @foreach(config('select.month') as $key => $month)
+        @foreach(config('select.week') as $key => $month)
           '{{$month}}'
-          @if($month != 'DEC'),@endif
+          @if($month != 'Week 52'),@endif
         @endforeach
       ];
       header_months = [];
       
-      for (let index = parseInt(month[0],10); index <= 12; index++) {
+      for (let index = parseInt(month[0],10); index <= 52; index++) {
         this_year = parseInt(year[0],10);
         months_from_selection.push(months_name[index-1]+' '+this_year.toString().substring(2));
         header_months.push({'year':this_year,'month':index});
@@ -493,11 +497,12 @@
       //console.log(months_from_selection);
       
       // We change the title of the months as it varies in function of the year and month selected
-      for (let index = 1; index <= 12; index++) {
+      for (let index = 1; index <= 52; index++) {
           //console.log(month);
           $('#table_month_'+index).empty().html(months_from_selection[index-1]);
         }
     }
+
   
 
     activitiesTable = $('#activitiesTable').DataTable({
@@ -508,12 +513,15 @@
       @endif
       serverSide: true,
       processing: true,
-      stateSave: true,
+      stateSave: true,//m
       ajax: {
         url: "{!! route('listOfActivitiesPerUserAjax') !!}",
         type: "POST",
         data: function ( d ) {
+          // console.log(ajaxData());
           $.extend(d,ajaxData());
+        }, success: function(data){
+          console.log(data);
         },
         dataType: "JSON"
       },
@@ -840,8 +848,11 @@
 
     $(document).on('click', '#legendButton', function () {
     $('#legendModal').modal();
+  
+
   });
 
-  } );
+  });
+
   </script>
   @stop

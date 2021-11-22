@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Repositories\UserRepository;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class AuthUsersForDataView
 {

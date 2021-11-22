@@ -187,7 +187,7 @@ class ActivityRepository
         //We receive $where['month'] and we will create $where['months'] as an arry with year and months for the next 12 months
         $where['months'] = [];
 
-        for ($i=$where['month'][0]; $i <= 12 ; $i++) { 
+        for ($i=$where['month'][0]; $i <= 52 ; $i++) { 
             array_push($where['months'],['year' => $where['year'][0],'month'=>$i]);
         }
 
@@ -218,7 +218,7 @@ class ActivityRepository
                             'm1_id','m1_com', 'm1_from_otl','m2_id','m2_com', 'm2_from_otl','m3_id','m3_com', 'm3_from_otl',
                             'm4_id','m4_com', 'm4_from_otl','m5_id','m5_com', 'm5_from_otl','m6_id','m6_com', 'm6_from_otl',
                             'm7_id','m7_com', 'm7_from_otl','m8_id','m8_com', 'm8_from_otl','m9_id','m9_com', 'm9_from_otl',
-                            'm10_id','m10_com', 'm10_from_otl','m11_id','m11_com', 'm11_from_otl','m12_id','m12_com', 'm12_from_otl',
+                            'm10_id','m10_com', 'm10_from_otl','m11_id','m11_com', 'm11_from_otl','m12_id','m12_com', 'm12_from_otl','m13_id','m13_com', 'm13_from_otl','m14_id','m14_com', 'm14_from_otl','m15_id','m15_com', 'm15_from_otl','m16_id','m16_com', 'm16_from_otl','m17_id','m17_com', 'm17_from_otl','m18_id','m18_com', 'm18_from_otl','m19_id','m19_com', 'm19_from_otl','m20_id','m20_com', 'm20_from_otl','m21_id','m21_com', 'm21_from_otl','m22_id','m22_com', 'm22_from_otl','m23_id','m23_com', 'm23_from_otl','m24_id','m24_com', 'm24_from_otl','m25_id','m25_com', 'm25_from_otl','m26_id','m26_com', 'm26_from_otl','m27_id','m27_com', 'm27_from_otl','m28_id','m28_com', 'm28_from_otl','m29_id','m29_com', 'm29_from_otl','m30_id','m30_com', 'm30_from_otl','m31_id','m31_com', 'm31_from_otl','m32_id','m32_com', 'm32_from_otl','m33_id','m33_com', 'm33_from_otl','m34_id','m34_com', 'm34_from_otl','m35_id','m35_com', 'm35_from_otl','m36_id','m36com', 'm36_from_otl','m37_id','m37_com', 'm37_from_otl','m38_id','m38_com', 'm38_from_otl','m39_id','m39_com', 'm39_from_otl','m40_id','m40_com', 'm40_from_otl','m41_id','m41_com', 'm41_from_otl','m42_id','m42_com', 'm42_from_otl','m43_id','m43_com', 'm43_from_otl','m44_id','m44_com', 'm44_from_otl','m45_id','m45_com', 'm45_from_otl','m46_id','m46_com', 'm46_from_otl','m47_id','m47_com', 'm47_from_otl','m48_id','m48_com', 'm48_from_otl','m49_id','m49_com', 'm49_from_otl','m50_id','m50_com', 'm50_from_otl','m51_id','m51_com', 'm51_from_otl','m52_id','m52_com', 'm52_from_otl',
                             DB::raw('COUNT(loe.id) as num_of_loe')
         );
         $activityList->leftjoin('projects AS p', 'p.id', '=', 'temp_a.project_id');
@@ -336,18 +336,58 @@ class ActivityRepository
         $activityList = DB::table('temp_a');
 
         $activityList->select('uu.manager_id AS manager_id', 'm.name AS manager_name', 'temp_a.user_id', 'u.name AS user_name', 'year','p.meta_activity',
-                            DB::raw('ROUND(SUM(jan_com),1) AS jan_com'),DB::raw('SUM(jan_from_otl) AS jan_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN jan_com ELSE 0 END),1) AS jan_bil'),
-                            DB::raw('ROUND(SUM(feb_com),1) AS feb_com'),DB::raw('SUM(feb_from_otl) AS feb_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN feb_com ELSE 0 END),1) AS feb_bil'),
-                            DB::raw('ROUND(SUM(mar_com),1) AS mar_com'),DB::raw('SUM(mar_from_otl) AS mar_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN mar_com ELSE 0 END),1) AS mar_bil'),
-                            DB::raw('ROUND(SUM(apr_com),1) AS apr_com'),DB::raw('SUM(apr_from_otl) AS apr_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN apr_com ELSE 0 END),1) AS apr_bil'),
-                            DB::raw('ROUND(SUM(may_com),1) AS may_com'),DB::raw('SUM(may_from_otl) AS may_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN may_com ELSE 0 END),1) AS may_bil'),
-                            DB::raw('ROUND(SUM(jun_com),1) AS jun_com'),DB::raw('SUM(jun_from_otl) AS jun_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN jun_com ELSE 0 END),1) AS jun_bil'),
-                            DB::raw('ROUND(SUM(jul_com),1) AS jul_com'),DB::raw('SUM(jul_from_otl) AS jul_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN jul_com ELSE 0 END),1) AS jul_bil'),
-                            DB::raw('ROUND(SUM(aug_com),1) AS aug_com'),DB::raw('SUM(aug_from_otl) AS aug_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN aug_com ELSE 0 END),1) AS aug_bil'),
-                            DB::raw('ROUND(SUM(sep_com),1) AS sep_com'),DB::raw('SUM(sep_from_otl) AS sep_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN sep_com ELSE 0 END),1) AS sep_bil'),
-                            DB::raw('ROUND(SUM(oct_com),1) AS oct_com'),DB::raw('SUM(oct_from_otl) AS oct_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN oct_com ELSE 0 END),1) AS oct_bil'),
-                            DB::raw('ROUND(SUM(nov_com),1) AS nov_com'),DB::raw('SUM(nov_from_otl) AS nov_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN nov_com ELSE 0 END),1) AS nov_bil'),
-                            DB::raw('ROUND(SUM(dec_com),1) AS dec_com'),DB::raw('SUM(dec_from_otl) AS dec_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN dec_com ELSE 0 END),1) AS dec_bil')
+                            DB::raw('ROUND(SUM(w1_com),1) AS w1_com'),DB::raw('SUM(w1_from_otl) AS w1_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w1_com ELSE 0 END),1) AS w1_bil'),
+                            DB::raw('ROUND(SUM(w2_com),1) AS w2_com'),DB::raw('SUM(w2_from_otl) AS w2_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w2_com ELSE 0 END),1) AS w2_bil'),
+                            DB::raw('ROUND(SUM(w3_com),1) AS w3_com'),DB::raw('SUM(w3_from_otl) AS w3_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w3_com ELSE 0 END),1) AS w3_bil'),
+                            DB::raw('ROUND(SUM(w4_com),1) AS w4_com'),DB::raw('SUM(w4_from_otl) AS w4_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w4_com ELSE 0 END),1) AS w4_bil'),
+                            DB::raw('ROUND(SUM(w5_com),1) AS w5_com'),DB::raw('SUM(w5_from_otl) AS w5_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w5_com ELSE 0 END),1) AS w5_bil'),
+                            DB::raw('ROUND(SUM(w6_com),1) AS w6_com'),DB::raw('SUM(w6_from_otl) AS w6_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w6_com ELSE 0 END),1) AS w6_bil'),
+                            DB::raw('ROUND(SUM(w7_com),1) AS w7_com'),DB::raw('SUM(w7_from_otl) AS w7_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w7_com ELSE 0 END),1) AS w7_bil'),
+                            DB::raw('ROUND(SUM(w8_com),1) AS w8_com'),DB::raw('SUM(w8_from_otl) AS w8_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w8_com ELSE 0 END),1) AS w8_bil'),
+                            DB::raw('ROUND(SUM(w9_com),1) AS w9_com'),DB::raw('SUM(w9_from_otl) AS w9_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w9_com ELSE 0 END),1) AS w9_bil'),
+                            DB::raw('ROUND(SUM(w10_com),1) AS w10_com'),DB::raw('SUM(w10_from_otl) AS w10_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w10_com ELSE 0 END),1) AS w10_bil'),
+                            DB::raw('ROUND(SUM(w11_com),1) AS w11_com'),DB::raw('SUM(w11_from_otl) AS w11_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w11_com ELSE 0 END),1) AS w11_bil'),
+                            DB::raw('ROUND(SUM(w12_com),1) AS w12_com'),DB::raw('SUM(w12_from_otl) AS w12_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w12_com ELSE 0 END),1) AS w12_bil'),
+                            DB::raw('ROUND(SUM(w13_com),1) AS w13_com'),DB::raw('SUM(w13_from_otl) AS w13_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w13_com ELSE 0 END),1) AS w13_bil'),
+                            DB::raw('ROUND(SUM(w14_com),1) AS w14_com'),DB::raw('SUM(w14_from_otl) AS w14_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w14_com ELSE 0 END),1) AS w14_bil'),
+                            DB::raw('ROUND(SUM(w15_com),1) AS w15_com'),DB::raw('SUM(w15_from_otl) AS w15_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w15_com ELSE 0 END),1) AS w15_bil'),
+                            DB::raw('ROUND(SUM(w16_com),1) AS w16_com'),DB::raw('SUM(w16_from_otl) AS w16_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w16_com ELSE 0 END),1) AS w16_bil'),
+                            DB::raw('ROUND(SUM(w17_com),1) AS w17_com'),DB::raw('SUM(w17_from_otl) AS w17_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w17_com ELSE 0 END),1) AS w17_bil'),
+                            DB::raw('ROUND(SUM(w18_com),1) AS w18_com'),DB::raw('SUM(w18_from_otl) AS w18_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w18_com ELSE 0 END),1) AS w18_bil'),
+                            DB::raw('ROUND(SUM(w19_com),1) AS w19_com'),DB::raw('SUM(w19_from_otl) AS w19_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w19_com ELSE 0 END),1) AS w19_bil'),
+                            DB::raw('ROUND(SUM(w20_com),1) AS w20_com'),DB::raw('SUM(w20_from_otl) AS w20_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w20_com ELSE 0 END),1) AS w20_bil'),
+                            DB::raw('ROUND(SUM(w21_com),1) AS w21_com'),DB::raw('SUM(w21_from_otl) AS w21_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w21_com ELSE 0 END),1) AS w21_bil'),
+                            DB::raw('ROUND(SUM(w22_com),1) AS w22_com'),DB::raw('SUM(w22_from_otl) AS w22_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w22_com ELSE 0 END),1) AS w22_bil'),
+                            DB::raw('ROUND(SUM(w23_com),1) AS w23_com'),DB::raw('SUM(w23_from_otl) AS w23_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w23_com ELSE 0 END),1) AS w23_bil'),
+                            DB::raw('ROUND(SUM(w24_com),1) AS w24_com'),DB::raw('SUM(w24_from_otl) AS w24_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w24_com ELSE 0 END),1) AS w24_bil'),
+                            DB::raw('ROUND(SUM(w25_com),1) AS w25_com'),DB::raw('SUM(w25_from_otl) AS w25_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w25_com ELSE 0 END),1) AS w25_bil'),
+                            DB::raw('ROUND(SUM(w26_com),1) AS w26_com'),DB::raw('SUM(w26_from_otl) AS w26_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w26_com ELSE 0 END),1) AS w26_bil'),
+                            DB::raw('ROUND(SUM(w27_com),1) AS w27_com'),DB::raw('SUM(w27_from_otl) AS w27_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w27_com ELSE 0 END),1) AS w27_bil'),
+                            DB::raw('ROUND(SUM(w28_com),1) AS w28_com'),DB::raw('SUM(w28_from_otl) AS w28_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w28_com ELSE 0 END),1) AS w28_bil'),
+                            DB::raw('ROUND(SUM(w29_com),1) AS w29_com'),DB::raw('SUM(w29_from_otl) AS w29_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w29_com ELSE 0 END),1) AS w29_bil'),
+                            DB::raw('ROUND(SUM(w30_com),1) AS w30_com'),DB::raw('SUM(w30_from_otl) AS w30_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w30_com ELSE 0 END),1) AS w30_bil'),
+                            DB::raw('ROUND(SUM(w31_com),1) AS w31_com'),DB::raw('SUM(w31_from_otl) AS w31_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w31_com ELSE 0 END),1) AS w31_bil'),
+                            DB::raw('ROUND(SUM(w32_com),1) AS w32_com'),DB::raw('SUM(w32_from_otl) AS w32_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w32_com ELSE 0 END),1) AS w32_bil'),
+                            DB::raw('ROUND(SUM(w33_com),1) AS w33_com'),DB::raw('SUM(w33_from_otl) AS w33_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w33_com ELSE 0 END),1) AS w33_bil'),
+                            DB::raw('ROUND(SUM(w34_com),1) AS w34_com'),DB::raw('SUM(w34_from_otl) AS w34_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w34_com ELSE 0 END),1) AS w34_bil'),
+                            DB::raw('ROUND(SUM(w35_com),1) AS w35_com'),DB::raw('SUM(w35_from_otl) AS w35_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w35_com ELSE 0 END),1) AS w35_bil'),
+                            DB::raw('ROUND(SUM(w36_com),1) AS w36_com'),DB::raw('SUM(w36_from_otl) AS w36_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w36_com ELSE 0 END),1) AS w36_bil'),
+                            DB::raw('ROUND(SUM(w37_com),1) AS w37_com'),DB::raw('SUM(w37_from_otl) AS w37_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w37_com ELSE 0 END),1) AS w37_bil'),
+                            DB::raw('ROUND(SUM(w38_com),1) AS w38_com'),DB::raw('SUM(w38_from_otl) AS w38_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w38_com ELSE 0 END),1) AS w38_bil'),
+                            DB::raw('ROUND(SUM(w39_com),1) AS w39_com'),DB::raw('SUM(w39_from_otl) AS w39_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w39_com ELSE 0 END),1) AS w39_bil'),
+                            DB::raw('ROUND(SUM(w40_com),1) AS w40_com'),DB::raw('SUM(w40_from_otl) AS w40_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w40_com ELSE 0 END),1) AS w40_bil'),
+                            DB::raw('ROUND(SUM(w41_com),1) AS w41_com'),DB::raw('SUM(w41_from_otl) AS w41_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w41_com ELSE 0 END),1) AS w41_bil'),
+                            DB::raw('ROUND(SUM(w42_com),1) AS w42_com'),DB::raw('SUM(w42_from_otl) AS w42_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w42_com ELSE 0 END),1) AS w42_bil'),
+                            DB::raw('ROUND(SUM(w43_com),1) AS w43_com'),DB::raw('SUM(w43_from_otl) AS w43_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w43_com ELSE 0 END),1) AS w43_bil'),
+                            DB::raw('ROUND(SUM(w44_com),1) AS w44_com'),DB::raw('SUM(w44_from_otl) AS w44_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w44_com ELSE 0 END),1) AS w44_bil'),
+                            DB::raw('ROUND(SUM(w45_com),1) AS w45_com'),DB::raw('SUM(w45_from_otl) AS w45_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w45_com ELSE 0 END),1) AS w45_bil'),
+                            DB::raw('ROUND(SUM(w46_com),1) AS w46_com'),DB::raw('SUM(w46_from_otl) AS w46_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w46_com ELSE 0 END),1) AS w46_bil'),
+                            DB::raw('ROUND(SUM(w47_com),1) AS w47_com'),DB::raw('SUM(w47_from_otl) AS w47_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w47_com ELSE 0 END),1) AS w47_bil'),
+                            DB::raw('ROUND(SUM(w48_com),1) AS w48_com'),DB::raw('SUM(w48_from_otl) AS w48_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w48_com ELSE 0 END),1) AS w48_bil'),
+                            DB::raw('ROUND(SUM(w49_com),1) AS w49_com'),DB::raw('SUM(w49_from_otl) AS w49_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w49_com ELSE 0 END),1) AS w49_bil'),
+                            DB::raw('ROUND(SUM(w50_com),1) AS w50_com'),DB::raw('SUM(w50_from_otl) AS w50_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w50_com ELSE 0 END),1) AS w50_bil'),
+                            DB::raw('ROUND(SUM(w51_com),1) AS w51_com'),DB::raw('SUM(w51_from_otl) AS w51_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w51_com ELSE 0 END),1) AS w51_bil'),
+                            DB::raw('ROUND(SUM(w52_com),1) AS w52_com'),DB::raw('SUM(w52_from_otl) AS w52_from_otl'),DB::raw('ROUND(SUM(CASE WHEN p.meta_activity="BILLABLE" THEN w52_com ELSE 0 END),1) AS w52_bil')
     );
         $activityList->leftjoin('users_users AS uu', 'temp_a.user_id', '=', 'uu.user_id');
         $activityList->leftjoin('users AS u', 'temp_a.user_id', '=', 'u.id');
@@ -418,18 +458,58 @@ class ActivityRepository
         $activityList = DB::table($table);
 
         $activityList->select('year',
-                            DB::raw('SUM(jan_com) AS jan_com'),
-                            DB::raw('SUM(feb_com) AS feb_com'),
-                            DB::raw('SUM(mar_com) AS mar_com'),
-                            DB::raw('SUM(apr_com) AS apr_com'),
-                            DB::raw('SUM(may_com) AS may_com'),
-                            DB::raw('SUM(jun_com) AS jun_com'),
-                            DB::raw('SUM(jul_com) AS jul_com'),
-                            DB::raw('SUM(aug_com) AS aug_com'),
-                            DB::raw('SUM(sep_com) AS sep_com'),
-                            DB::raw('SUM(oct_com) AS oct_com'),
-                            DB::raw('SUM(nov_com) AS nov_com'),
-                            DB::raw('SUM(dec_com) AS dec_com')
+                            DB::raw('SUM(w1_com) AS w1_com'),
+                            DB::raw('SUM(w2_com) AS w2_com'),
+                            DB::raw('SUM(w3_com) AS w3_com'),
+                            DB::raw('SUM(w4_com) AS w4_com'),
+                            DB::raw('SUM(w5_com) AS w5_com'),
+                            DB::raw('SUM(w6_com) AS w6_com'),
+                            DB::raw('SUM(w7_com) AS w7_com'),
+                            DB::raw('SUM(w8_com) AS w8_com'),
+                            DB::raw('SUM(w9_com) AS w9_com'),
+                            DB::raw('SUM(w10_com) AS w10_com'),
+                            DB::raw('SUM(w11_com) AS w11_com'),
+                            DB::raw('SUM(w12_com) AS w12_com'),
+                            DB::raw('SUM(w13_com) AS w13_com'),
+                            DB::raw('SUM(w14_com) AS w14_com'),
+                            DB::raw('SUM(w15_com) AS w15_com'),
+                            DB::raw('SUM(w16_com) AS w16_com'),
+                            DB::raw('SUM(w17_com) AS w17_com'),
+                            DB::raw('SUM(w18_com) AS w18_com'),
+                            DB::raw('SUM(w19_com) AS w19_com'),
+                            DB::raw('SUM(w20_com) AS w20_com'),
+                            DB::raw('SUM(w21_com) AS w21_com'),
+                            DB::raw('SUM(w22_com) AS w22_com'),
+                            DB::raw('SUM(w23_com) AS w23_com'),
+                            DB::raw('SUM(w24_com) AS w24_com'),
+                            DB::raw('SUM(w25_com) AS w25_com'),
+                            DB::raw('SUM(w26_com) AS w26_com'),
+                            DB::raw('SUM(w27_com) AS w27_com'),
+                            DB::raw('SUM(w28_com) AS w28_com'),
+                            DB::raw('SUM(w29_com) AS w29_com'),
+                            DB::raw('SUM(w30_com) AS w30_com'),
+                            DB::raw('SUM(w31_com) AS w31_com'),
+                            DB::raw('SUM(w32_com) AS w32_com'),
+                            DB::raw('SUM(w33_com) AS w33_com'),
+                            DB::raw('SUM(w34_com) AS w34_com'),
+                            DB::raw('SUM(w35_com) AS w35_com'),
+                            DB::raw('SUM(w36_com) AS w36_com'),
+                            DB::raw('SUM(w37_com) AS w37_com'),
+                            DB::raw('SUM(w38_com) AS w38_com'),
+                            DB::raw('SUM(w39_com) AS w39_com'),
+                            DB::raw('SUM(w40_com) AS w40_com'),
+                            DB::raw('SUM(w41_com) AS w41_com'),
+                            DB::raw('SUM(w42_com) AS w42_com'),
+                            DB::raw('SUM(w43_com) AS w43_com'),
+                            DB::raw('SUM(w44_com) AS w44_com'),
+                            DB::raw('SUM(w45_com) AS w45_com'),
+                            DB::raw('SUM(w46_com) AS w46_com'),
+                            DB::raw('SUM(w47_com) AS w47_com'),
+                            DB::raw('SUM(w48_com) AS w48_com'),
+                            DB::raw('SUM(w49_com) AS w49_com'),
+                            DB::raw('SUM(w50_com) AS w50_com'),
+                            DB::raw('SUM(w51_com) AS w51_com'),
+                            DB::raw('SUM(w52_com) AS w52_com')
     );
         $activityList->leftjoin('projects AS p', 'p.id', '=', $table.'.project_id');
         $activityList->leftjoin('users_users AS uu', $table.'.user_id', '=', 'uu.user_id');
@@ -486,18 +566,58 @@ class ActivityRepository
             $data = [];
             $data[0] = new \stdClass();
             $data[0]->year = $where['year'][0];
-            $data[0]->jan_com = 0;
-            $data[0]->feb_com = 0;
-            $data[0]->mar_com = 0;
-            $data[0]->apr_com = 0;
-            $data[0]->may_com = 0;
-            $data[0]->jun_com = 0;
-            $data[0]->jul_com = 0;
-            $data[0]->aug_com = 0;
-            $data[0]->sep_com = 0;
-            $data[0]->oct_com = 0;
-            $data[0]->nov_com = 0;
-            $data[0]->dec_com = 0;
+            $data[0]->w1_com = 0;
+            $data[0]->w2_com = 0;
+            $data[0]->w3_com = 0;
+            $data[0]->w4_com = 0;
+            $data[0]->w5_com = 0;
+            $data[0]->w6_com = 0;
+            $data[0]->w7_com = 0;
+            $data[0]->w8_com = 0;
+            $data[0]->w9_com = 0;
+            $data[0]->w10_com = 0;
+            $data[0]->w11_com = 0;
+            $data[0]->w12_com = 0;
+            $data[0]->w13_com = 0;
+            $data[0]->w14_com = 0;
+            $data[0]->w15_com = 0;
+            $data[0]->w16_com = 0;
+            $data[0]->w17_com = 0;
+            $data[0]->w18_com = 0;
+            $data[0]->w19_com = 0;
+            $data[0]->w20_com = 0;
+            $data[0]->w21_com = 0;
+            $data[0]->w22_com = 0;
+            $data[0]->w23_com = 0;
+            $data[0]->w24_com = 0;
+            $data[0]->w25_com = 0;
+            $data[0]->w26_com = 0;
+            $data[0]->w27_com = 0;
+            $data[0]->w28_com = 0;
+            $data[0]->w29_com = 0;
+            $data[0]->w30_com = 0;
+            $data[0]->w31_com = 0;
+            $data[0]->w32_com = 0;
+            $data[0]->w33_com = 0;
+            $data[0]->w34_com = 0;
+            $data[0]->w35_com = 0;
+            $data[0]->w36_com = 0;
+            $data[0]->w37_com = 0;
+            $data[0]->w38_com = 0;
+            $data[0]->w39_com = 0;
+            $data[0]->w40_com = 0;
+            $data[0]->w41_com = 0;
+            $data[0]->w42_com = 0;
+            $data[0]->w43_com = 0;
+            $data[0]->w44_com = 0;
+            $data[0]->w45_com = 0;
+            $data[0]->w46_com = 0;
+            $data[0]->w47_com = 0;
+            $data[0]->w48_com = 0;
+            $data[0]->w49_com = 0;
+            $data[0]->w50_com = 0;
+            $data[0]->w51_com = 0;
+            $data[0]->w52_com = 0;
         }
 
         return $data;
@@ -554,8 +674,8 @@ class ActivityRepository
         $activityList->leftjoin('users AS u', $temp_table.'.user_id', '=', 'u.id');
         $activityList->leftjoin('customers AS c', 'c.id', '=', 'p.customer_id');
         $activityList->select('year','project_id','user_id','u.name AS user_name','u.country AS user_country','u.employee_type',
-        'jan_com','feb_com','mar_com','apr_com','may_com','jun_com','jul_com','aug_com','sep_com','oct_com','nov_com','dec_com',
-        'jan_from_otl','feb_from_otl','mar_from_otl','apr_from_otl','may_from_otl','jun_from_otl','jul_from_otl','aug_from_otl','sep_from_otl','oct_from_otl','nov_from_otl','dec_from_otl',
+        'w1_com','w2_com','w3_com','w4_com','w5_com','w6_com','w7_com','w8_com','w9_com','w10_com','w11_com','w12_com','w13_com','w14_com','w15_com','w16_com','w17_com','w18_com','w19_com','w20_com','w21_com','w22_com','w23_com','w24_com','w25_com','w26_com','w27_com','w28_com','w29_com','w30_com','w31_com','w32_com','w33_com','w34_com','w35_com','w36_com','w37_com','w38_com','w39_com','w40_com','w41_com','w42_com','w43_com','w44_com','w45_com','w46_com','w47_com','w48_com','w49_com','w50_com','w51_com','w52_com',
+        'w1_from_otl','w2_from_otl','w3_from_otl','w4_from_otl','w5_from_otl','w6_from_otl','w7_from_otl','w8_from_otl','w9_from_otl','w10_from_otl','w11_from_otl','w12_from_otl','w13_from_otl','w14_from_otl','w15_from_otl','w16_from_otl','w17_from_otl','w18_from_otl','w19_from_otl','w20_from_otl','w21_from_otl','w22_from_otl','w23_from_otl','w24_from_otl','w25_from_otl','w26_from_otl','w27_from_otl','w28_from_otl','w29_from_otl','w30_from_otl','w31_from_otl','w32_from_otl','w33_from_otl','w34_from_otl','w35_from_otl','w36_from_otl','w37_from_otl','w38_from_otl','w39_from_otl','w40_from_otl','w41_from_otl','w42_from_otl','w43_from_otl','w44_from_otl','w45_from_otl','w46_from_otl','w47_from_otl','w48_from_otl','w49_from_otl','w50_from_otl','w51_from_otl','w52_from_otl',
                                 'project_name', 'u.domain AS user_domain');
         $activityList->where('c.name', '=', $customer_name);
         $activityList->where('year', '=', $year);
@@ -576,7 +696,7 @@ class ActivityRepository
         $activityList->leftjoin('projects AS p', 'p.id', '=', $temp_table.'.project_id');
         $activityList->leftjoin('users AS u', $temp_table.'.user_id', '=', 'u.id');
         $activityList->leftjoin('customers AS c', 'c.id', '=', 'p.customer_id');
-        $activityList->select('year', DB::raw('sum(jan_com) AS jan_com'), DB::raw('sum(feb_com) AS feb_com'), DB::raw('sum(mar_com) AS mar_com'), DB::raw('sum(apr_com) AS apr_com'), DB::raw('sum(may_com) AS may_com'), DB::raw('sum(jun_com) AS jun_com'), DB::raw('sum(jul_com) AS jul_com'), DB::raw('sum(aug_com) AS aug_com'), DB::raw('sum(sep_com) AS sep_com'), DB::raw('sum(oct_com) AS oct_com'), DB::raw('sum(nov_com) AS nov_com'), DB::raw('sum(dec_com) AS dec_com'));
+        $activityList->select('year', DB::raw('sum(w1_com) AS w1_com'), DB::raw('sum(w2_com) AS w2_com'), DB::raw('sum(w3_com) AS w3_com'), DB::raw('sum(w4_com) AS w4_com'), DB::raw('sum(w5_com) AS w5_com'), DB::raw('sum(w6_com) AS w6_com'), DB::raw('sum(w7_com) AS w7_com'), DB::raw('sum(w8_com) AS w8_com'), DB::raw('sum(w9_com) AS w9_com'), DB::raw('sum(w10_com) AS w10_com'), DB::raw('sum(w11_com) AS w11_com'), DB::raw('sum(w12_com) AS w12_com'), DB::raw('sum(w13_com) AS w13_com'), DB::raw('sum(w14_com) AS w14_com'), DB::raw('sum(w15_com) AS w15_com'), DB::raw('sum(w16_com) AS w16_com'), DB::raw('sum(w17_com) AS w17_com'), DB::raw('sum(w18_com) AS w18_com'), DB::raw('sum(w19_com) AS w19_com'), DB::raw('sum(w20_com) AS w20_com'), DB::raw('sum(w21_com) AS w21_com'), DB::raw('sum(w22_com) AS w22_com'), DB::raw('sum(w23_com) AS w23_com'), DB::raw('sum(w24_com) AS w24_com'), DB::raw('sum(w25_com) AS w25_com'), DB::raw('sum(w26_com) AS w26_com'), DB::raw('sum(w27_com) AS w27_com'), DB::raw('sum(w28_com) AS w28_com'), DB::raw('sum(w29_com) AS w29_com'), DB::raw('sum(w30_com) AS w30_com'), DB::raw('sum(w31_com) AS w31_com'), DB::raw('sum(w32_com) AS w32_com'), DB::raw('sum(w33_com) AS w33_com'), DB::raw('sum(w34_com) AS w34_com'), DB::raw('sum(w35_com) AS w35_com'), DB::raw('sum(w36_com) AS w36_com'), DB::raw('sum(w37_com) AS w37_com'), DB::raw('sum(w38_com) AS w38_com'), DB::raw('sum(w39_com) AS w39_com'), DB::raw('sum(w40_com) AS w40_com'), DB::raw('sum(w41_com) AS w41_com'), DB::raw('sum(w42_com) AS w42_com'), DB::raw('sum(w43_com) AS 43_com'), DB::raw('sum(w44_com) AS w44_com'), DB::raw('sum(w45_com) AS w45_com'), DB::raw('sum(w46_com) AS w46_com'), DB::raw('sum(w47_com) AS w47_com'), DB::raw('sum(w48_com) AS w48_com'), DB::raw('sum(w49_com) AS w49_com'), DB::raw('sum(w50_com) AS w50_com'), DB::raw('sum(w51_com) AS w51_com'), DB::raw('sum(w52_com) AS w52_com'));
         $activityList->where('c.name', '=', $customer_name);
         $activityList->where('p.project_type', '!=', 'Pre-sales');
         $activityList->where('year', '=', $year);

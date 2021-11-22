@@ -17,7 +17,7 @@ use App\Repositories\UserRepository;
 use App\Skill;
 use App\User;
 use App\UserSkill;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Datatables;
 use DB;
 use Illuminate\Http\Request;
@@ -41,6 +41,7 @@ class ToolsController extends Controller
         $authUsersForDataView->userCanView('tools-activity-all-view');
         Session::put('url', 'toolsActivities');
         $table_height = Auth::user()->table_height;
+        // $activity_list = DB::table('activities')->get();
 
         return view('tools/list', compact('authUsersForDataView', 'table_height'));
     }
@@ -384,7 +385,7 @@ class ToolsController extends Controller
             $activity_OTL = $this->activityRepository->getByOTL($year, $user->id, $project->id, 1);
         }
 
-        for ($i = 1; $i <= 12; $i++) {
+        for ($i = 1; $i <= 52; $i++) {
             if (isset($activity_OTL[$i])) {
                 $activities[$i] = $activity_OTL[$i];
                 $from_otl[$i] = 'disabled';
@@ -397,7 +398,7 @@ class ToolsController extends Controller
             }
         }
 
-        for ($i = 1; $i <= 12; $i++) {
+        for ($i = 1; $i <= 52; $i++) {
             if (isset($activity_OTL[$i])) {
                 $otl[$i] = $activity_OTL[$i];
             } else {
@@ -714,4 +715,9 @@ class ToolsController extends Controller
 
         return $activities;
     }
+        public function add_weeks(){
+        $activity_list = DB::table('activities')->get();
+        return view('tools/list', compact('activity_list'));
+        }
+
 }
