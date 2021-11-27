@@ -47,7 +47,7 @@
 <!-- Page title -->
 <div class="page-title">
   <div class="title_left">
-    <h3>Activities <small>(in days)</small></h3><button id="legendButton" class="btn btn-success btn-sm">legend</button>
+    <h3>Activities <small>(In Hours)</small></h3><button id="legendButton" class="btn btn-success btn-sm">Legend</button>
   </div>
 </div>
 <div class="clearfix"></div>
@@ -60,7 +60,7 @@
 
       <!-- Window content -->
       <div class="x_content">
-        
+
         <!-- Selections for the table -->
 
         <div class="form-group row">
@@ -75,8 +75,8 @@
             </select>
           </div>
           <div class="col-xs-2">
-            <label for="month" class="control-label">Week</label>
-            <select class="form-control select2" id="month" name="month" data-placeholder="Select a week">
+            <label for="month" class="control-label">Weeks</label>
+            <select class="form-control select2" id="month" name="month" data-placeholder="Select a month">
               @foreach(config('select.month_names') as $key => $value)
               <option value="{{ $key }}">
                 {{ $value }}
@@ -84,7 +84,17 @@
               @endforeach
             </select>
           </div>
-          <div class="col-xs-3">
+          <div class="col-xs-2">
+            <label for="started-by" class="control-label">Start Date</label>
+            <div id="started-by" name="started-by" class="form-control select2">
+              <span id="Year_day"></span>
+              <span class="slash">/</span>
+              <span id="Month_date"></span>
+              <span class="slash">/</span>
+              <span id="Year_date"></span>
+            </div>
+          </div>
+          <div class="col-xs-2">
             <label for="manager" class="control-label">Manager</label>
             <select class="form-control select2" id="manager" name="manager" data-placeholder="Select a manager" multiple="multiple">
               @foreach($authUsersForDataView->manager_list as $key => $value)
@@ -96,7 +106,7 @@
               @endforeach
             </select>
           </div>
-          <div class="col-xs-3">
+          <div class="col-xs-2">
             <label for="user" class="control-label">User</label>
             <select class="form-control select2" id="user" name="user" data-placeholder="Select a user" multiple="multiple">
               @foreach($authUsersForDataView->user_list as $key => $value)
@@ -108,7 +118,7 @@
               @endforeach
             </select>
           </div>
-          <div class="col-xs-2">
+          <div class="col-xs-1">
             <label for="closed" class="control-label">Hide closed</label>
             <input name="closed" type="checkbox" id="closed" class="form-group js-switch-small" checked /> 
           </div>
@@ -120,16 +130,18 @@
         @can('tools-activity-new')
         <div class="row button_in_row">
           <div class="col-md-12">
-            <button id="new_project" class="btn btn-info btn-xs" align="left"><span class="glyphicon glyphicon-plus"> New Project</span></button>
+            <button id="new_project" class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New Project</span></button>
+        <!-- <span id="Month_date" class=""></span><span>/</span><span id="Year_date"></span> -->
           </div>
         </div>
         @endcan
         <!-- Create new button -->
-        
+
+
         <!-- Main table -->
         <table id="activitiesTable" class="table table-striped table-hover table-bordered mytable" width="100%">
           <thead>
-            <tr>
+              <tr>
               <th>Manager ID</th>
               <th>Manager name</th>
               <th>User ID</th>
@@ -161,7 +173,7 @@
               <th>End date</th>
               <th>Gold order</th>
               <th>Win ratio (%)</th>
-              @foreach(config('select.available_months') as $key => $month)
+              @foreach(config('select.data_shown') as $key => $month)
               <th id="table_month_{{$key}}"></th>
               <th>ID</th>
               <th>OTL</th>
@@ -201,7 +213,7 @@
               <th></th>
               <th></th>
               <th></th>
-              @foreach(config('select.available_months') as $key => $month)
+              @foreach(config('select.data_shown') as $key => $month)
               <th></th>
               <th></th>
               <th></th>
@@ -275,10 +287,11 @@
   var header_months = [];
   var checkbox_closed = 0;
 
+
+
   // switchery
   var small = document.querySelector('.js-switch-small');
   var switchery = new Switchery(small, { size: 'small' });
-  // console.log(activity_list);
 
   function ajaxData(){
     var obj = {
@@ -311,7 +324,9 @@
     else {
       var d = new Date();
       var y = d.getFullYear();
-      var m = d.getMonth()+1;
+      var firstMonth = new Date(y,0,1);
+      var numberOfDays = Math.floor((d - firstMonth)/ (24 * 60 * 60 * 1000));
+      var m = 100;
       if (select_id == 'year') {
         $('#'+select_id).val(y).trigger('change');
       } else if (select_id == 'month') {
@@ -328,14 +343,38 @@
 
   $(document).ready(function() {
 
-
-
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
 
+    function get_month() {
+    weekCookie = Cookies.get('month');
+    yearCookie = Cookies.get('year');
+    
+    var weekToDays = (1 + (weekCookie-1) *7);
+    var getDate = new Date(yearCookie,0,weekToDays);
+    var dateToMonth = getDate.getMonth()+1;
+    var getDate2 = new Date(yearCookie,dateToMonth,weekToDays);
+    
+      return dateToMonth;
+    }
+
+    function get_day() {
+    weekCookie = Cookies.get('month');
+    yearCookie = Cookies.get('year');
+    
+    var weekToDays = (1 + (weekCookie-1) *7);
+    var getDate = new Date(yearCookie,0,weekToDays);
+    var dateToDay = getDate.getDate()+1;
+    
+      return dateToDay;
+    }
+
+    $('#Year_day').html(get_day);
+    $('#Year_date').html(Cookies.get('year'));
+    $('#Month_date').html(get_month);
 
     //region Selection
     // SELECTIONS START
@@ -388,6 +427,9 @@
 
       });
       activitiesTable.ajax.reload(update_headers());
+      $('#Year_date').html(year);
+      $('#Month_date').html(get_month);
+      $('#Year_day').html(get_day);
     });
 
     $('#month').on('change', function() {
@@ -399,8 +441,9 @@
         month.push($(this).val());
 
       });
-      //console.log(month);
       activitiesTable.ajax.reload(update_headers());
+      $('#Month_date').html(get_month);
+      $('#Year_day').html(get_day);
     });
 
     $('#manager').on('change', function() {
@@ -472,14 +515,14 @@
 
     // This is to update the headers
     function update_headers() {
-      months_from_selection = [];
+      months_from_selection = [];//store month and year in one cell (selection order    )
       months_name = [
-        @foreach(config('select.week') as $key => $month)
+        @foreach(config('select.month') as $key => $month)
           '{{$month}}'
           @if($month != 'Week 52'),@endif
         @endforeach
-      ];
-      header_months = [];
+      ]; //store month names in order
+      header_months = []; //store key and value of year and month (selection order)
       
       for (let index = parseInt(month[0],10); index <= 52; index++) {
         this_year = parseInt(year[0],10);
@@ -493,18 +536,31 @@
           header_months.push({'year':next_year,'month':index});
         }
       }
+      console.log(header_months);
+      console.log(months_name);
+      console.log(months_from_selection);
 
-      //console.log(months_from_selection);
       
       // We change the title of the months as it varies in function of the year and month selected
       for (let index = 1; index <= 52; index++) {
-          //console.log(month);
+          console.log(index);
           $('#table_month_'+index).empty().html(months_from_selection[index-1]);
         }
     }
-
   
-
+    // $.ajax({
+    //     type: 'POST',
+    //     url: "{!! route('listOfActivitiesPerUserAjax') !!}",
+    //     dataType: 'json',
+    //     data: ajaxData(),
+    //     success: function(data) {
+    //       console.log("bold");
+    //       console.log(data);
+    //     },
+    //     error: function (jqXhr, textStatus, errorMessage) { // error callback 
+    //       console.log('Error: ' + errorMessage);
+    //     }
+    //   });
     activitiesTable = $('#activitiesTable').DataTable({
       scrollX: true,
       @if(isset($table_height))
@@ -513,15 +569,12 @@
       @endif
       serverSide: true,
       processing: true,
-      stateSave: true,//m
+      stateSave: true,
       ajax: {
         url: "{!! route('listOfActivitiesPerUserAjax') !!}",
         type: "POST",
         data: function ( d ) {
-          // console.log(ajaxData());
           $.extend(d,ajaxData());
-        }, success: function(data){
-          console.log(data);
         },
         dataType: "JSON"
       },
@@ -575,7 +628,7 @@
         { name: 'p.estimated_end_date', data: 'estimated_end_date' , searchable: true , visible: false, className: "dt-nowrap"},
         { name: 'p.gold_order_number', data: 'gold_order_number' , searchable: true , visible: false, className: "dt-nowrap"},
         { name: 'p.win_ratio', data: 'win_ratio' , searchable: true , visible: false, className: "dt-nowrap"}
-        @foreach(config('select.available_months') as $key => $month)
+        @foreach(config('select.data_shown') as $key => $month)
 
           ,{ name: 'm{{$key}}_com', data: 'm{{$key}}_com', 
             createdCell: function (td, cellData, rowData, row, col) {
@@ -848,11 +901,8 @@
 
     $(document).on('click', '#legendButton', function () {
     $('#legendModal').modal();
-  
-
   });
 
-  });
-
+  } );
   </script>
   @stop

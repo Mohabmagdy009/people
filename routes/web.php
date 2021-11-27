@@ -27,7 +27,7 @@ Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']
 Route::group(['middleware' => ['auth', 'general','last_login']], function () {
     Route::get('/home', ['uses' => 'HomeController@index', 'as' => 'home']);
     Route::get('/', ['uses' => 'HomeController@index']);
-    Route::get('weeks', ['uses' => 'ActivityController@add_weeks', 'as' => 'add_weeks']);
+
     // Backup routes
     Route::get('backup', ['uses' => 'BackupController@index', 'as' => 'backupList', 'middleware' => ['permission:backup-create|backup-download|backup-delete']]);
     Route::get('backup/create', ['uses' => 'BackupController@create', 'as' => 'backupCreate', 'middleware' => ['permission:backup-create']]);
@@ -178,7 +178,7 @@ Route::group(['middleware' => ['auth', 'general','last_login']], function () {
     Route::get('toolsFormCreate/{y}/{tab?}', ['uses' => 'ToolsController@getFormCreate', 'as' => 'toolsFormCreate', 'middleware' => ['permission:tools-activity-new']]);
     Route::post('toolsFormCreate', ['uses' => 'ToolsController@postFormCreate', 'middleware' => ['permission:tools-activity-new']]);
     //  Update activity
-    Route::get('toolsFormUpdate/{u}/{p}/{y}/{tab?}', ['uses' => 'ToolsController@getFormUpdate', 'as' => 'toolsFormUpdate', 'middleware' => ['permission:tools-activity-edit']]);
+    Route::get('x/{u}/{p}/{y}/{tab?}', ['uses' => 'ToolsController@getFormUpdate', 'as' => 'toolsFormUpdate', 'middleware' => ['permission:tools-activity-edit']]);
     Route::post('toolsFormUpdate', ['uses' => 'ToolsController@postFormUpdate', 'middleware' => ['permission:tools-activity-edit']]);
     //  Transfer user
     Route::get('toolsFormTransfer/{user_id}/{project_id}', ['uses' => 'ToolsController@getFormTransfer', 'as' => 'toolsFormTransfer', 'middleware' => ['permission:tools-user_assigned-transfer']]);
@@ -207,7 +207,7 @@ Route::group(['middleware' => ['auth', 'general','last_login']], function () {
     //Dashboards
     Route::get('dashboardLoad', ['uses' => 'DashboardController@load', 'as' => 'dashboardLoad', 'middleware' => ['permission:dashboard-view']]);
     Route::get('dashboardLoadChart', ['uses' => 'DashboardController@load_chart', 'as' => 'dashboardLoadChart', 'middleware' => ['permission:dashboard-view']]);
-    Route::get('clusterdashboard/{year?}/{customer_id?}/{domain_selected?}/{manager_id?}/{user_id?}', ['ustes' => 'DashboardController@clusterboard', 'as' => 'clusterdashboard', 'middleware' => ['permission:cluster-view']]);
+    Route::get('clusterdashboard/{year?}/{customer_id?}/{domain_selected?}/{manager_id?}/{user_id?}', ['uses' => 'DashboardController@clusterboard', 'as' => 'clusterdashboard', 'middleware' => ['permission:cluster-view']]);
     Route::get('dashboarddscisc/{year?}', ['uses' => 'DashboardController@dscisc', 'as' => 'dashboarddscisc', 'middleware' => ['permission:dashboard-view']]);
     Route::get('revenuedashboard/{year?}/{user_id?}', ['uses' => 'DashboardController@revenue', 'as' => 'revenuedashboard', 'middleware' => ['permission:dashboardRevenue-view']]);
     Route::get('orderdashboard/{year?}/{user_id?}', ['uses' => 'DashboardController@order', 'as' => 'orderdashboard', 'middleware' => ['permission:dashboardOrder-view']]);
@@ -260,11 +260,12 @@ Route::group(['middleware' => ['auth', 'general','last_login']], function () {
     Route::get('loeCreateUpdate/{id}', ['uses' => 'LoeController@view', 'as' => 'loeView', 'middleware' => ['permission:projectLoe-view']]);
     Route::get('loe/dashboard/projects/{id}', ['uses' => 'LoeController@dashboardProjects', 'as' => 'loeDashboardProjects', 'middleware' => ['permission:projectLoe-dashboard_view']]);
     Route::get('loe/{id}', ['uses' => 'LoeController@listFromProjectID', 'as' => 'listFromProjectID', 'middleware' => ['permission:projectLoe-view|projectLoe-dashboard_view']]);
-    
     //endregion
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
 // Route::get('updator',['uses'=>'UpdateTableController@updator', 'as'=>'updator']);
 
 Route::post('import', ['uses' => 'UserController@UploadExcelToCreateOrUpdateUsers', 'as' => 'UploadExcelToCreateOrUpdateUsers', 'middleware' => ['permission:user-view|user-create|user-edit|user-delete']]);

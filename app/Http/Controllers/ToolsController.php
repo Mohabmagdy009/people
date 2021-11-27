@@ -17,7 +17,7 @@ use App\Repositories\UserRepository;
 use App\Skill;
 use App\User;
 use App\UserSkill;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 use Datatables;
 use DB;
 use Illuminate\Http\Request;
@@ -41,7 +41,6 @@ class ToolsController extends Controller
         $authUsersForDataView->userCanView('tools-activity-all-view');
         Session::put('url', 'toolsActivities');
         $table_height = Auth::user()->table_height;
-        // $activity_list = DB::table('activities')->get();
 
         return view('tools/list', compact('authUsersForDataView', 'table_height'));
     }
@@ -385,7 +384,7 @@ class ToolsController extends Controller
             $activity_OTL = $this->activityRepository->getByOTL($year, $user->id, $project->id, 1);
         }
 
-        for ($i = 1; $i <= 52; $i++) {
+        for ($i = 1; $i <= 12; $i++) {
             if (isset($activity_OTL[$i])) {
                 $activities[$i] = $activity_OTL[$i];
                 $from_otl[$i] = 'disabled';
@@ -398,7 +397,7 @@ class ToolsController extends Controller
             }
         }
 
-        for ($i = 1; $i <= 52; $i++) {
+        for ($i = 1; $i <= 12; $i++) {
             if (isset($activity_OTL[$i])) {
                 $otl[$i] = $activity_OTL[$i];
             } else {
@@ -424,42 +423,42 @@ class ToolsController extends Controller
 
         // all users on this project for the actions
         $users_on_project = DB::table('projects')
-    ->leftjoin('activities', 'projects.id', '=', 'activities.project_id')
-    ->leftjoin('users', 'users.id', '=', 'activities.user_id')
-    ->select('users.id', 'users.name')
-    ->where('project_id', $project_id)
-    ->groupBy('users.name')
-    ->pluck('users.name', 'users.id');
+            ->leftjoin('activities', 'projects.id', '=', 'activities.project_id')
+            ->leftjoin('users', 'users.id', '=', 'activities.user_id')
+            ->select('users.id', 'users.name')
+            ->where('project_id', $project_id)
+            ->groupBy('users.name')
+            ->pluck('users.name', 'users.id');
 
-        return view('tools/create_update', compact('users_on_project','num_of_actions','user_id','project','year','activities','from_otl','forecast','otl','customers_list',
-    'project_name_disabled',
-    'customer_id_select_disabled',
-    'otl_name_disabled',
-    'meta_activity_select_disabled',
-    'project_type_select_disabled',
-    'activity_type_select_disabled',
-    'project_status_select_disabled',
-    'region_select_disabled',
-    'country_select_disabled',
-    'user_select_disabled',
-    'customer_location_disabled',
-    'technology_disabled',
-    'description_disabled',
-    'comments_disabled',
-    'estimated_date_disabled',
-    'LoE_onshore_disabled',
-    'LoE_nearshore_disabled',
-    'LoE_offshore_disabled',
-    'LoE_contractor_disabled',
-    'gold_order_disabled',
-    'samba_options_disabled',
-    'product_code_disabled',
-    'revenue_disabled',
-    'win_ratio_disabled',
-    'show_change_button',
-    'num_of_comments', 'comments', 'user_list', 'user_selected', 'user_select_disabled', 'created_by_user_name', 'tab'))
-      ->with('action', 'update');
-    }
+        return view('tools/create_update', compact('users_on_project','num_of_actions','user_id','project','year','activities','from_otl','forecast','otl',          'customers_list',
+            'project_name_disabled',
+            'customer_id_select_disabled',
+            'otl_name_disabled',
+            'meta_activity_select_disabled',
+            'project_type_select_disabled',
+            'activity_type_select_disabled',
+            'project_status_select_disabled',
+            'region_select_disabled',
+            'country_select_disabled',
+            'user_select_disabled',
+            'customer_location_disabled',
+            'technology_disabled',
+            'description_disabled',
+            'comments_disabled',
+            'estimated_date_disabled',
+            'LoE_onshore_disabled',
+            'LoE_nearshore_disabled',
+            'LoE_offshore_disabled',
+            'LoE_contractor_disabled',
+            'gold_order_disabled',
+            'samba_options_disabled',
+            'product_code_disabled',
+            'revenue_disabled',
+            'win_ratio_disabled',
+            'show_change_button',
+            'num_of_comments', 'comments', 'user_list', 'user_selected', 'user_select_disabled', 'created_by_user_name', 'tab'))
+              ->with('action', 'update');
+            }
 
     public function postFormUpdate(ProjectUpdateRequest $request)
     {
@@ -715,9 +714,4 @@ class ToolsController extends Controller
 
         return $activities;
     }
-        public function add_weeks(){
-        $activity_list = DB::table('activities')->get();
-        return view('tools/list', compact('activity_list'));
-        }
-
 }

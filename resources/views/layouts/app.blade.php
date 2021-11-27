@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>People</title>
+  <title>PRE-SALES</title>
 
   <!-- All styles -->
   <!-- Bootstrap core CSS -->

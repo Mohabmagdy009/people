@@ -11,7 +11,7 @@ use App\Repositories\ActivityRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\ProjectTableRepository;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 use DB;
 use Illuminate\Http\Request;
 
@@ -91,7 +91,7 @@ class ActivityController extends Controller
         return $this->activityRepository->getListOfActivities();
     }
 
-    public function ListOfactivitiesPerUser(Request $request)
+    public function ListOfActivitiesPerUser(Request $request) //ajax function
     {
         $input = $request->all();
 
@@ -212,9 +212,5 @@ class ActivityController extends Controller
             $result->msg = 'No permission to edit this record';
         }
         return json_encode($result);
-    }
-            public function add_weeks(){
-        $activity_list = DB::table('activities')->where('id',1)->get();
-        return $activity_list;
     }
 }

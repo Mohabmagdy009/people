@@ -17,6 +17,7 @@ use DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\UsersImport;
 use App\Imports\UserFullImport;
+use App\Activity;
 
 use Illuminate\Http\Request;
 
@@ -170,12 +171,14 @@ class UserController extends Controller
         return view('user/create_update', compact('manager_list', 'user', 'manager', 'roles', 'userRole', 'clusters', 'userCluster', 'role_select_disabled'))->with('action', 'update');
     }
 
+    // this function used to create new user
     public function postFormCreate(UserCreateRequest $request)
     {
         $inputs = $request->all();
         //dd($inputs['user']);
 
         $user = User::create($inputs['user']);
+
 
         //dd($user);
 
@@ -216,6 +219,26 @@ class UserController extends Controller
         if (isset($inputs['roles'])) {
             $user->syncRoles($inputs['roles']);
         }
+
+
+        // -----------------User Created successfully-----------------------------------
+        
+        $user_id_for_Activity = $user->id;
+        $getYear = date("Y");
+
+        
+        $record = Activity::create([
+            'project_id'=>'1812', // Default Project ID
+            'year'=> $getYear, // Add current year at adding the user
+            'user_id'=>$user_id_for_Activity,
+        ]);
+
+        $secondRecord = Activity::create([
+            'project_id'=>'1813', // Default Project ID
+            'year'=> $getYear, // Add current year at adding the user
+            'user_id'=>$user_id_for_Activity,
+        ]);
+        
 
         return redirect('userList')->with('success', 'Record created successfully');
     }
