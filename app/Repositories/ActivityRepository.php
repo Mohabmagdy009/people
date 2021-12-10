@@ -210,7 +210,7 @@ class ActivityRepository
                             'p.estimated_start_date AS estimated_start_date', 'p.estimated_end_date AS estimated_end_date',
                             'p.gold_order_number AS gold_order_number', 'p.win_ratio AS win_ratio',
                             'c.name AS customer_name', 'c.cluster_owner AS customer_cluster_owner', 'c.country_owner AS customer_country_owner',
-                            'p.activity_type AS activity_type', 'p.project_status AS project_status', 'p.project_type AS project_type',
+                            'p.activity_type AS activity_type', 'p.project_status AS project_status', 'p.project_type AS project_type','mm.created_at AS created_at',
                             'm1_id','m1_com', 'm1_from_otl','m2_id','m2_com', 'm2_from_otl','m3_id','m3_com', 'm3_from_otl',
                             'm4_id','m4_com', 'm4_from_otl','m5_id','m5_com', 'm5_from_otl','m6_id','m6_com', 'm6_from_otl',
                             'm7_id','m7_com', 'm7_from_otl','m8_id','m8_com', 'm8_from_otl','m9_id','m9_com', 'm9_from_otl',
@@ -232,6 +232,8 @@ class ActivityRepository
         $activityList->leftjoin('users_users AS uu', 'u.id', '=', 'uu.user_id');
         $activityList->leftjoin('users AS m', 'm.id', '=', 'uu.manager_id');
         $activityList->leftjoin('customers AS c', 'c.id', '=', 'p.customer_id');
+        $activityList->leftjoin('activities AS mm', 'mm.project_id', '=', 'temp_a.project_id');
+        $activityList->orderBy('created_at','asc');
 
         // Removing customers
         if (! empty($where['except_customers'])) {
