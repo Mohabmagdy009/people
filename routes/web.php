@@ -179,6 +179,7 @@ Route::group(['middleware' => ['auth', 'general','last_login']], function () {
     Route::post('toolsFormCreate', ['uses' => 'ToolsController@postFormCreate', 'middleware' => ['permission:tools-activity-new']]);
     //  Update activity
     Route::get('x/{u}/{p}/{y}/{tab?}', ['uses' => 'ToolsController@getFormUpdate', 'as' => 'toolsFormUpdate', 'middleware' => ['permission:tools-activity-edit']]);
+    
     Route::post('toolsFormUpdate', ['uses' => 'ToolsController@postFormUpdate', 'middleware' => ['permission:tools-activity-edit']]);
     //  Transfer user
     Route::get('toolsFormTransfer/{user_id}/{project_id}', ['uses' => 'ToolsController@getFormTransfer', 'as' => 'toolsFormTransfer', 'middleware' => ['permission:tools-user_assigned-transfer']]);
@@ -261,6 +262,11 @@ Route::group(['middleware' => ['auth', 'general','last_login']], function () {
     Route::get('loe/dashboard/projects/{id}', ['uses' => 'LoeController@dashboardProjects', 'as' => 'loeDashboardProjects', 'middleware' => ['permission:projectLoe-dashboard_view']]);
     Route::get('loe/{id}', ['uses' => 'LoeController@listFromProjectID', 'as' => 'listFromProjectID', 'middleware' => ['permission:projectLoe-view|projectLoe-dashboard_view']]);
     //endregion
+
+    //modal route
+
+    Route::post('modalData', ['uses' => 'ToolsController@modalData', 'as' => 'modalData']);
+    Route::post('addNew', ['uses' => 'ToolsController@addNew', 'as' => 'addNew']);
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -269,5 +275,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 // Route::get('updator',['uses'=>'UpdateTableController@updator', 'as'=>'updator']);
 
 Route::post('import', ['uses' => 'UserController@UploadExcelToCreateOrUpdateUsers', 'as' => 'UploadExcelToCreateOrUpdateUsers', 'middleware' => ['permission:user-view|user-create|user-edit|user-delete']]);
+Route::get('getModalData/{p_id}/{u_id}/{week}/{year}',['uses' => 'ToolsController@getModalData', 'as' => 'getModalData']);
 // Route::get('export', 'UpdateTableController@export');
 // Route::get('import',['uses'=>'UpdateTableController@show', 'as' =>'show']);

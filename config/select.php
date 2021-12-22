@@ -231,6 +231,13 @@ return [
         '11' => '11',
         '12' => '12',
     ],
+    'Account_level' => [
+        '0' => 'Select the project sub-type',
+        '1' => 'Bid Management',
+        '2' => 'Contract Negotiation',
+        '3' => 'Customer Facing Activities (post-DAC)',
+        '4' => 'Customer Facing Activities (pre-DAC)',
+    ],
     'available_months_h1' => [
         'jan',
         'feb',

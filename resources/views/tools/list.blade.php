@@ -120,6 +120,47 @@
         <!-- Create new button -->
 
 
+        <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Sub Activities</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <table id="CustomerTable">
+        <thead>
+        </thead>
+        <tbody>
+          <tr>
+             <td class="dropdown">
+                     <select name="filter_for" id="first">
+                         <option value="0" selected disabled hidden>Choose here</option>
+                         <option value="Druck">Activity 1</option>
+                         <option value="Zahl">Activity 2</option>
+                         <option value="Temperatur">Activity 3</option>
+                     </select>
+              </td>
+          </tr>
+        </tbody>
+    </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="save" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
         <!-- Main table -->
         <table id="activitiesTable" class="table table-striped table-hover table-bordered mytable" width="100%">
           <thead>
@@ -268,6 +309,11 @@
         console.log(getWeek(i));
         $("#table_month_"+ID).prop('title',getWeek(i));
         getMonday(new Date());
+        k = $("#first").val();
+        console.log(k);
+        if ($("#first").val() === "Druck"){
+      console.log("asas");
+    };
       }
 
       function getMonday(d) {
@@ -384,6 +430,9 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
+
+    
+
 
     // $("#activitiesTable").
     // on('hover','td',function(){
@@ -756,6 +805,7 @@
             });
           };
         });
+   
         // Restore state
         var state = activitiesTable.state.loaded();
         if (state) {
@@ -820,18 +870,18 @@
       var columns = table.settings().init().columns;
       //get the index of the clicked cell
       var colIndex = table.cell(this).index().column;
-      //console.log('you clicked on the column with the name '+columns[colIndex].name);
-      //console.log('the user id is '+row.data().user_id);
-      //console.log('the project id is '+row.data().project_id);
-      // If we click on the name, then we create a new project
+      var week = $("#month-by").html();
+      var year = $("#year-by").html();
+      console.log(week);
       if (columns[colIndex].name == 'p.project_name') {
-        year = [];
-        $("#year option:selected").each(function()
-        {
-          // log the value and text of each option
-          year.push($(this).val());
-        });
-        window.location.href = "{!! route('toolsFormUpdate',['','','']) !!}/"+row.data().user_id+"/"+row.data().project_id+"/"+year[0];
+        // year = [];
+        var week = $("#month-by").html();
+        // $("#year option:selected").each(function()
+        // {
+        //   // log the value and text of each option
+        //   year.push($(this).val());
+        // });
+        window.location.href = "{!! route('getModalData',['','','','']) !!}/"+row.data().project_id+"/"+row.data().user_id+"/"+week+"/"+year;
       }
     });
 

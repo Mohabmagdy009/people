@@ -1,0 +1,35 @@
+.mytablee{
+	margin-left: 470px;
+    margin-right: 470px;
+    width: 40%;
+}
+#select-2, #select-1 {
+    min-width: 400px;
+    min-height: 18px;
+    background-color: #f7f7f7;
+    border: none;
+}
+#option-1{
+    font-size: 13px;
+    font-style: inherit;
+    font-weight: lighter;
+}
+
+.hour{
+    max-width: 35px;
+    max-height: 35px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.myDrop{
+    margin-top: 10px;
+    margin-left: 2px;
+  }
+.glyphicon{
+    top: 7px;
+    left: 3px;
+    right: 3px;
+    bottom: 7px;
+    border: double;
+}

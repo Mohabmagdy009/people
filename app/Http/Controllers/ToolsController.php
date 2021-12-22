@@ -6,6 +6,7 @@ use App\Action;
 use App\Activity;
 use App\Comment;
 use App\Customer;
+use App\Project;
 use App\Http\Controllers\Auth\AuthUsersForDataView;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProjectCreateRequest;
@@ -22,6 +23,7 @@ use Datatables;
 use DB;
 use Illuminate\Http\Request;
 use Session;
+use App\SubActivityActuals;
 
 class ToolsController extends Controller
 {
@@ -713,5 +715,73 @@ class ToolsController extends Controller
         }
 
         return $activities;
+    }
+
+      public function getModalData($project_id,$user_id,$week_no,$year)
+    {
+
+            //If there are actuals on the project, get the user and the project name
+        $data = DB::table('subactivityactuals as actuals') 
+                ->join('projects as p', 'actuals.project_id','=','p.id')
+                ->join('subactivitytypes as ss','actuals.sub_id','=','ss.id')
+                ->join('users as u','actuals.user_id','=','u.id')
+                ->select('p.project_name as project','u.name as user','actuals.task_hour','actuals.year','actuals.week','ss.name','p.project_type')
+                ->where('actuals.project_id',$project_id)
+                ->where('actuals.user_id',$user_id)
+                ->where('actuals.week',$week_no)
+                ->where('actuals.year',$year)
+                ->get();
+
+        //If the project has no actuals
+        if($data->isEmpty()){
+            $data = DB::table('activities as a')
+            ->join('users as u','a.user_id','=','u.id')
+            ->join('projects as p','a.project_id','=','p.id')
+            ->select('u.name as user','p.project_name as project')
+            ->where('a.project_id',$project_id)
+            ->where('a.user_id',$user_id)
+            ->take(1)->get();
+        }
+
+        //To have a drop down menu depends on the project type
+        $type = Project::where('id',$project_id)->get('project_type');
+             
+        if($type[0]->project_type != 'Account' && $type[0]->project_type != 'General'){
+            //Opportunity
+            $innerContent = DB::table('subactivitytypes')->where('type','Opportunity')->select('id','name')->get();
+
+        }else{
+            $innerContent = DB::table('subactivitytypes')->where('type',$type[0]->project_type)->select('id','name')->get();
+        }
+
+        //To get the actuals and the activitites
+        $content = DB::table('subactivitytypes as ss')
+        ->join('subactivityactuals as actuals','ss.id','=','actuals.sub_id')
+        ->where('actuals.project_id',$project_id)
+        ->where('actuals.user_id',$user_id)
+        ->where('actuals.week',$week_no)
+        ->where('actuals.year',$year)
+        ->select('ss.name','ss.id','actuals.task_hour')
+        ->get();
+
+        
+        return view('tools/actuals',compact('data','week_no','type','content','innerContent','project_id','user_id','year'));
+    }
+
+    public function addNew(Request $request)
+    {
+        // code...
+        $input = $request->all();
+
+        $record = SubActivityActuals::updateOrCreate(
+            ['sub_id'=>$input['taskId']],
+            ['year'=>'2021',
+            'week'=>$input['week'],
+            'project_id'=>$input['pid'],
+            'user_id'=>$input['uid'],
+            'task_hour'=>$input['taskHour']
+        ]);
+
+        return json_encode("done");
     }
 }
