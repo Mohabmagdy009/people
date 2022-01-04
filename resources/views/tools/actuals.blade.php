@@ -69,7 +69,7 @@
           </select>
         </div>
         <div class="col-sm-6">
-          <label for="month" class="control-label">Weeks</label>
+          <label for="week" class="control-label">Weeks</label>
           <select class="form-control" id="week" name="week" data-placeholder="Select a week">
             @foreach(config('select.month_names') as $key => $value)
             <option value="{{ $key }}">
@@ -96,7 +96,7 @@
           <tr style="font-size: 18px; font-weight:bold">
             <td style="width:79%">Activity</td>
             <td style="width:16%;" id="actuals">Actual Hours</td>
-            <td style="width: 5%;" class="old" colspan="2">Actions</td>
+            <td style="width: 5%;" id="oldData" colspan="2">Actions</td>
           </tr>
         </thead>
         <tbody id='tableBody'>
@@ -115,7 +115,7 @@
                   </select> 
               </td>
               <td contenteditable='true' class='hour'>{{$key1->task_hour}}</td>
-              <td colspan="2" class="old"><button type="button" id="button2" class="glyphicon glyphicon-trash" title="Kindly enter the actual hours"style="padding-left: 45%;"></button></td>
+              <td colspan="2" id="oldData"><button type="button" id="button2" class="glyphicon glyphicon-trash" title="Kindly enter the actual hours"style="padding-left: 45%;"></button></td>
             </tr>
           @endforeach  
             <tr id="selectionRow">
@@ -187,7 +187,7 @@ $(document).ready(function(){
     $(".database").prop("disabled", true);
     $(".hour").prop("contenteditable",false);
     $("#selectionRow").remove();
-    $(".old").remove();
+    $("#olData").remove();
     console.log(currentWeek);
   }
   $(document).on("mouseover","#button",function(){
