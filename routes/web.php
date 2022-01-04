@@ -266,7 +266,8 @@ Route::group(['middleware' => ['auth', 'general','last_login']], function () {
     //modal route
 
     Route::post('modalData', ['uses' => 'ToolsController@modalData', 'as' => 'modalData']);
-    Route::post('addNew', ['uses' => 'ToolsController@addNew', 'as' => 'addNew']);
+    Route::post('addNew', ['uses' => 'ToolsController@addNew', 'as' => 'addNew','middleware' => ['permission:tools-activity-view|tools-activity-edit']]);
+    Route::post('delete', ['uses' => 'ToolsController@deleteActivity', 'as' => 'delete','middleware' => ['permission:tools-activity-view|tools-activity-edit']]);
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -276,5 +277,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('import', ['uses' => 'UserController@UploadExcelToCreateOrUpdateUsers', 'as' => 'UploadExcelToCreateOrUpdateUsers', 'middleware' => ['permission:user-view|user-create|user-edit|user-delete']]);
 Route::get('getModalData/{p_id}/{u_id}/{week}/{year}',['uses' => 'ToolsController@getModalData', 'as' => 'getModalData']);
+Route::get('uploadfile','ToolsController@uploadFileView');
+Route::post('uploadfile','ToolsController@importActivities');
 // Route::get('export', 'UpdateTableController@export');
 // Route::get('import',['uses'=>'UpdateTableController@show', 'as' =>'show']);

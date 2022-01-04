@@ -49,10 +49,16 @@
 @section('content')
 <!-- Page title -->
 <div class="page-title">
-  <div class="title_left">
-    <h2>{{$data[0]->user}}</h2>
-      <div class="form-group row">
-        <div class="col-xs-3">
+  <div class="title_left"><h3>{{$data[0]->user}}</h3></div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <!-- Window content -->
+      <div class="x_content">    
+      <div class="form-group row" style="width:400px;padding:5px ;font-size:15px">
+        <div class="col-sm-6">
           <label for="year" class="control-label">Year</label>
           <select class="form-control select2" id="year" name="year" data-placeholder="Select a year">
             @foreach(config('select.year') as $key => $value)
@@ -62,9 +68,9 @@
               @endforeach
           </select>
         </div>
-        <div class="col-xs-3">
+        <div class="col-sm-6">
           <label for="month" class="control-label">Weeks</label>
-          <select class="form-control select2" id="week" name="week" data-placeholder="Select a week">
+          <select class="form-control" id="week" name="week" data-placeholder="Select a week">
             @foreach(config('select.month_names') as $key => $value)
             <option value="{{ $key }}">
               {{ $value }}
@@ -72,68 +78,71 @@
               @endforeach
           </select>
         </div>
-      </div>  
-  </div>
+      </div>
+
+      <!-- Week and Year drop down menues ended -->
+
+      <!-- Variables sent from Tools Controller -->
+      <input type="hidden" id="p_id" value="{{$project_id}}">
+      <input type="hidden" id="u_id" value="{{$user_id}}">
+      <input type="hidden" id="w" value="{{$week_no}}">
+      <input type="hidden" id="y" value="{{$year}}">
+
+      <div class="clearfix"><h2>{{$data[0]->project}}</h2></div> <!-- Project Name -->
+
+      <!-- Main table -->
+      <table id="sub_activity" class="table table-striped table-hover table-bordered mytablee" width="100%">
+        <thead>
+          <tr style="font-size: 18px; font-weight:bold">
+            <td style="width:79%">Activity</td>
+            <td style="width:16%;" id="actuals">Actual Hours</td>
+            <td style="width: 5%;" class="old" colspan="2">Actions</td>
+          </tr>
+        </thead>
+        <tbody id='tableBody'>
+          @foreach($content as $key1)
+            <tr>
+              <td cellpadding="0" cellspacing="0">        
+                <select id="select-1" class="form-control database" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                    <option value="{{$key1->id}}">{{$key1->name}}</option>
+                      @foreach( $innerContent as $key )
+                        @if($key1->name != $key->name)
+                          <option value="{{ $key->id }}">
+                            {{ $key->name }}
+                          </option>
+                        @endif
+                      @endforeach
+                  </select> 
+              </td>
+              <td contenteditable='true' class='hour'>{{$key1->task_hour}}</td>
+              <td colspan="2" class="old"><button type="button" id="button2" class="glyphicon glyphicon-trash" title="Kindly enter the actual hours"style="padding-left: 45%;"></button></td>
+            </tr>
+          @endforeach  
+            <tr id="selectionRow">
+              <td cellpadding="0" cellspacing="0">        
+                <select id="select-1" class="form-control" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                  <option value="" id="option-1">Select your activity ...</option>
+                    @foreach( $innerContent as $key )
+                  <option value="{{ $key->id }}">
+                    {{ $key->name }}
+                  </option>
+                    @endforeach
+                </select>
+              </td>
+              <td contenteditable='true' class='hour'></td>
+              <td class="removable"><button type="button" id="button" class="glyphicon glyphicon-plus" title="Kindly enter the actual hours"></button></td>
+              <td class="span"><button type="button" id="button2" class="glyphicon glyphicon-trash padding"></button></td>
+            </tr>
+        </tbody>
+        <tfoot style="font-size: 18px; font-weight:bold">
+          <td>Total</td>
+          <td id="totals"></td>
+        </tfoot>
+      </table>
+      @stop
+    </div>
+  </div>  
 </div>
-<!-- Week and Year drop down menues ended -->
-
-<!-- Variables sent from Tools Controller -->
-<input type="hidden" id="p_id" value="{{$project_id}}">
-<input type="hidden" id="u_id" value="{{$user_id}}">
-<input type="hidden" id="w" value="{{$week_no}}">
-<input type="hidden" id="y" value="{{$year}}">
-
-<div class="clearfix"><h3>{{$data[0]->project}}</h3></div> <!-- Project Name -->
-
-<!-- Main table -->
-<table id="sub_activity" class="table table-striped table-hover table-bordered mytablee" width="100%">
-  <thead>
-    <tr>
-      <td>Activity</td>
-      <td style="max-width: 30%; max-height: 40px;">Actual Hours</td>
-      <td style="max-width: 20%;">Add</td>
-    </tr>
-  </thead>
-  <tbody id='tableBody'>
-    @foreach($content as $key1)
-      <tr>
-        <td>        
-          <select id="select-1" class="form-control select2">
-              <option value="{{$key1->id}}">{{$key1->name}}</option>
-                @foreach( $innerContent as $key )
-                  @if($key1->name != $key->name)
-                    <option value="{{ $key->id }}">
-                      {{ $key->name }}
-                    </option>
-                  @endif
-                @endforeach
-            </select> 
-        </td>
-        <td contenteditable='true' class='hour'>{{$key1->task_hour}}</td>
-      </tr>
-    @endforeach  
-      <tr>
-        <td>        
-          <select id="select-2" class="form-control select2">
-            <option value="" id="option-1">Select your activity</option>
-              @foreach( $innerContent as $key )
-            <option value="{{ $key->id }}">
-              {{ $key->name }}
-            </option>
-              @endforeach
-          </select>
-        </td>
-        <td contenteditable='true' class='hour' type='number'></td>
-        <td><button type="button" id="button" class="glyphicon glyphicon-plus"></button></td>
-      </tr>
-  </tbody>
-  <tfoot>
-    <td>Total</td>
-    <td id="totals"></td>
-  </tfoot>
-</table>
-@stop
-
 @section('script')
 <script>
 // Variables From Controller 
@@ -146,34 +155,81 @@ var taskId;
 $('#year').val(yearFromController);
 $('#week').val(weekFromController);
 
+function getYear(d){
+  d = new Date(d);
+  var year = d.getFullYear();
+  return year;
+}
+
+function getWeek(d) { // This function is to get the Week number of the current week
+  d = new Date(d); // Today's date
+  var day = d.getDay(); // Today's day in 0-6 (2)
+  diff = d.getDate() - day + (day == 0 ? -6:1); // Adjust when day is sunday
+  var dd = new Date(d.setDate(diff));
+  var y = dd.getFullYear();
+  var firstMonth = new Date(y,0,1);
+  var numberOfDays = Math.floor((dd - firstMonth)/ (24 * 60 * 60 * 1000));
+  var m =Math.ceil(( dd.getDay() + 1 + numberOfDays) / 7);
+  return m;
+}
+
 $(document).ready(function(){
   $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
-  $(document).on("click","button",function(){
-    var empty_th = $(this).closest('tr').find('.hour').html(); 
-    // Stop button from adding if the current input row is empty
-    if(empty_th == 0){
-      return;
+
+  var currentYear = getYear(new Date());
+  var currentWeek = getWeek(new Date());
+
+  if(yearFromController < currentYear || weekFromController<currentWeek){
+    $(".database").prop("disabled", true);
+    $(".hour").prop("contenteditable",false);
+    $("#selectionRow").remove();
+    $(".old").remove();
+    console.log(currentWeek);
+  }
+  $(document).on("mouseover","#button",function(){
+    var empty_th = $(this).closest('tr').find('.hour').html();
+    var selection = $(this).closest('tr').find('#select-1').val();
+    if(empty_th == '' || selection ==''){
+      $(this).tooltip()
     }
     else{
-    $('.glyphicon').remove();
+      $(this).tooltip('disable');
+    } 
+  })
+  $(document).on("click","#button",function(){
+    var empty_th = $(this).closest('tr').find('.hour').html();
+    var selection = $(this).closest('tr').find('#select-1').val(); 
+    // Stop button from adding if the current input row is empty
+    if(empty_th == '' || selection ==''){
+      $(this).tooltip()
+    }
+    else{
+    // $('#button').tooltip('disable');
+    $('.removable').remove();
+    $('.span').prop("colspan",2);
+    $('.padding').css("padding-left","45%");
     $('#tableBody').
     append(
-      "<tr><td><select id='select-2' class='form-control select2'><option value='' id='option-1'>Select your activity</option>@foreach( $innerContent as $key )<option value='{{$key->id}}'>{{$key->name}}</option>@endforeach</select></td><td contenteditable='true' class='hour'></td><td id='l'><button type='button' class='glyphicon glyphicon-plus'></button></td></tr>");
+      "<tr><td cellpadding='0' cellspacing='0'><select id='select-1' class='form-control select2' onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'><option value='' id='option-1'>Select your activity ...</option>@foreach( $innerContent as $key )<option value='{{ $key->id }}'>{{ $key->name }}</option>@endforeach</select></td><td contenteditable='true' class='hour'></td><td class='removable'><button type='button' id='button' class='glyphicon glyphicon-plus' title='Kindly enter the actual hours'></button></td><td class='span'><button type='button' id='button2' class='glyphicon glyphicon-trash padding'></button></td>");
     }
   })
-  $(document).on("change",".select2",function(){
+  $(document).on("change","#select-1",function(){
     taskId = $(this).val();
     var taskh = $(this).closest('tr').find('.hour').html();
+    if(taskh != ''){
+      $(this).closest('tr').find('#button').tooltip('disable');
+    }
     data ={
             'uid':uid,
             'pid':pid,
             'taskId':taskId,
             'taskHour':taskh,
-            'week':weekFromController
+            'week':weekFromController,
+            'year':yearFromController
       };
       $.ajax({
           type: 'POST',
@@ -185,41 +241,46 @@ $(document).ready(function(){
             getTotlas();
           }
     });
-    console.log(taskh);
+  })
+  $(document).on("click","#button2",function () {
+    var taskh = $(this).closest('tr').find('.hour').html();
+    var taskId = $(this).closest('tr').find('#select-1').val();
+    if(taskh !== '' && taskId !== ''){ 
+    data={
+      'uid':uid,
+      'pid':pid,
+      'taskId':taskId,
+      'taskHour':taskh,
+      'week':weekFromController,
+      'year':yearFromController
+    }
+    $.ajax({
+        type: 'POST',
+        url: "{!! route('delete') !!}",
+        data:data,
+        dataType: 'json',
+        success: function() {
+          location.reload();
+        }
+      });
+    }else{
+      return;
+    }
+
   })
   $(document).on("keyup",".hour",function(){
     var taskHour = $(this).html();
-    var taskId2 = $(this).closest('tr').find('select.select2').val(); //If user filled the task hour while empty drop down menu
-    if(typeof taskId2 === 'undefined' && typeof taskId !== 'undefined'){
-      data = {
-        'uid':uid,
-        'pid':pid,
-        'taskId':taskId,
-        'taskHour':taskHour,
-        'week':weekFromController
-      };
-      $.ajax({
-        type: 'POST',
-        url: "{!! route('addNew') !!}",
-        data:data,
-        dataType: 'json',
-        success: function(data) {
-          console.log(data);
-          $('.hour').addClass('update_success');
-          setTimeout(function () {
-            $('.hour').removeClass('update_success');
-          }, 1000);
-        getTotlas();
-        }
-      });
-    }
-    else if(typeof taskId2 !== 'undefined'){ 
+    var taskId2 = $(this).closest('tr').find('#select-1').val(); //If user filled the task hour while empty drop down menu
+    console.log(taskId2);
+    if(taskId2 != ''){
+      $(this).closest('tr').find('#button').tooltip('disable');
       data ={
         'uid':uid,
         'pid':pid,
         'taskId':taskId2,
         'taskHour':taskHour,
-        'week':weekFromController
+        'week':weekFromController,
+        'year':yearFromController
       };
       $.ajax({
         type: 'POST',

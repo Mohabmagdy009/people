@@ -24,6 +24,8 @@ use DB;
 use Illuminate\Http\Request;
 use Session;
 use App\SubActivityActuals;
+use App\Imports\activitiesImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ToolsController extends Controller
 {
@@ -770,18 +772,64 @@ class ToolsController extends Controller
 
     public function addNew(Request $request)
     {
-        // code...
-        $input = $request->all();
-
-        $record = SubActivityActuals::updateOrCreate(
-            ['sub_id'=>$input['taskId']],
-            ['year'=>'2021',
-            'week'=>$input['week'],
-            'project_id'=>$input['pid'],
-            'user_id'=>$input['uid'],
-            'task_hour'=>$input['taskHour']
-        ]);
-
+        if(Auth::user()->can('tools-activity-view')){
+            $input = $request->all();
+            if($input['taskHour']!=0){
+            $record = SubActivityActuals::updateOrCreate(
+                ['sub_id'=>$input['taskId']],
+                ['year'=>$input['year'],
+                'week'=>$input['week'],
+                'project_id'=>$input['pid'],
+                'user_id'=>$input['uid'],
+                'task_hour'=>$input['taskHour']
+                ]);
+            }
+            else{
+                return json_encode("Equal 0");
+            }
+        }
+        else{
+            return json_encode("no");
+        }
         return json_encode("done");
+    }   
+    public function deleteActivity(Request $request){
+
+        if(Auth::user()->can('tools-activity-view')){
+            $input = $request->all();
+            $deleted = SubActivityActuals::where('year',$input['year'])->where('week',$input['week'])
+            ->where('project_id',$input['pid'])->where('sub_id',$input['taskId'])->where('task_hour',$input['taskHour'])
+            ->where('user_id',$input['uid'])->delete();
+        }else{
+            return json_encode("failed");
+        }
+        return json_encode("Deleted");
+    } 
+    public function uploadFileView(){
+        $feedBack = "";
+        $color="blue";
+        return view('uploadfile',compact('feedBack','color'));
+    }
+    public function importActivities(Request $request){
+        //Get the file from the request
+        $file = $request->file;
+
+        //Check if the file is valid
+        if($file->isValid()){
+        $filePath = $request->file->getClientOriginalName(); 
+        $fileextension = $file->getClientOriginalExtension();
+        //Check the file type
+            if ($fileextension != 'xlsx'){
+                $color="red";
+                $feedBack = "The loader could not upload your file";
+                return view('uploadfile',compact('feedBack',"color"));
+            }
+            else{
+                Excel::import(new activitiesImport, $file);
+                $color="#07a64e";
+                $feedBack = "The loader has uploaded your data successfully";
+                return view('uploadfile',compact('feedBack','color'));
+            }
+        }
     }
 }

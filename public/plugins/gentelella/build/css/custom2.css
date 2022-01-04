@@ -1,35 +1,94 @@
 .mytablee{
-	margin-left: 470px;
-    margin-right: 470px;
-    width: 40%;
+	margin-left: 370px;
+    margin-right: 370px;
+    width: 60%;
+    border: 2px solid;
+    font-size: 17px;
 }
-#select-2, #select-1 {
-    min-width: 400px;
-    min-height: 18px;
-    background-color: #f7f7f7;
-    border: none;
-}
-#option-1{
-    font-size: 13px;
+#option-1{                      /*Select your activity sentence*/
+    font-size: 18px;
     font-style: inherit;
     font-weight: lighter;
 }
-
-.hour{
-    max-width: 35px;
-    max-height: 35px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+#select-1{
+    width: 100%;
+    height: auto;
+    border: 1px solid #999;
+    font-size: 18px;
+    color: #1c87c9;
+    background-color: rgb(0 0 0 / 3%);
+    border-radius: 5px;
+    box-shadow: 1px 1px #ccc;
 }
-.myDrop{
-    margin-top: 10px;
-    margin-left: 2px;
-  }
+#year, #week{
+    border: 1px solid #999;
+    font-size: 18px;
+    color: #1c87c9;
+    background-color: rgb(0 0 0 / 3%);
+    box-shadow: 1px 1px #ccc;
+    border-radius: 10px;
+}
+.hour, #totals, .old, #actuals{
+    text-align: center;
+}
 .glyphicon{
-    top: 7px;
-    left: 3px;
-    right: 3px;
-    bottom: 7px;
-    border: double;
+   border: none;
+   top:0;
+   left:0; 
+   right:0; 
+   bottom:0;
+   padding: 20px;
+   margin: 0;
+   display: flex;
+   justify-content: center;
+   align-content: space-around;
+   align-items: center;
+   font-size: 13px;
+   background-color: #dddddd00;
+}
+#button3{
+   border: none;
+   top:0;
+   left:0; 
+   right:0; 
+   bottom:0;
+   padding: 40%;
+   margin: 0;
+   display: flex;
+   justify-content: center;
+   align-content: space-around;
+   align-items: center;
+   font-size: 13px;
+   background-color: #dddddd00;
+}
+
+/*The Loader*/
+
+input[type=file] {
+    display: inline;
+}
+.btn-block {
+    display: inline;
+    width: 5%;
+    margin-left: 1233px;
+    margin-top: 5px;
+   
+}
+input#chooseFile {
+    width: 80%;
+    border-block: inherit;
+    border: #5555558c;
+    border-style: solid;
+    padding: 2px;
+    margin-top: 20px;
+    margin-right: 0;
+    border-radius: 5px;
+}
+#uploadText{
+margin-right: 110px;
+    font-size: medium;
+}
+#FeedBack{
+    font-size: 15px;
+    font-weight: bold;
 }
