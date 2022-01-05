@@ -28,7 +28,7 @@
     box-shadow: 1px 1px #ccc;
     border-radius: 10px;
 }
-.hour, #totals, .old, #actuals{
+.hour, #totals, #actions, #actuals{
     text-align: center;
 }
 .glyphicon{

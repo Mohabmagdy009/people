@@ -80,7 +80,7 @@
         </div>
       </div>
 
-      <!-- Week and Year drop down menues ended -->
+      <!-- Week and Year drop down menus ended -->
 
       <!-- Variables sent from Tools Controller -->
       <input type="hidden" id="p_id" value="{{$project_id}}">
@@ -96,7 +96,7 @@
           <tr style="font-size: 18px; font-weight:bold">
             <td style="width:79%">Activity</td>
             <td style="width:16%;" id="actuals">Actual Hours</td>
-            <td style="width: 5%;" id="oldData" colspan="2">Actions</td>
+            <td style="width: 5%;" id="actions" colspan="2">Actions</td>
           </tr>
         </thead>
         <tbody id='tableBody'>
@@ -115,7 +115,9 @@
                   </select> 
               </td>
               <td contenteditable='true' class='hour'>{{$key1->task_hour}}</td>
-              <td colspan="2" id="oldData"><button type="button" id="button2" class="glyphicon glyphicon-trash" title="Kindly enter the actual hours"style="padding-left: 45%;"></button></td>
+              <td colspan="2" id="oldData">
+                <button type="button" id="button2" class="glyphicon glyphicon-trash" title="Fill the empty record"style="padding-left: 45%;"></button>
+              </td>
             </tr>
           @endforeach  
             <tr id="selectionRow">
@@ -152,19 +154,22 @@ var pid = $('#p_id').val();
 var uid = $('#u_id').val();
 var taskId;
 
+//Insert week and year values sent from the controller to the drop down menus
 $('#year').val(yearFromController);
 $('#week').val(weekFromController);
 
+//Get the current Year
 function getYear(d){
   d = new Date(d);
   var year = d.getFullYear();
   return year;
 }
 
-function getWeek(d) { // This function is to get the Week number of the current week
-  d = new Date(d); // Today's date
-  var day = d.getDay(); // Today's day in 0-6 (2)
-  diff = d.getDate() - day + (day == 0 ? -6:1); // Adjust when day is sunday
+// This function is to get the Week number of the current week
+function getWeek(d) { 
+  d = new Date(d);
+  var day = d.getDay();
+  diff = d.getDate() - day + (day == 0 ? -6:1);
   var dd = new Date(d.setDate(diff));
   var y = dd.getFullYear();
   var firstMonth = new Date(y,0,1);
@@ -183,13 +188,17 @@ $(document).ready(function(){
   var currentYear = getYear(new Date());
   var currentWeek = getWeek(new Date());
 
+  //Lock any editing if the user is checking old data
   if(yearFromController < currentYear || weekFromController<currentWeek){
     $(".database").prop("disabled", true);
     $(".hour").prop("contenteditable",false);
     $("#selectionRow").remove();
-    $("#olData").remove();
+    $("#actions").remove();
+    $("#oldData").remove();
     console.log(currentWeek);
   }
+
+  //tooltip for the user if he has an empty record
   $(document).on("mouseover","#button",function(){
     var empty_th = $(this).closest('tr').find('.hour').html();
     var selection = $(this).closest('tr').find('#select-1').val();
@@ -200,6 +209,7 @@ $(document).ready(function(){
       $(this).tooltip('disable');
     } 
   })
+
   $(document).on("click","#button",function(){
     var empty_th = $(this).closest('tr').find('.hour').html();
     var selection = $(this).closest('tr').find('#select-1').val(); 
@@ -208,7 +218,6 @@ $(document).ready(function(){
       $(this).tooltip()
     }
     else{
-    // $('#button').tooltip('disable');
     $('.removable').remove();
     $('.span').prop("colspan",2);
     $('.padding').css("padding-left","45%");
@@ -217,6 +226,8 @@ $(document).ready(function(){
       "<tr><td cellpadding='0' cellspacing='0'><select id='select-1' class='form-control select2' onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'><option value='' id='option-1'>Select your activity ...</option>@foreach( $innerContent as $key )<option value='{{ $key->id }}'>{{ $key->name }}</option>@endforeach</select></td><td contenteditable='true' class='hour'></td><td class='removable'><button type='button' id='button' class='glyphicon glyphicon-plus' title='Kindly enter the actual hours'></button></td><td class='span'><button type='button' id='button2' class='glyphicon glyphicon-trash padding'></button></td>");
     }
   })
+
+  //Sent data if the user selects an activity
   $(document).on("change","#select-1",function(){
     taskId = $(this).val();
     var taskh = $(this).closest('tr').find('.hour').html();
@@ -242,32 +253,8 @@ $(document).ready(function(){
           }
     });
   })
-  $(document).on("click","#button2",function () {
-    var taskh = $(this).closest('tr').find('.hour').html();
-    var taskId = $(this).closest('tr').find('#select-1').val();
-    if(taskh !== '' && taskId !== ''){ 
-    data={
-      'uid':uid,
-      'pid':pid,
-      'taskId':taskId,
-      'taskHour':taskh,
-      'week':weekFromController,
-      'year':yearFromController
-    }
-    $.ajax({
-        type: 'POST',
-        url: "{!! route('delete') !!}",
-        data:data,
-        dataType: 'json',
-        success: function() {
-          location.reload();
-        }
-      });
-    }else{
-      return;
-    }
 
-  })
+  //Sent data if the user enters any hour
   $(document).on("keyup",".hour",function(){
     var taskHour = $(this).html();
     var taskId2 = $(this).closest('tr').find('#select-1').val(); //If user filled the task hour while empty drop down menu
@@ -301,10 +288,40 @@ $(document).ready(function(){
       return;
     }
   })
+
+  //Delete the record when the user clicks on the delete button
+  $(document).on("click","#button2",function () {
+    var taskh = $(this).closest('tr').find('.hour').html();
+    var taskId = $(this).closest('tr').find('#select-1').val();
+    if(taskh !== '' && taskId !== ''){ 
+    data={
+      'uid':uid,
+      'pid':pid,
+      'taskId':taskId,
+      'taskHour':taskh,
+      'week':weekFromController,
+      'year':yearFromController
+    }
+    $.ajax({
+        type: 'POST',
+        url: "{!! route('delete') !!}",
+        data:data,
+        dataType: 'json',
+        success: function() {
+          location.reload();
+        }
+      });
+    }else{
+      return;
+    }
+  })
+
   // Avoid user to write letters
   $(".hour").keypress(function(e){
     if(isNaN(String.fromCharCode(e.which))) e.preventDefault();
   });
+
+  //Drop down menus changes
   $(document).on('change','#week',function(){
     var new_week = $('select#week').val();
     var new_year = $('select#year').val();
@@ -315,6 +332,7 @@ $(document).ready(function(){
     var new_year = $('select#year').val();
     window.location.href = "{!! route('getModalData',['','','','']) !!}/"+pid+"/"+uid+"/"+new_week+"/"+new_year;
   })
+
   // Total Actual Hours calculated
   function getTotlas(){
     var total =0;
@@ -326,6 +344,7 @@ $(document).ready(function(){
     console.log($('#sub_activity tfoot').find('#totals').html());
     $('#sub_activity tfoot').find('#totals').html(total);
   }
+
   // Run the function to have the totals ready
   getTotlas();
 });
