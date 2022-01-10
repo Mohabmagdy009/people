@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubActivityTypes extends Model
 {
-    protected $table = 'SubActivityTypes';
+    protected $table = 'subactivitytypes';
     public $timestamps = true;
     protected $fillable = ['name', 'type'];
 }

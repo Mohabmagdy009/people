@@ -317,9 +317,9 @@ $(document).ready(function(){
   })
 
   // Avoid user to write letters
-  $(".hour").keypress(function(e){
-    if(isNaN(String.fromCharCode(e.which))) e.preventDefault();
-  });
+  $(document).on('keypress','.hour',(function(e){
+    if(isNaN(String.fromCharCode(e.which))) e.preventDefault(); 
+  }));
 
   //Drop down menus changes
   $(document).on('change','#week',function(){
