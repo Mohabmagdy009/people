@@ -194,7 +194,7 @@ $(document).ready(function(){
     $(".hour").prop("contenteditable",false);
     $("#selectionRow").remove();
     $("#actions").remove();
-    $("#oldData4").remove();
+    $("#oldData").remove();
     console.log(currentWeek);
   }
 

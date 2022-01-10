@@ -59,6 +59,8 @@ return [
         'Project' => 'Project',
         'Pre-sales' => 'Pre-sales',
         'Orange absence or other' => 'Orange absence or other',
+        'Account'=>'Account',
+        'General'=>'General',
     ],
     'project_subtype' => [
         'POC' => 'POC',
