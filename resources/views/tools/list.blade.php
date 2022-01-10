@@ -115,6 +115,9 @@
         <table id="activitiesTable" class="table table-striped table-hover table-bordered mytable" width="100%">
           <thead>
               <tr>
+              @if($isManager == 1)
+              <th>User Name</th>
+              @endif
               <th>Customer name</th>
               <th>Project name</th>
               <th>Project type</th>
@@ -128,6 +131,9 @@
           </thead>
           <tfoot>
             <tr>
+              @if($isManager == 1)
+              <th></th>
+              @endif
               <th></th>
               <th></th>
               <th></th>
@@ -180,6 +186,8 @@
   </div>
 </div>
 <!-- Modal -->
+<!-- Variables sent from Tools Controller -->
+<input type="hidden" id="isManager" value="{{$isManager}}">
 @stop
 
 @section('script')
@@ -324,8 +332,10 @@ $(document).ready(function() {
     disabled: {{ $authUsersForDataView->user_select_disabled }}
   });
 
+
   manager = fill_select('manager');
   user = fill_select('user');
+  isManager = $('#isManager').val();
 
   if (Cookies.get('checkbox_closed') != null) {
     if (Cookies.get('checkbox_closed') == 0) {
@@ -374,7 +384,12 @@ $(document).ready(function() {
     // SELECTIONS END
     //endregion
 
-  month_col = [4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37];
+  if(isManager == 1){
+    month_col = [5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38];
+  }
+  else{
+    month_col = [4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37];
+  }
 
   // This is to color in case it comes from prime or if forecast
   function color_for_month_value(value,from_otl,id,colonne,project_id,user_id,td) {
@@ -468,6 +483,9 @@ $(document).ready(function() {
       dataType: "JSON"
     },
     columns: [
+      @if($isManager==1)  
+        { name: 'u.name', data: 'user_name' , className: "dt-nowrap"},
+      @endif
       { name: 'c.name', data: 'customer_name' , className: "dt-nowrap",
         render: function(data, type, row) {
           if (type === 'display') {
@@ -518,7 +536,7 @@ $(document).ready(function() {
         extend: "colvis",
         className: "btn-sm",
         collectionLayout: "one-column",
-        columns: [0,1,2,3]
+        columns: [0,1,2,3,4]
       },
       {
         extend: "pageLength",
