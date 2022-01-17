@@ -59,7 +59,7 @@
       <!-- Window content -->
       <div class="x_content">    
       <div class="form-group row" style="width:400px;padding:5px ;font-size:15px">
-        <div class="col-sm-6">
+        <div class="col-xs-6">
           <label for="year" class="control-label">Year</label>
           <select class="form-control select2" id="year" name="year" data-placeholder="Select a year">
             @foreach(config('select.year') as $key => $value)
@@ -69,7 +69,7 @@
               @endforeach
           </select>
         </div>
-        <div class="col-sm-6">
+        <div class="col-xs-6">
           <label for="week" class="control-label">Weeks</label>
           <select class="form-control" id="week" name="week" data-placeholder="Select a week">
             @foreach(config('select.month_names') as $key => $value)
@@ -89,7 +89,14 @@
       <input type="hidden" id="w" value="{{$week_no}}">
       <input type="hidden" id="y" value="{{$year}}">
 
-      <div class="clearfix"><h2>{{$data[0]->project}}</h2></div> <!-- Project Name -->
+
+      <!-- Project Name -->
+      <div class="clearfix">
+        <h2 style="display:inline-block;">{{$data[0]->project}}</h2>
+          <button type="button" id="actualsButton" title="There is no actuals for this week to show." class="btn btn-primary" value="asdas" style="display:none; float: right;">
+                        Actuals Activity Report
+          </button>
+      </div> 
 
       <!-- Main table -->
       <table id="sub_activity" class="table table-striped table-hover table-bordered mytablee" width="100%">
@@ -142,7 +149,6 @@
           <td id="totals"></td>
         </tfoot>
       </table>
-      <!-- <button type="button" id="actuals" title="Kindly enter the actual hours"></button> -->
       @stop
     </div>
   </div>  
@@ -208,7 +214,10 @@ $(document).ready(function(){
       console.log(data2);
     }
   })
-
+    if($("#totals").html() != 0){
+        $("#actualsButton").css("display","inline-block");
+    }
+    
   //Lock any editing if the user is checking old data
   // if(yearFromController < currentYear || weekFromController<currentWeek){
   //   $(".database").prop("disabled", true);
@@ -218,8 +227,14 @@ $(document).ready(function(){
   //   $("#oldData").remove();
   //   console.log(currentWeek);
   // }
-  $(document).on("click","#actuals",function(){
-    window.location.href = "{!! route('actualsView',['','','']) !!}/"+uid+"/"+weekFromController+"/"+yearFromController;
+  $(document).on("click","#actualsButton",function(){
+    if($("#totals").html()!=0){
+      console.log($("#totals").html());
+      window.location.href = "{!! route('actualsView',['','','','']) !!}/"+uid+"/"+weekFromController+"/"+yearFromController+"/"+pid;
+    }
+    else{
+      return;
+    } 
   })
   //tooltip for the user if he has an empty record
   $(document).on("mouseover","#button",function(){
@@ -246,7 +261,7 @@ $(document).ready(function(){
     $('.padding').css("padding-left","45%");
     $('#tableBody').
     append(
-      "<tr><td cellpadding='0' cellspacing='0'><select id='select-1' class='form-control select2' onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'><option value='' id='option-1'>Select your activity ...</option>@foreach( $innerContent as $key )<option value='{{ $key->id }}'>{{ $key->name }}</option>@endforeach</select></td><td contenteditable='true' class='hour'></td><td class='removable'><button type='button' id='button' class='glyphicon glyphicon-plus' title='Kindly enter the actual hours'></button></td><td class='span'><button type='button' id='button2' class='glyphicon glyphicon-trash padding'></button></td>");
+      "<tr><td cellpadding='0' cellspacing='0'><select id='select-1' class='form-control select2'><option value='' id='option-1'>Select your activity ...</option>@foreach( $innerContent as $key )<option value='{{ $key->id }}'>{{ $key->name }}</option>@endforeach</select></td><td contenteditable='true' class='hour'></td><td class='removable'><button type='button' id='button' class='glyphicon glyphicon-plus' title='Kindly enter the actual hours'></button></td><td class='span'><button type='button' id='button2' class='glyphicon glyphicon-trash padding'></button></td>");
     }
   })
 
@@ -303,6 +318,7 @@ $(document).ready(function(){
     // console.log(taskId2);
     if(taskId2 != ''){
       $(this).closest('tr').find('#button').tooltip('disable');
+      $('#actualsButton').fadeIn(5000);
       data ={
         'uid':uid,
         'pid':pid,

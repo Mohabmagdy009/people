@@ -691,7 +691,7 @@ $(document).ready(function() {
   });
 
 
-  $(document).on('blur', '.editable', function(e){
+  $(document).on('keyup', '.editable', function(e){
     update_activity($(this));
   });
 

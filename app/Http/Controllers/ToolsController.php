@@ -824,7 +824,8 @@ class ToolsController extends Controller
         return json_encode("done");
     }
 
-    public function getActuals($user_id,$week_no,$year ){
+    public function getActuals($user_id,$week_no,$year,$projectID){
+        $d = $projectID + 1;
         $week_2 = $week_no+1;
         $week_3 = $week_no+2;
         $week_4 = $week_no+3;
@@ -847,7 +848,7 @@ class ToolsController extends Controller
                 ->groupBy('p.project_name')
                 ->get();
 
-                return view('tools/actualsView',compact('user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12'));
+                return view('tools/actualsView',compact('d','user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12'));
     }
     public function deleteActivity(Request $request){
 

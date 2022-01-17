@@ -91,11 +91,11 @@
       <div class="clearfix"><h2>{{$data[0]->user}}</h2></div> <!-- Project Name -->
 
       <!-- Main table -->
-      <table id="sub_activity" class="table table-striped table-hover table-bordered mytablee" width="100%">
+      <table id="sub_activity" class="table table-striped table-hover table-bordered mytablee2" width="100%">
         <thead>
           <tr style="font-size: 18px; font-weight:bold">
-            <td style="width:60%">Project Name</td>
-            <td style="width:30%;">Project Type</td>
+            <td style="width:15%">Project Name</td>
+            <td style="width:10%;">Project Type</td>
             @for($i=0;$i<12;$i++)
               <td>Week {{$week_no + $i}} </td>
             @endfor
@@ -104,7 +104,7 @@
         <tbody id='tableBody'>
 
           @foreach($data as $key => $value)
-            
+
             <tr id="selectionRow">
             
             <td>{{$data[$key]->project}}</td>
