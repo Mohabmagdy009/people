@@ -268,12 +268,15 @@ Route::group(['middleware' => ['auth', 'general','last_login']], function () {
     Route::post('modalData', ['uses' => 'ToolsController@modalData', 'as' => 'modalData']);
     Route::post('addNew', ['uses' => 'ToolsController@addNew', 'as' => 'addNew','middleware' => ['permission:tools-activity-view|tools-activity-edit']]);
     Route::post('delete', ['uses' => 'ToolsController@deleteActivity', 'as' => 'delete','middleware' => ['permission:tools-activity-view|tools-activity-edit']]);
+    Route::post('postTotals',['uses'=>'ToolsController@totals', 'as'=>'postTotals','middleware' => ['permission:tools-activity-view|tools-activity-edit']]);
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 
 // Route::get('updator',['uses'=>'UpdateTableController@updator', 'as'=>'updator']);
+
+Route::get('actualsView/{u_id}/{w_no}/{y_no}', ['uses' => 'ToolsController@getActuals', 'as' => 'actualsView', 'middleware' => ['permission:tools-activity-view']]);
 
 Route::post('import', ['uses' => 'UserController@UploadExcelToCreateOrUpdateUsers', 'as' => 'UploadExcelToCreateOrUpdateUsers', 'middleware' => ['permission:user-view|user-create|user-edit|user-delete']]);
 Route::get('getModalData/{p_id}/{u_id}/{week}/{year}',['uses' => 'ToolsController@getModalData', 'as' => 'getModalData']);

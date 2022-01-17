@@ -104,7 +104,7 @@
           @foreach($content as $key1)
             <tr>
               <td cellpadding="0" cellspacing="0">        
-                <select id="select-1" class="form-control database" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                <select id="select-1" class="form-control database">
                     <option value="{{$key1->id}}">{{$key1->name}}</option>
                       @foreach( $innerContent as $key )
                         @if($key1->name != $key->name)
@@ -123,7 +123,7 @@
           @endforeach  
             <tr id="selectionRow">
               <td cellpadding="0" cellspacing="0">        
-                <select id="select-1" class="form-control" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                <select id="select-1" class="form-control">
                   <option value="" id="option-1">Select your activity ...</option>
                     @foreach( $innerContent as $key )
                   <option value="{{ $key->id }}">
@@ -142,6 +142,7 @@
           <td id="totals"></td>
         </tfoot>
       </table>
+      <!-- <button type="button" id="actuals" title="Kindly enter the actual hours"></button> -->
       @stop
     </div>
   </div>  
@@ -189,16 +190,37 @@ $(document).ready(function(){
   var currentYear = getYear(new Date());
   var currentWeek = getWeek(new Date());
 
-  //Lock any editing if the user is checking old data
-  if(yearFromController < currentYear || weekFromController<currentWeek){
-    $(".database").prop("disabled", true);
-    $(".hour").prop("contenteditable",false);
-    $("#selectionRow").remove();
-    $("#actions").remove();
-    $("#oldData").remove();
-    console.log(currentWeek);
+  var totals = getTotals();
+            
+  data2={
+    'uid':uid,
+    'pid':pid,
+    'totals':totals,
+    'week':weekFromController,
+    'year':yearFromController
   }
+  $.ajax({
+    type: 'POST',
+    url: "{!! route('postTotals') !!}",
+    data: data2,
+    dataType: 'json',
+    success: function(data2){
+      console.log(data2);
+    }
+  })
 
+  //Lock any editing if the user is checking old data
+  // if(yearFromController < currentYear || weekFromController<currentWeek){
+  //   $(".database").prop("disabled", true);
+  //   $(".hour").prop("contenteditable",false);
+  //   $("#selectionRow").remove();
+  //   $("#actions").remove();
+  //   $("#oldData").remove();
+  //   console.log(currentWeek);
+  // }
+  $(document).on("click","#actuals",function(){
+    window.location.href = "{!! route('actualsView',['','','']) !!}/"+uid+"/"+weekFromController+"/"+yearFromController;
+  })
   //tooltip for the user if he has an empty record
   $(document).on("mouseover","#button",function(){
     var empty_th = $(this).closest('tr').find('.hour').html();
@@ -249,17 +271,36 @@ $(document).ready(function(){
           data:data,
           dataType: 'json',
           success: function(data) {
-            console.log(data);
-            getTotlas();
+            getTotals();
+
+            var totals = getTotals();
+
+            data2={
+              'uid':uid,
+              'pid':pid,
+              'totals':totals,
+              'week':weekFromController,
+              'year':yearFromController
+            }
+            $.ajax({
+              type: 'POST',
+              url: "{!! route('postTotals') !!}",
+              data: data2,
+              dataType: 'json',
+              success: function(data2){
+                console.log(data2);
+              }
+            })
           }
     });
+     
   })
 
   //Sent data if the user enters any hour
   $(document).on("keyup",".hour",function(){
     var taskHour = $(this).html();
     var taskId2 = $(this).closest('tr').find('#select-1').val(); //If user filled the task hour while empty drop down menu
-    console.log(taskId2);
+    // console.log(taskId2);
     if(taskId2 != ''){
       $(this).closest('tr').find('#button').tooltip('disable');
       data ={
@@ -276,12 +317,31 @@ $(document).ready(function(){
         data:data,
         dataType: 'json',
         success: function(data) {
-          console.log(data);
+          // console.log(data);
           $('.hour').addClass('update_success');
           setTimeout(function () {
             $('.hour').removeClass('update_success');
           }, 1000);
-          getTotlas();
+          getTotals();
+          
+          var totals = getTotals();
+            
+          data2={
+            'uid':uid,
+            'pid':pid,
+            'totals':totals,
+            'week':weekFromController,
+            'year':yearFromController
+          }
+          $.ajax({
+            type: 'POST',
+            url: "{!! route('postTotals') !!}",
+            data: data2,
+            dataType: 'json',
+            success: function(data2){
+              console.log(data2);
+            }
+          })
         }
       });
     }
@@ -309,7 +369,7 @@ $(document).ready(function(){
         data:data,
         dataType: 'json',
         success: function() {
-          location.reload();
+        location.reload();
         }
       });
     }else{
@@ -335,19 +395,20 @@ $(document).ready(function(){
   })
 
   // Total Actual Hours calculated
-  function getTotlas(){
+  function getTotals(){
     var total =0;
     $('#sub_activity tbody').find('.hour').each(function(i,e){
       var d = parseInt($(this).html());
       var item = parseInt(d) || 0;
       total+=item;
     });
-    console.log($('#sub_activity tfoot').find('#totals').html());
+    // console.log($('#sub_activity tfoot').find('#totals').html());
     $('#sub_activity tfoot').find('#totals').html(total);
+    return total;
   }
 
   // Run the function to have the totals ready
-  getTotlas();
+  getTotals();
 });
 </script>
 @stop

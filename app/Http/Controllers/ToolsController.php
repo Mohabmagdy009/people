@@ -24,6 +24,7 @@ use DB;
 use Illuminate\Http\Request;
 use Session;
 use App\SubActivityActuals;
+use App\Actuals;
 use App\Imports\activitiesImport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -777,12 +778,15 @@ class ToolsController extends Controller
             $input = $request->all();
             if($input['taskHour']!=0){
             $record = SubActivityActuals::updateOrCreate(
-                ['sub_id'=>$input['taskId']],
-                ['year'=>$input['year'],
-                'week'=>$input['week'],
-                'project_id'=>$input['pid'],
-                'user_id'=>$input['uid'],
-                'task_hour'=>$input['taskHour']
+                [
+                    'sub_id'=>$input['taskId'],
+                    'project_id'=>$input['pid'],
+                    'year'=>$input['year'],
+                    'week'=>$input['week'],
+                    'user_id'=>$input['uid']
+                ],
+                [
+                    'task_hour'=>$input['taskHour']
                 ]);
             }
             else{
@@ -794,6 +798,57 @@ class ToolsController extends Controller
         }
         return json_encode("done");
     }   
+    public function totals(Request $request)
+    {
+        if(Auth::user()->can('tools-activity-view')){
+            $input = $request->all();
+            if($input['totals']!=0){
+            $record = Actuals::updateOrCreate(
+                [
+                    'user_id'=>$input['uid'],
+                    'project_id'=>$input['pid'],
+                    'year'=>$input['year'],
+                    'week'=>$input['week']
+                ],
+                [
+                    'actuals'=>$input['totals']
+                ]);
+            }
+            else{
+                return json_encode("Totals is Equal zero");
+            }
+        }
+        else{
+            return json_encode("Permission denied");
+        }
+        return json_encode("done");
+    }
+
+    public function getActuals($user_id,$week_no,$year ){
+        $week_2 = $week_no+1;
+        $week_3 = $week_no+2;
+        $week_4 = $week_no+3;
+        $week_5 = $week_no+4;
+        $week_6 = $week_no+5;
+        $week_7 = $week_no+6;
+        $week_8 = $week_no+7;
+        $week_9 = $week_no+8;
+        $week_10 = $week_no+9;
+        $week_11 = $week_no+10;
+        $week_12 = $week_no+11;
+        // SELECT , , SUM(CASE when aa.week=2 then aa.actuals else 0 end) as two, SUM(CASE when aa.week=3 then aa.actuals else 0 end) as three
+        $data = DB::table('activities_actual as actual') 
+                ->join('projects as p', 'actual.project_id','=','p.id')
+                ->join('users as u','actual.user_id','=','u.id')
+                ->select('p.project_name as project','u.name as user','actual.actuals','p.project_type',DB::raw("SUM(CASE when actual.week='$week_no' then actual.actuals else 0 end) as '$week_no', SUM(CASE when actual.week='$week_2'then actual.actuals else 0 end) as '$week_2', SUM(CASE when actual.week='$week_3' then actual.actuals else 0 end) as '$week_3', SUM(CASE when actual.week='week_4' then actual.actuals else 0 end) as '$week_4', SUM(CASE when actual.week='week_5' then actual.actuals else 0 end) as '$week_5', SUM(CASE when actual.week='week_6' then actual.actuals else 0 end) as '$week_6', SUM(CASE when actual.week='week_7' then actual.actuals else 0 end) as '$week_7', SUM(CASE when actual.week='week_8' then actual.actuals else 0 end) as '$week_8', SUM(CASE when actual.week='week_9' then actual.actuals else 0 end) as '$week_9', SUM(CASE when actual.week='week_10' then actual.actuals else 0 end) as '$week_10', SUM(CASE when actual.week='week_11' then actual.actuals else 0 end) as '$week_11', SUM(CASE when actual.week='week_12' then actual.actuals else 0 end) as '$week_12'"))
+                ->where('actual.user_id',$user_id)
+                ->whereBetween('actual.week',[$week_no,$week_12])
+                ->where('actual.year',$year)
+                ->groupBy('p.project_name')
+                ->get();
+
+                return view('tools/actualsView',compact('user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12'));
+    }
     public function deleteActivity(Request $request){
 
         if(Auth::user()->can('tools-activity-view')){
@@ -806,11 +861,13 @@ class ToolsController extends Controller
         }
         return json_encode("Deleted");
     } 
+
     public function uploadFileView(){
         $feedBack = "";
         $color="blue";
         return view('uploadfile',compact('feedBack','color'));
     }
+
     public function importActivities(Request $request){
         //Get the file from the request
         $file = $request->file;
@@ -832,5 +889,11 @@ class ToolsController extends Controller
                 return view('uploadfile',compact('feedBack','color'));
             }
         }
+    }
+    public function actualsView(AuthUsersForDataView $authUsersForDataView)
+    {
+        $authUsersForDataView->userCanView('tools-activity-all-view');
+
+        return view('tools/actualsView');
     }
 }
