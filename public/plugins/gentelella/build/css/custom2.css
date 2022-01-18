@@ -1,3 +1,6 @@
+#sub_activity tfoot{
+    border-top: 3px groove;;
+}
 .mytablee2{
     margin-left: 15px;
     border: 2px solid;
@@ -34,7 +37,7 @@
     box-shadow: 1px 1px #ccc;
     border-radius: 10px;
 }
-.hour, #totals, #actions, #actuals{
+.hour, #totals, #actions, #actuals, .font{
     text-align: center;
 }
 .glyphicon{

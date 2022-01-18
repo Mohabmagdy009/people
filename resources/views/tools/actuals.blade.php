@@ -230,7 +230,7 @@ $(document).ready(function(){
   $(document).on("click","#actualsButton",function(){
     if($("#totals").html()!=0){
       console.log($("#totals").html());
-      window.location.href = "{!! route('actualsView',['','','','']) !!}/"+uid+"/"+weekFromController+"/"+yearFromController+"/"+pid;
+      window.location.href = "{!! route('actualsView',['','','']) !!}/"+uid+"/"+weekFromController+"/"+yearFromController;
     }
     else{
       return;

@@ -50,7 +50,7 @@
 @section('content')
 <!-- Page title -->
 <div class="page-title">
-  <div class="title_left"><h3>{{$data}}</h3></div>
+  <div class="title_left"></div>
 </div>
 <div class="clearfix"></div>
 <div class="row">
@@ -59,25 +59,27 @@
       <!-- Window content -->
       <div class="x_content">    
       <div class="form-group row" style="width:400px;padding:5px ;font-size:15px">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
           <label for="year" class="control-label">Year</label>
-          <select class="form-control select2" id="year" name="year" data-placeholder="Select a year">
-            @foreach(config('select.year') as $key => $value)
+          <div class="form-control select2" id="year" name="year" data-placeholder="Select a year">
+            <!-- @foreach(config('select.year') as $key => $value)
             <option value="{{ $key }}">
               {{ $value }}
             </option>
-              @endforeach
-          </select>
+              @endforeach -->
+              {{$year}}
+          </div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-4">
           <label for="week" class="control-label">Weeks</label>
-          <select class="form-control" id="week" name="week" data-placeholder="Select a week">
-            @foreach(config('select.month_names') as $key => $value)
+          <div class="form-control" id="week" name="week" data-placeholder="Select a week">
+           <!--  @foreach(config('select.month_names') as $key => $value)
             <option value="{{ $key }}">
               {{ $value }}
             </option>
-              @endforeach
-          </select>
+              @endforeach -->
+              Week {{$week_no}}
+          </div>
         </div>
       </div>
 
@@ -97,7 +99,7 @@
             <td style="width:15%">Project Name</td>
             <td style="width:10%;">Project Type</td>
             @for($i=0;$i<12;$i++)
-              <td>Week {{$week_no + $i}} </td>
+              <td class="font">Week {{$week_no + $i}} </td>
             @endfor
           </tr>
         </thead>
@@ -109,24 +111,27 @@
             
             <td>{{$data[$key]->project}}</td>
             <td>{{$data[$key]->project_type}}</td>
-            <td>{{$data[$key]->$week_no}}</td>
-            <td>{{$data[$key]->$week_2}}</td>
-            <td>{{$data[$key]->$week_3}}</td>
-            <td>{{$data[$key]->$week_4}}</td>
-            <td>{{$data[$key]->$week_5}}</td>
-            <td>{{$data[$key]->$week_6}}</td>
-            <td>{{$data[$key]->$week_7}}</td>
-            <td>{{$data[$key]->$week_8}}</td>
-            <td>{{$data[$key]->$week_9}}</td>
-            <td>{{$data[$key]->$week_10}}</td>
-            <td>{{$data[$key]->$week_11}}</td>
-            <td>{{$data[$key]->$week_12}}</td>
+            <td class="one font">{{$data[$key]->$week_no}}</td>
+            <td class="two font">{{$data[$key]->$week_2}}</td>
+            <td class="three font">{{$data[$key]->$week_3}}</td>
+            <td class="four font">{{$data[$key]->$week_4}}</td>
+            <td class="five font">{{$data[$key]->$week_5}}</td>
+            <td class="six font">{{$data[$key]->$week_6}}</td>
+            <td class="seven font">{{$data[$key]->$week_7}}</td>
+            <td class="eight font">{{$data[$key]->$week_8}}</td>
+            <td class="nine font">{{$data[$key]->$week_9}}</td>
+            <td class="ten font">{{$data[$key]->$week_10}}</td>
+            <td class="eleven font">{{$data[$key]->$week_11}}</td>
+            <td class="twelve font">{{$data[$key]->$week_12}}</td>
             </tr>
           @endforeach
         </tbody>
         <tfoot style="font-size: 18px; font-weight:bold">
           <td>Total</td>
-          <td id="totals"></td>
+          <td class="font" id="totals"></td>
+          @foreach(config('select.totals') as $key => $month)
+            <td class="font" id="{{$key}}"></td>
+          @endforeach
         </tfoot>
       </table>
       @stop
@@ -346,21 +351,20 @@ $('#week').val(weekFromController);
     window.location.href = "{!! route('actualsView',['','','']) !!}/"+uid+"/"+new_week+"/"+new_year;
   })
 
-//   // Total Actual Hours calculated
-//   function getTotals(){
-//     var total =0;
-//     $('#sub_activity tbody').find('.hour').each(function(i,e){
-//       var d = parseInt($(this).html());
-//       var item = parseInt(d) || 0;
-//       total+=item;
-//     });
-//     // console.log($('#sub_activity tfoot').find('#totals').html());
-//     $('#sub_activity tfoot').find('#totals').html(total);
-//     return total;
-//   }
+  function getTotals(){
+    const totall =["one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve"];
+    totall.forEach(function(element){
+    
+    var total = 0;
+    $('#sub_activity tbody').find('.'+element).each(function(i,e){
+      var d = parseInt($(this).html());
+      var item = parseInt(d) || 0;
+      total+=item;
+    });
+    $('#sub_activity tfoot').find('#'+element).html(total);
+    });
+  };
 
-//   // Run the function to have the totals ready
-//   getTotals();
-// });
+  getTotals();
 </script>
 @stop
