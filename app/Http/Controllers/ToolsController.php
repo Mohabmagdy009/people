@@ -723,21 +723,27 @@ class ToolsController extends Controller
 
       public function getModalData($project_id,$user_id,$week_no,$year)
     {
-
+        $projects = DB::table('activities as a')
+                    ->join('projects as p', 'a.project_id', '=','p.id')
+                    ->select('p.project_name','a.project_id')
+                    ->where('a.user_id',$user_id)
+                    ->where('a.month',$week_no)
+                    ->where('a.year',$year)
+                    ->get();
             //If there are actuals on the project, get the user and the project name
+        $empty = "false";
         $data = DB::table('subactivityactuals as actuals') 
                 ->join('projects as p', 'actuals.project_id','=','p.id')
                 ->join('subactivitytypes as ss','actuals.sub_id','=','ss.id')
                 ->join('users as u','actuals.user_id','=','u.id')
-                ->select('p.project_name as project','u.name as user','actuals.task_hour','actuals.year','actuals.week','ss.name','p.project_type')
-                ->where('actuals.project_id',$project_id)
+                ->select('p.project_name as project','u.name as user','actuals.task_hour','actuals.year','actuals.week','ss.name','p.project_type','actuals.project_id','ss.id')
                 ->where('actuals.user_id',$user_id)
                 ->where('actuals.week',$week_no)
                 ->where('actuals.year',$year)
                 ->get();
-
         //If the project has no actuals
         if($data->isEmpty()){
+            $empty = "true";
             $data = DB::table('activities as a')
             ->join('users as u','a.user_id','=','u.id')
             ->join('projects as p','a.project_id','=','p.id')
@@ -747,6 +753,9 @@ class ToolsController extends Controller
             ->take(1)->get();
         }
 
+        $Account = DB::table('subactivitytypes')->where('type','Account')->select('id','name')->get();
+        $General = DB::table('subactivitytypes')->where('type','General')->select('id','name')->get();
+        $Opportunity = DB::table('subactivitytypes')->where('type','Opportunity')->select('id','name')->get();    
         //To have a drop down menu depends on the project type
         $type = Project::where('id',$project_id)->get('project_type');
              
@@ -769,7 +778,7 @@ class ToolsController extends Controller
         ->get();
 
         
-        return view('tools/actuals',compact('data','week_no','type','content','innerContent','project_id','user_id','year'));
+        return view('tools/actuals',compact('data','week_no','type','content','innerContent','project_id','user_id','year','projects','Account','General','Opportunity','empty'));
     }
 
     public function addNew(Request $request)
@@ -824,7 +833,8 @@ class ToolsController extends Controller
         return json_encode("done");
     }
 
-    public function getActuals($user_id,$week_no,$year){
+    public function getActuals($user_id,$week_no,$pro,$year){
+
         $week_2 = $week_no+1;
         $week_3 = $week_no+2;
         $week_4 = $week_no+3;
@@ -847,7 +857,7 @@ class ToolsController extends Controller
                 ->groupBy('p.project_name')
                 ->get();
 
-                return view('tools/actualsView',compact('user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12'));
+                return view('tools/actualsView',compact('pro','user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12'));
     }
     public function deleteActivity(Request $request){
 

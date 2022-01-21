@@ -227,24 +227,23 @@ class UserController extends Controller
         $getYear = date("Y");
 
 for($i=0;$i<5;$i++){
+    for ($j=1; $j<53; $j++) { 
      $record = Activity::create([
             'project_id'=>'1812', // Default Project ID
             'year'=> $getYear+$i, // Add current year at adding the user
             'user_id'=>$user_id_for_Activity,
+            'month'=>$j,
         ]);
 
         $secondRecord = Activity::create([
             'project_id'=>'1813', // Default Project ID
             'year'=> $getYear+$i, // Add current year at adding the user
             'user_id'=>$user_id_for_Activity,
-        ]);
-        
-
+            'month'=>$j,
+        ]);   
+    }
 }
         
-       
-
-
        
         return redirect('userList')->with('success', 'Record created successfully');
     }

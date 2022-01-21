@@ -276,7 +276,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // Route::get('updator',['uses'=>'UpdateTableController@updator', 'as'=>'updator']);
 
-Route::get('actualsView/{u_id}/{w_no}/{y_no}', ['uses' => 'ToolsController@getActuals', 'as' => 'actualsView', 'middleware' => ['permission:tools-activity-view']]);
+Route::get('actualsView/{u_id}/{w_no}/{pid}/{y_no}', ['uses' => 'ToolsController@getActuals', 'as' => 'actualsView', 'middleware' => ['permission:tools-activity-view']]);
 
 Route::post('import', ['uses' => 'UserController@UploadExcelToCreateOrUpdateUsers', 'as' => 'UploadExcelToCreateOrUpdateUsers', 'middleware' => ['permission:user-view|user-create|user-edit|user-delete']]);
 Route::get('getModalData/{p_id}/{u_id}/{week}/{year}',['uses' => 'ToolsController@getModalData', 'as' => 'getModalData']);

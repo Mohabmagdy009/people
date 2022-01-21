@@ -91,61 +91,96 @@
 
 
       <!-- Project Name -->
-      <div class="clearfix">
-        <h2 style="display:inline-block;">{{$data[0]->project}}</h2>
-          <button type="button" id="actualsButton" title="There is no actuals for this week to show." class="btn btn-primary" value="asdas" style="display:none; float: right;">
-                        Actuals Activity Report
-          </button>
-      </div> 
-
+        <!-- <div class="clearfix">
+          <h2 style="display:inline-block;">{{$data}}</h2>
+            <button type="button" id="actualsButton" title="There is no actuals for this week to show." class="btn btn-primary" value="asdas" style="display:none; float: right;">
+                          Actuals Activity Report
+            </button>
+        </div> 
+ -->
       <!-- Main table -->
       <table id="sub_activity" class="table table-striped table-hover table-bordered mytablee" width="100%">
         <thead>
           <tr style="font-size: 18px; font-weight:bold">
-            <td style="width:79%">Activity</td>
+            <td style="width:40%">Project Name</td>
+            <td style="width:39%">Activity</td>
             <td style="width:16%;" id="actuals">Actual Hours</td>
             <td style="width: 5%;" id="actions" colspan="2">Actions</td>
           </tr>
         </thead>
         <tbody id='tableBody'>
-          @foreach($content as $key1)
-            <tr>
-              <td cellpadding="0" cellspacing="0">        
-                <select id="select-1" class="form-control database">
-                    <option value="{{$key1->id}}">{{$key1->name}}</option>
-                      @foreach( $innerContent as $key )
-                        @if($key1->name != $key->name)
-                          <option value="{{ $key->id }}">
-                            {{ $key->name }}
-                          </option>
-                        @endif
-                      @endforeach
-                  </select> 
-              </td>
-              <td contenteditable='true' class='hour'>{{$key1->task_hour}}</td>
-              <td colspan="2" id="oldData">
-                <button type="button" id="button2" class="glyphicon glyphicon-trash" title="Fill the empty record"style="padding-left: 45%;"></button>
-              </td>
-            </tr>
-          @endforeach  
-            <tr id="selectionRow">
-              <td cellpadding="0" cellspacing="0">        
-                <select id="select-1" class="form-control">
-                  <option value="" id="option-1">Select your activity ...</option>
-                    @foreach( $innerContent as $key )
-                  <option value="{{ $key->id }}">
-                    {{ $key->name }}
+          @if($empty == "true")
+          <tr id="selectionRow">
+               <td cellpadding="0" cellspacing="0">        
+                <select id="select-1" class="form-control projects">
+                  <option value="empty" id="option-1">Select your Project ...</option>
+                    @foreach( $projects as $key )
+                  <option value="{{$key->project_id}}">
+                    {{$key->project_name}}
                   </option>
                     @endforeach
+                </select>
+              </td>
+              <td cellpadding="0" cellspacing="0">        
+                <select id="select-1" class="form-control ndatabase">
+                  
                 </select>
               </td>
               <td contenteditable='true' class='hour'></td>
               <td class="removable"><button type="button" id="button" class="glyphicon glyphicon-plus" title="Kindly enter the actual hours"></button></td>
               <td class="span"><button type="button" id="button2" class="glyphicon glyphicon-trash padding"></button></td>
             </tr>
+          @else
+          @foreach($data as $key1)
+            <tr>
+              <td cellpadding="0" cellspacing="0">        
+                <select id="select-1" class="form-control projects">
+                  <option value="{{$key1->project_id}}" id="option-1">{{$key1->project}}</option>
+                   @foreach( $projects as $key )
+                  <option value="{{$key->project_id}}">
+                    {{$key->project_name}}
+                  </option>
+                    @endforeach
+                </select>
+              </td>
+              <td cellpadding="0" cellspacing="0">        
+                <select id="select-1" class="form-control ndatabase">
+                    <option value="{{$key1->id}}">{{$key1->name}}</option>
+                  </select> 
+              </td>
+              <td contenteditable='true' class='hour'>{{$key1->task_hour}}</td>
+              <td colspan="2" id="oldData">
+                <button type="button" id="button2" class="glyphicon glyphicon-trash"style="padding-left: 45%;"></button>
+              </td>
+            </tr>
+          @endforeach  
+            <tr id="selectionRow">
+               <td cellpadding="0" cellspacing="0">        
+                <select id="select-1" class="form-control projects">
+                  <option value="empty" id="option-1">Select your Project ...</option>
+                    @foreach( $projects as $key )
+                  <option value="{{$key->project_id}}">
+                    {{$key->project_name}}
+                  </option>
+                    @endforeach
+                </select>
+              </td>
+              <td cellpadding="0" cellspacing="0">        
+                <select id="select-1" class="form-control ndatabase">
+                  
+                </select>
+              </td>
+              <td contenteditable='true' class='hour'></td>
+              <td class="removable"><button type="button" id="button" class="glyphicon glyphicon-plus" title="Kindly enter the actual hours"></button></td>
+              <td class="span"><button type="button" id="button2" class="glyphicon glyphicon-trash padding"></button></td>
+            </tr>
+          @endif
         </tbody>
         <tfoot style="font-size: 18px; font-weight:bold">
           <td>Total</td>
+          <td>        
+                
+          </td>
           <td id="totals"></td>
         </tfoot>
       </table>
@@ -159,6 +194,10 @@
 var yearFromController = $('#y').val();
 var weekFromController = $('#w').val();
 var pid = $('#p_id').val();
+
+console.log("pid");
+console.log(pid);
+console.log("pid");
 var uid = $('#u_id').val();
 var taskId;
 
@@ -227,10 +266,26 @@ $(document).ready(function(){
   //   $("#oldData").remove();
   //   console.log(currentWeek);
   // }
+
+  $(document).on("change",".projects",function(){
+    if($(this).val()==1813){
+    $(this).closest("tr").find('.ndatabase').
+    html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $Account as $key )<option value='{{ $key->id }}'>{{ $key->name }}</option>@endforeach")
+    }
+    else if($(this).val()==1812){
+      $(this).closest("tr").find('.ndatabase').
+      html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $General as $key )<option value='{{ $key->id }}'>{{ $key->name }}</option>@endforeach")
+    }
+    else{ 
+      $(this).closest("tr").find('.ndatabase').
+      html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $Opportunity as $key )<option value='{{ $key->id }}'>{{ $key->name }}</option>@endforeach")
+    }
+  })
   $(document).on("click","#actualsButton",function(){
+
     if($("#totals").html()!=0){
       console.log($("#totals").html());
-      window.location.href = "{!! route('actualsView',['','','']) !!}/"+uid+"/"+weekFromController+"/"+yearFromController;
+      window.location.href = "{!! route('actualsView',['','','','',]) !!}/"+uid+"/"+weekFromController+"/"+pid+"/"+yearFromController;
     }
     else{
       return;
@@ -238,9 +293,10 @@ $(document).ready(function(){
   })
   //tooltip for the user if he has an empty record
   $(document).on("mouseover","#button",function(){
+    var projectCol = $(this).closest('tr').find('.projects').val();
     var empty_th = $(this).closest('tr').find('.hour').html();
-    var selection = $(this).closest('tr').find('#select-1').val();
-    if(empty_th == '' || selection ==''){
+    var selection = $(this).closest('tr').find('ndatabase').val();
+    if(empty_th == '' || selection =='' || projectCol ==''){
       $(this).tooltip()
     }
     else{
@@ -249,10 +305,11 @@ $(document).ready(function(){
   })
 
   $(document).on("click","#button",function(){
+    var projectCol = $(this).closest('tr').find('.projects').val();
     var empty_th = $(this).closest('tr').find('.hour').html();
-    var selection = $(this).closest('tr').find('#select-1').val(); 
+    var selection = $(this).closest('tr').find('ndatabase').val();
     // Stop button from adding if the current input row is empty
-    if(empty_th == '' || selection ==''){
+    if(empty_th == '' || selection =='' || projectCol ==''){
       $(this).tooltip()
     }
     else{
@@ -261,20 +318,21 @@ $(document).ready(function(){
     $('.padding').css("padding-left","45%");
     $('#tableBody').
     append(
-      "<tr><td cellpadding='0' cellspacing='0'><select id='select-1' class='form-control select2'><option value='' id='option-1'>Select your activity ...</option>@foreach( $innerContent as $key )<option value='{{ $key->id }}'>{{ $key->name }}</option>@endforeach</select></td><td contenteditable='true' class='hour'></td><td class='removable'><button type='button' id='button' class='glyphicon glyphicon-plus' title='Kindly enter the actual hours'></button></td><td class='span'><button type='button' id='button2' class='glyphicon glyphicon-trash padding'></button></td>");
+      "<tr id='selectionRow'><td cellpadding='0' cellspacing='0'><select id='select-1' class='form-control projects'><option value='empty' id='option-1'>Select your Project ...</option>@foreach( $projects as $key )<option value='{{$key->project_id}}''>{{$key->project_name}}</option>@endforeach</select></td><td cellpadding='0' cellspacing='0'><select id='select-1' class='form-control ndatabase'></select></td><td contenteditable='true' class='hour'></td><td class='removable'><button type='button' id='button' class='glyphicon glyphicon-plus' title='Kindly enter the actual hours'></button></td><td class='span'><button type='button' id='button2' class='glyphicon glyphicon-trash padding'></button></td></tr>");
     }
   })
 
   //Sent data if the user selects an activity
   $(document).on("change","#select-1",function(){
+    var projectCol = $(this).closest('tr').find('.projects').val();
     taskId = $(this).val();
     var taskh = $(this).closest('tr').find('.hour').html();
-    if(taskh != ''){
+    if(taskh != '' && projectCol!='empty'){
       $(this).closest('tr').find('#button').tooltip('disable');
     }
     data ={
             'uid':uid,
-            'pid':pid,
+            'pid':projectCol,
             'taskId':taskId,
             'taskHour':taskh,
             'week':weekFromController,
@@ -292,7 +350,7 @@ $(document).ready(function(){
 
             data2={
               'uid':uid,
-              'pid':pid,
+              'pid':projectCol,
               'totals':totals,
               'week':weekFromController,
               'year':yearFromController
@@ -313,15 +371,16 @@ $(document).ready(function(){
 
   //Sent data if the user enters any hour
   $(document).on("keyup",".hour",function(){
+    var projectCol = $(this).closest('tr').find('.projects').val();
     var taskHour = $(this).html();
-    var taskId2 = $(this).closest('tr').find('#select-1').val(); //If user filled the task hour while empty drop down menu
-    // console.log(taskId2);
-    if(taskId2 != ''){
+    var taskId2 = $(this).closest('tr').find('.ndatabase').val(); //If user filled the task hour while empty drop down menu
+    if(taskId2 != null && projectCol != 'empty' && taskId2 != 'empty') {
+    console.log(projectCol);
+    console.log(taskId2);
       $(this).closest('tr').find('#button').tooltip('disable');
-      $('#actualsButton').fadeIn(5000);
       data ={
         'uid':uid,
-        'pid':pid,
+        'pid':projectCol,
         'taskId':taskId2,
         'taskHour':taskHour,
         'week':weekFromController,
@@ -344,7 +403,7 @@ $(document).ready(function(){
             
           data2={
             'uid':uid,
-            'pid':pid,
+            'pid':projectCol,
             'totals':totals,
             'week':weekFromController,
             'year':yearFromController
@@ -368,12 +427,13 @@ $(document).ready(function(){
 
   //Delete the record when the user clicks on the delete button
   $(document).on("click","#button2",function () {
+    var projectCol = $(this).closest('tr').find('.projects').val();
     var taskh = $(this).closest('tr').find('.hour').html();
-    var taskId = $(this).closest('tr').find('#select-1').val();
-    if(taskh !== '' && taskId !== ''){ 
+    var taskId = $(this).closest('tr').find('.ndatabase').val();
+    if(taskh !== '' && taskId !== '' && projectCol!==''){ 
     data={
       'uid':uid,
-      'pid':pid,
+      'pid':projectCol,
       'taskId':taskId,
       'taskHour':taskh,
       'week':weekFromController,
