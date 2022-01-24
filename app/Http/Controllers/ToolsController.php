@@ -723,6 +723,7 @@ class ToolsController extends Controller
 
       public function getModalData($project_id,$user_id,$week_no,$year)
     {
+        //Get the projects assigned to the user
         $projects = DB::table('activities as a')
                     ->join('projects as p', 'a.project_id', '=','p.id')
                     ->select('p.project_name','a.project_id')
@@ -730,7 +731,8 @@ class ToolsController extends Controller
                     ->where('a.month',$week_no)
                     ->where('a.year',$year)
                     ->get();
-            //If there are actuals on the project, get the user and the project name
+    
+        //If there are actuals on the project, get the user and the project name
         $empty = "false";
         $data = DB::table('subactivityactuals as actuals') 
                 ->join('projects as p', 'actuals.project_id','=','p.id')
@@ -741,6 +743,7 @@ class ToolsController extends Controller
                 ->where('actuals.week',$week_no)
                 ->where('actuals.year',$year)
                 ->get();
+
         //If the project has no actuals
         if($data->isEmpty()){
             $empty = "true";
@@ -753,32 +756,12 @@ class ToolsController extends Controller
             ->take(1)->get();
         }
 
+        //Distribute the subactivities on their types to have dynamics dropdown menues
         $Account = DB::table('subactivitytypes')->where('type','Account')->select('id','name')->get();
         $General = DB::table('subactivitytypes')->where('type','General')->select('id','name')->get();
         $Opportunity = DB::table('subactivitytypes')->where('type','Opportunity')->select('id','name')->get();    
-        //To have a drop down menu depends on the project type
-        $type = Project::where('id',$project_id)->get('project_type');
-             
-        if($type[0]->project_type != 'Account' && $type[0]->project_type != 'General'){
-            //Opportunity
-            $innerContent = DB::table('subactivitytypes')->where('type','Opportunity')->select('id','name')->get();
-
-        }else{
-            $innerContent = DB::table('subactivitytypes')->where('type',$type[0]->project_type)->select('id','name')->get();
-        }
-
-        //To get the actuals and the activitites
-        $content = DB::table('subactivitytypes as ss')
-        ->join('subactivityactuals as actuals','ss.id','=','actuals.sub_id')
-        ->where('actuals.project_id',$project_id)
-        ->where('actuals.user_id',$user_id)
-        ->where('actuals.week',$week_no)
-        ->where('actuals.year',$year)
-        ->select('ss.name','ss.id','actuals.task_hour')
-        ->get();
-
-        
-        return view('tools/actuals',compact('data','week_no','type','content','innerContent','project_id','user_id','year','projects','Account','General','Opportunity','empty'));
+         
+        return view('tools/actuals',compact('data','week_no','project_id','user_id','year','projects','Account','General','Opportunity','empty'));
     }
 
     public function addNew(Request $request)
@@ -807,57 +790,39 @@ class ToolsController extends Controller
         }
         return json_encode("done");
     }   
-    public function totals(Request $request)
-    {
-        if(Auth::user()->can('tools-activity-view')){
-            $input = $request->all();
-            if($input['totals']!=0){
-            $record = Actuals::updateOrCreate(
-                [
-                    'user_id'=>$input['uid'],
-                    'project_id'=>$input['pid'],
-                    'year'=>$input['year'],
-                    'week'=>$input['week']
-                ],
-                [
-                    'actuals'=>$input['totals']
-                ]);
+
+    public function getActuals($user_id,$week_no,$year){
+
+         if($week_no<12){
+            $pastYearWeeks = 12 - $week_no;
+            for ($i=1; $i<$week_no ; $i++) {
+                $j = $i+1;
+            ${'week_' . $j} = $week_no - $i;
+            ${'year_'.$j} = $year;
             }
-            else{
-                return json_encode("Totals is Equal zero");
+
+            for($i=0; $i<$pastYearWeeks;$i++){
+                $j = $week_no + 1 + $i;
+                ${'week_' . $j} = 52 - $i;    
+                ${'year_'.$j} = $year - 1;
             }
+        }else{
+            for ($i=1; $i <12 ; $i++) { 
+                $j = $i+1;
+                ${'week_'.$j} = $week_no - $i;
+                ${'year_'.$j} = $year;
+            }
+            
         }
-        else{
-            return json_encode("Permission denied");
-        }
-        return json_encode("done");
-    }
-
-    public function getActuals($user_id,$week_no,$pro,$year){
-
-        $week_2 = $week_no+1;
-        $week_3 = $week_no+2;
-        $week_4 = $week_no+3;
-        $week_5 = $week_no+4;
-        $week_6 = $week_no+5;
-        $week_7 = $week_no+6;
-        $week_8 = $week_no+7;
-        $week_9 = $week_no+8;
-        $week_10 = $week_no+9;
-        $week_11 = $week_no+10;
-        $week_12 = $week_no+11;
-
-        $data = DB::table('activities_actual as actual') 
-                ->join('projects as p', 'actual.project_id','=','p.id')
-                ->join('users as u','actual.user_id','=','u.id')
-                ->select('p.project_name as project','u.name as user','actual.actuals','p.project_type',DB::raw("SUM(CASE when actual.week='$week_no' then actual.actuals else 0 end) as '$week_no', SUM(CASE when actual.week='$week_2'then actual.actuals else 0 end) as '$week_2', SUM(CASE when actual.week='$week_3' then actual.actuals else 0 end) as '$week_3', SUM(CASE when actual.week='week_4' then actual.actuals else 0 end) as '$week_4', SUM(CASE when actual.week='week_5' then actual.actuals else 0 end) as '$week_5', SUM(CASE when actual.week='week_6' then actual.actuals else 0 end) as '$week_6', SUM(CASE when actual.week='week_7' then actual.actuals else 0 end) as '$week_7', SUM(CASE when actual.week='week_8' then actual.actuals else 0 end) as '$week_8', SUM(CASE when actual.week='week_9' then actual.actuals else 0 end) as '$week_9', SUM(CASE when actual.week='week_10' then actual.actuals else 0 end) as '$week_10', SUM(CASE when actual.week='week_11' then actual.actuals else 0 end) as '$week_11', SUM(CASE when actual.week='week_12' then actual.actuals else 0 end) as '$week_12'"))
-                ->where('actual.user_id',$user_id)
-                ->whereBetween('actual.week',[$week_no,$week_12])
-                ->where('actual.year',$year)
+        $data = DB::table('subactivityactuals as ss') 
+                ->join('projects as p', 'ss.project_id','=','p.id')
+                ->join('users as u','ss.user_id','=','u.id')
+                ->select('p.project_name as project','u.name as user','ss.task_hour','p.project_type',DB::raw("SUM(CASE when ss.week='$week_no' AND ss.year='$year' then ss.task_hour else 0 end) as '$week_no', SUM(CASE when ss.week='$week_2' AND ss.year='$year_2' then ss.task_hour else 0 end) as '$week_2', SUM(CASE when ss.week='$week_3' AND ss.year='$year_3' then ss.task_hour else 0 end) as '$week_3', SUM(CASE when ss.week='$week_4' AND ss.year='$year_4' then ss.task_hour else 0 end) as '$week_4', SUM(CASE when ss.week='$week_5' AND ss.year='$year_5' then ss.task_hour else 0 end) as '$week_5', SUM(CASE when ss.week='$week_6' AND ss.year='$year_6' then ss.task_hour else 0 end) as '$week_6', SUM(CASE when ss.week='$week_7' AND ss.year='$year_7' then ss.task_hour else 0 end) as '$week_7', SUM(CASE when ss.week='$week_8' AND ss.year='$year_8' then ss.task_hour else 0 end) as '$week_8', SUM(CASE when ss.week='$week_9' AND ss.year='$year_9' then ss.task_hour else 0 end) as '$week_9', SUM(CASE when ss.week='$week_10' AND ss.year='$year_10' then ss.task_hour else 0 end) as '$week_10', SUM(CASE when ss.week='$week_11' AND ss.year='$year_11' then ss.task_hour else 0 end) as '$week_11', SUM(CASE when ss.week='$week_12' AND ss.year='$year_12' then ss.task_hour else 0 end) as '$week_12'"))
+                ->where('ss.user_id',$user_id)
                 ->groupBy('p.project_name')
                 ->get();
 
-                return view('tools/actualsView',compact('pro','user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12'));
+                return view('tools/actualsView',compact('user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12'));
     }
     public function deleteActivity(Request $request){
 
@@ -900,10 +865,21 @@ class ToolsController extends Controller
             }
         }
     }
-    public function actualsView(AuthUsersForDataView $authUsersForDataView)
-    {
-        $authUsersForDataView->userCanView('tools-activity-all-view');
 
-        return view('tools/actualsView');
+    //Test Function
+    public function t($week_no = 8){
+        if($week_no<12){
+            $pastYearWeeks = 12 - $week_no;
+            for ($i=1; $i<$week_no ; $i++) {
+                $j = $i+1;
+            ${'week_' . $j} = $week_no - $i;
+            array_push($weeks_n,${'week_' . $j});
+            }
+
+            for($i=0; $i<$pastYearWeeks;$i++){
+                $j = $week_no + 1 + $i;
+                ${'week_' . $j} = 52 - $i;    
+            }
+        }
     }
 }

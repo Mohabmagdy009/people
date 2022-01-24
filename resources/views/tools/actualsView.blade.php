@@ -61,38 +61,16 @@
       <div class="form-group row" style="width:400px;padding:5px ;font-size:15px">
         <div class="col-sm-4">
           <label for="year" class="control-label">Year</label>
-          <div class="form-control select2" id="year" name="year" data-placeholder="Select a year">
-            <!-- @foreach(config('select.year') as $key => $value)
-            <option value="{{ $key }}">
-              {{ $value }}
-            </option>
-              @endforeach -->
-              
-
-              {{$year}}
-          </div>
+          <div class="form-control select2" id="year" name="year" data-placeholder="Select a year">{{$year}}</div>
         </div>
         <div class="col-sm-4">
           <label for="week" class="control-label">Weeks</label>
-          <div class="form-control" id="week" name="week" data-placeholder="Select a week">
-           <!--  @foreach(config('select.month_names') as $key => $value)
-            <option value="{{ $key }}">
-              {{ $value }}
-            </option>
-              @endforeach -->
-              Week {{$week_no}}
-          </div>
+          <div class="form-control" id="week" name="week" data-placeholder="Select a week">Week {{$week_no}}</div>
         </div>
       </div>
 
-      <!-- Variables sent from Tools Controller -->
-      <input type="hidden" id="u_id" value="{{$user_id}}">
-      <input type="hidden" id="w" value="{{$week_no}}">
-      <input type="hidden" id="y" value="{{$year}}">
-
-      <!-- Week and Year drop down menus ended -->
-
       <div class="clearfix"><h2>{{$data[0]->user}}</h2></div> <!-- Project Name -->
+      <div class="clearfix"><h2 style="text-align: center;">Your 12 Weeks Summarization</h2></div> <!-- Project Name -->
 
       <!-- Main table -->
       <table id="sub_activity" class="table table-striped table-hover table-bordered mytablee2" width="100%">
@@ -100,31 +78,37 @@
           <tr style="font-size: 18px; font-weight:bold">
             <td style="width:15%">Project Name</td>
             <td style="width:10%;">Project Type</td>
-            @for($i=0;$i<12;$i++)
-              <td class="font">Week {{$week_no + $i}} </td>
-            @endfor
+              <td class="font">Week {{$week_12}} </td>
+              <td class="font">Week {{$week_11}} </td>
+              <td class="font">Week {{$week_10}} </td>
+              <td class="font">Week {{$week_9}} </td>
+              <td class="font">Week {{$week_8}} </td>
+              <td class="font">Week {{$week_7}} </td>
+              <td class="font">Week {{$week_6}} </td>
+              <td class="font">Week {{$week_5}} </td>
+              <td class="font">Week {{$week_4}} </td>
+              <td class="font">Week {{$week_3}} </td>
+              <td class="font">Week {{$week_2}} </td>
+              <td class="font">Week {{$week_no}} </td>
           </tr>
         </thead>
         <tbody id='tableBody'>
-
           @foreach($data as $key => $value)
-
             <tr id="selectionRow">
-            
             <td>{{$data[$key]->project}}</td>
             <td>{{$data[$key]->project_type}}</td>
-            <td class="one font">{{$data[$key]->$week_no}}</td>
-            <td class="two font">{{$data[$key]->$week_2}}</td>
-            <td class="three font">{{$data[$key]->$week_3}}</td>
-            <td class="four font">{{$data[$key]->$week_4}}</td>
-            <td class="five font">{{$data[$key]->$week_5}}</td>
-            <td class="six font">{{$data[$key]->$week_6}}</td>
-            <td class="seven font">{{$data[$key]->$week_7}}</td>
-            <td class="eight font">{{$data[$key]->$week_8}}</td>
-            <td class="nine font">{{$data[$key]->$week_9}}</td>
-            <td class="ten font">{{$data[$key]->$week_10}}</td>
-            <td class="eleven font">{{$data[$key]->$week_11}}</td>
-            <td class="twelve font">{{$data[$key]->$week_12}}</td>
+            <td class="one font">{{$data[$key]->$week_12}}</td>
+            <td class="two font">{{$data[$key]->$week_11}}</td>
+            <td class="three font">{{$data[$key]->$week_10}}</td>
+            <td class="four font">{{$data[$key]->$week_9}}</td>
+            <td class="five font">{{$data[$key]->$week_8}}</td>
+            <td class="six font">{{$data[$key]->$week_7}}</td>
+            <td class="seven font">{{$data[$key]->$week_6}}</td>
+            <td class="eight font">{{$data[$key]->$week_5}}</td>
+            <td class="nine font">{{$data[$key]->$week_4}}</td>
+            <td class="ten font">{{$data[$key]->$week_3}}</td>
+            <td class="eleven font">{{$data[$key]->$week_2}}</td>
+            <td class="twelve font">{{$data[$key]->$week_no}}</td>
             </tr>
           @endforeach
         </tbody>
@@ -142,22 +126,9 @@
 </div>
 @section('script')
 <script>
-// Variables From Controller 
-var yearFromController = $('#y').val();
-var weekFromController = $('#w').val();
-// var pid = $('#p_id').val();
-var uid = $('#u_id').val();
-// var taskId;
-
-// //Insert week and year values sent from the controller to the drop down menus
-$('#year').val(yearFromController);
-$('#week').val(weekFromController);
-
-
   function getTotals(){
     const totall =["one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve"];
     totall.forEach(function(element){
-    
     var total = 0;
     $('#sub_activity tbody').find('.'+element).each(function(i,e){
       var d = parseInt($(this).html());
@@ -167,7 +138,7 @@ $('#week').val(weekFromController);
     $('#sub_activity tfoot').find('#'+element).html(total);
     });
   };
-
+  //Run the function to get the totals
   getTotals();
 </script>
 @stop

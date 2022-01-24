@@ -90,14 +90,14 @@
       <input type="hidden" id="y" value="{{$year}}">
 
 
-      <!-- Project Name -->
-        <!-- <div class="clearfix">
-          <h2 style="display:inline-block;">{{$data}}</h2>
-            <button type="button" id="actualsButton" title="There is no actuals for this week to show." class="btn btn-primary" value="asdas" style="display:none; float: right;">
+      <!-- Report Button -->
+        <div class="clearfix">
+          <h2 style="display:inline-block;"></h2>
+            <button type="button" id="actualsButton" class="btn btn-primary" style="float: right;">
                           Actuals Activity Report
             </button>
         </div> 
- -->
+
       <!-- Main table -->
       <table id="sub_activity" class="table table-striped table-hover table-bordered mytablee" width="100%">
         <thead>
@@ -122,9 +122,7 @@
                 </select>
               </td>
               <td cellpadding="0" cellspacing="0">        
-                <select id="select-1" class="form-control ndatabase">
-                  
-                </select>
+                <select id="select-1" class="form-control ndatabase"></select>
               </td>
               <td contenteditable='true' class='hour'></td>
               <td class="removable"><button type="button" id="button" class="glyphicon glyphicon-plus" title="Kindly enter the actual hours"></button></td>
@@ -166,9 +164,7 @@
                 </select>
               </td>
               <td cellpadding="0" cellspacing="0">        
-                <select id="select-1" class="form-control ndatabase">
-                  
-                </select>
+                <select id="select-1" class="form-control ndatabase"></select>
               </td>
               <td contenteditable='true' class='hour'></td>
               <td class="removable"><button type="button" id="button" class="glyphicon glyphicon-plus" title="Kindly enter the actual hours"></button></td>
@@ -178,10 +174,9 @@
         </tbody>
         <tfoot style="font-size: 18px; font-weight:bold">
           <td>Total</td>
-          <td>        
-                
-          </td>
+          <td></td>
           <td id="totals"></td>
+          <td></td>
         </tfoot>
       </table>
       @stop
@@ -194,10 +189,6 @@
 var yearFromController = $('#y').val();
 var weekFromController = $('#w').val();
 var pid = $('#p_id').val();
-
-console.log("pid");
-console.log(pid);
-console.log("pid");
 var uid = $('#u_id').val();
 var taskId;
 
@@ -232,31 +223,17 @@ $(document).ready(function(){
     }
   });
 
-  var currentYear = getYear(new Date());
-  var currentWeek = getWeek(new Date());
 
-  var totals = getTotals();
-            
-  data2={
-    'uid':uid,
-    'pid':pid,
-    'totals':totals,
-    'week':weekFromController,
-    'year':yearFromController
+  // Run the function to have the totals ready
+  getTotals();
+
+  //Displays the actuals report bytton if we have entries
+  if($("#totals").html()!= 0){
+      $("#actualsButton").css("display","inline-block");
   }
-  $.ajax({
-    type: 'POST',
-    url: "{!! route('postTotals') !!}",
-    data: data2,
-    dataType: 'json',
-    success: function(data2){
-      console.log(data2);
-    }
-  })
-    if($("#totals").html() != 0){
-        $("#actualsButton").css("display","inline-block");
-    }
     
+  // var currentYear = getYear(new Date());
+  // var currentWeek = getWeek(new Date());
   //Lock any editing if the user is checking old data
   // if(yearFromController < currentYear || weekFromController<currentWeek){
   //   $(".database").prop("disabled", true);
@@ -264,9 +241,9 @@ $(document).ready(function(){
   //   $("#selectionRow").remove();
   //   $("#actions").remove();
   //   $("#oldData").remove();
-  //   console.log(currentWeek);
   // }
 
+  //Make sure we have the correct subactivities of each project type
   $(document).on("change",".projects",function(){
     if($(this).val()==1813){
     $(this).closest("tr").find('.ndatabase').
@@ -282,14 +259,7 @@ $(document).ready(function(){
     }
   })
   $(document).on("click","#actualsButton",function(){
-
-    if($("#totals").html()!=0){
-      console.log($("#totals").html());
-      window.location.href = "{!! route('actualsView',['','','','',]) !!}/"+uid+"/"+weekFromController+"/"+pid+"/"+yearFromController;
-    }
-    else{
-      return;
-    } 
+      window.location.href = "{!! route('actualsView',['','','']) !!}/"+uid+"/"+weekFromController+"/"+yearFromController; 
   })
   //tooltip for the user if he has an empty record
   $(document).on("mouseover","#button",function(){
@@ -345,25 +315,6 @@ $(document).ready(function(){
           dataType: 'json',
           success: function(data) {
             getTotals();
-
-            var totals = getTotals();
-
-            data2={
-              'uid':uid,
-              'pid':projectCol,
-              'totals':totals,
-              'week':weekFromController,
-              'year':yearFromController
-            }
-            $.ajax({
-              type: 'POST',
-              url: "{!! route('postTotals') !!}",
-              data: data2,
-              dataType: 'json',
-              success: function(data2){
-                console.log(data2);
-              }
-            })
           }
     });
      
@@ -375,8 +326,6 @@ $(document).ready(function(){
     var taskHour = $(this).html();
     var taskId2 = $(this).closest('tr').find('.ndatabase').val(); //If user filled the task hour while empty drop down menu
     if(taskId2 != null && projectCol != 'empty' && taskId2 != 'empty') {
-    console.log(projectCol);
-    console.log(taskId2);
       $(this).closest('tr').find('#button').tooltip('disable');
       data ={
         'uid':uid,
@@ -392,31 +341,12 @@ $(document).ready(function(){
         data:data,
         dataType: 'json',
         success: function(data) {
-          // console.log(data);
           $('.hour').addClass('update_success');
           setTimeout(function () {
             $('.hour').removeClass('update_success');
           }, 1000);
           getTotals();
-          
-          var totals = getTotals();
-            
-          data2={
-            'uid':uid,
-            'pid':projectCol,
-            'totals':totals,
-            'week':weekFromController,
-            'year':yearFromController
-          }
-          $.ajax({
-            type: 'POST',
-            url: "{!! route('postTotals') !!}",
-            data: data2,
-            dataType: 'json',
-            success: function(data2){
-              console.log(data2);
-            }
-          })
+          $("#actualsButton").fadeIn(3000);
         }
       });
     }
@@ -430,7 +360,7 @@ $(document).ready(function(){
     var projectCol = $(this).closest('tr').find('.projects').val();
     var taskh = $(this).closest('tr').find('.hour').html();
     var taskId = $(this).closest('tr').find('.ndatabase').val();
-    if(taskh !== '' && taskId !== '' && projectCol!==''){ 
+    if(taskh != '' && taskId != 'empty' && projectCol!='empty'&&taskId != null){ 
     data={
       'uid':uid,
       'pid':projectCol,
@@ -478,13 +408,9 @@ $(document).ready(function(){
       var item = parseInt(d) || 0;
       total+=item;
     });
-    // console.log($('#sub_activity tfoot').find('#totals').html());
     $('#sub_activity tfoot').find('#totals').html(total);
     return total;
   }
-
-  // Run the function to have the totals ready
-  getTotals();
 });
 </script>
 @stop

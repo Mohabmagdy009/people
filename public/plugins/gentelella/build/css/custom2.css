@@ -1,3 +1,6 @@
+#actualsButton{
+    display: none;
+}
 #sub_activity tfoot{
     border-top: 3px groove;;
 }
