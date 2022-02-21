@@ -12,6 +12,7 @@ use App\Repositories\ProjectRepository;
 use App\Repositories\ProjectTableRepository;
 use App\Repositories\UserRepository;
 use Auth;
+use Datatables;
 use DB;
 use Illuminate\Http\Request;
 
@@ -59,6 +60,96 @@ class ActivityController extends Controller
         return view('activity/create_update', compact('activity', 'allUsers_list', 'allProjects_list'))->with('action', 'update');
     }
 
+public function hanaaCarfour()
+    {
+        // code...
+        $table = DB::table('subactivityactuals as sub');
+
+            for($j=0, $i=1; $i<53;$j++, $i++){
+                    ${'y' . $i} = date('Y');
+                    ${'m' . $i} = date('W') + $j;
+                    if(${'m' . $i}>52){
+                        ${'m' . $i} -= 52;
+                        ${'y' . $i} = date('Y')-1;
+                    }    
+                }
+
+        $table->select('uu.manager_id as manager_id','m.name AS manager_name','u.name as user_name', 'p.project_name as project_name',
+           DB::raw("SUM(CASE when sub.week='1'  then sub.task_hour else 0 end) as m1_com"), 
+                            DB::raw("SUM(CASE when sub.week='2'  then sub.task_hour else 0 end) as m2_com"), 
+                            DB::raw("SUM(CASE when sub.week='3'  then sub.task_hour else 0 end) as m3_com"), 
+                            DB::raw("SUM(CASE when sub.week='4'  then sub.task_hour else 0 end) as m4_com"), 
+                            DB::raw("SUM(CASE when sub.week='5'  then sub.task_hour else 0 end) as m5_com"), 
+                            DB::raw("SUM(CASE when sub.week='6'  then sub.task_hour else 0 end) as m6_com"), 
+                            DB::raw("SUM(CASE when sub.week='7'  then sub.task_hour else 0 end) as m7_com"), 
+                            DB::raw("SUM(CASE when sub.week='8'  then sub.task_hour else 0 end) as m8_com"), 
+                            DB::raw("SUM(CASE when sub.week='9'  then sub.task_hour else 0 end) as m9_com"),
+                            DB::raw("SUM(CASE when sub.week='10' then sub.task_hour else 0 end) as m10_com"), 
+                            DB::raw("SUM(CASE when sub.week='11' then sub.task_hour else 0 end) as m11_com"), 
+                            DB::raw("SUM(CASE when sub.week='12' then sub.task_hour else 0 end) as m12_com"), 
+                            DB::raw("SUM(CASE when sub.week='13' then sub.task_hour else 0 end) as m13_com"),
+                            DB::raw("SUM(CASE when sub.week='14' then sub.task_hour else 0 end) as m14_com"), 
+                            DB::raw("SUM(CASE when sub.week='15' then sub.task_hour else 0 end) as m15_com"), 
+                            DB::raw("SUM(CASE when sub.week='16' then sub.task_hour else 0 end) as m16_com"), 
+                            DB::raw("SUM(CASE when sub.week='17' then sub.task_hour else 0 end) as m17_com"), 
+                            DB::raw("SUM(CASE when sub.week='18' then sub.task_hour else 0 end) as m18_com"), 
+                            DB::raw("SUM(CASE when sub.week='19' then sub.task_hour else 0 end) as m19_com"), 
+                            DB::raw("SUM(CASE when sub.week='20' then sub.task_hour else 0 end) as m20_com"), 
+                            DB::raw("SUM(CASE when sub.week='21' then sub.task_hour else 0 end) as m21_com"), 
+                            DB::raw("SUM(CASE when sub.week='22' then sub.task_hour else 0 end) as m22_com"), 
+                            DB::raw("SUM(CASE when sub.week='23' then sub.task_hour else 0 end) as m23_com"), 
+                            DB::raw("SUM(CASE when sub.week='24' then sub.task_hour else 0 end) as m24_com"), 
+                            DB::raw("SUM(CASE when sub.week='25' then sub.task_hour else 0 end) as m25_com"), 
+                            DB::raw("SUM(CASE when sub.week='26' then sub.task_hour else 0 end) as m26_com"), 
+                            DB::raw("SUM(CASE when sub.week='27' then sub.task_hour else 0 end) as m27_com"), 
+                            DB::raw("SUM(CASE when sub.week='28' then sub.task_hour else 0 end) as m28_com"), 
+                            DB::raw("SUM(CASE when sub.week='29' then sub.task_hour else 0 end) as m29_com"), 
+                            DB::raw("SUM(CASE when sub.week='30' then sub.task_hour else 0 end) as m30_com"), 
+                            DB::raw("SUM(CASE when sub.week='31' then sub.task_hour else 0 end) as m31_com"), 
+                            DB::raw("SUM(CASE when sub.week='32' then sub.task_hour else 0 end) as m32_com"), 
+                            DB::raw("SUM(CASE when sub.week='33' then sub.task_hour else 0 end) as m33_com"), 
+                            DB::raw("SUM(CASE when sub.week='34' then sub.task_hour else 0 end) as m34_com"), 
+                            DB::raw("SUM(CASE when sub.week='35' then sub.task_hour else 0 end) as m35_com"), 
+                            DB::raw("SUM(CASE when sub.week='36' then sub.task_hour else 0 end) as m36_com"), 
+                            DB::raw("SUM(CASE when sub.week='37' then sub.task_hour else 0 end) as m37_com"), 
+                            DB::raw("SUM(CASE when sub.week='38' then sub.task_hour else 0 end) as m38_com"), 
+                            DB::raw("SUM(CASE when sub.week='39' then sub.task_hour else 0 end) as m39_com"),
+                            DB::raw("SUM(CASE when sub.week='40' then sub.task_hour else 0 end) as m40_com"),
+                            DB::raw("SUM(CASE when sub.week='41' then sub.task_hour else 0 end) as m41_com"),
+                            DB::raw("SUM(CASE when sub.week='42' then sub.task_hour else 0 end) as m42_com"),
+                            DB::raw("SUM(CASE when sub.week='43' then sub.task_hour else 0 end) as m43_com"),
+                            DB::raw("SUM(CASE when sub.week='44' then sub.task_hour else 0 end) as m44_com"),
+                            DB::raw("SUM(CASE when sub.week='45' then sub.task_hour else 0 end) as m45_com"),
+                            DB::raw("SUM(CASE when sub.week='46' then sub.task_hour else 0 end) as m46_com"),
+                            DB::raw("SUM(CASE when sub.week='47' then sub.task_hour else 0 end) as m47_com"),
+                            DB::raw("SUM(CASE when sub.week='48' then sub.task_hour else 0 end) as m48_com"),
+                            DB::raw("SUM(CASE when sub.week='49' then sub.task_hour else 0 end) as m49_com"),
+                            DB::raw("SUM(CASE when sub.week='50' then sub.task_hour else 0 end) as m50_com"),
+                            DB::raw("SUM(CASE when sub.week='51' then sub.task_hour else 0 end) as m51_com"),
+                            DB::raw("SUM(CASE when sub.week='52' then sub.task_hour else 0 end) as m52_com"))
+                           ;
+        $table->join('projects as p','p.id','=','sub.project_id');
+        $table->join('users AS u', 'sub.user_id', '=', 'u.id');
+        $table->join('users_users AS uu', 'u.id', '=', 'uu.user_id');
+        $table->join('users AS m', 'm.id', '=', 'uu.manager_id');
+        $table->where('sub.year','=','2022');
+        $table->groupBy('p.project_name','sub.week');
+
+
+        $data = Datatables::of($table)->make(true);
+
+        $users = DB::table('activities');
+        $user = $users->select('user_id')->get();
+        $arr = [];
+        foreach($user as $key => $val){
+            array_push($arr,$val->user_id);
+        }
+
+
+        return $arr;
+
+    }
+
     public function postFormCreate(ActivityCreateRequest $request)
     {
         $inputs = $request->all();
@@ -96,6 +187,12 @@ class ActivityController extends Controller
         $input = $request->all();
 
         return $this->activityRepository->getListOfActivitiesPerUser($input);
+    }
+    public function ListOfActualsPerUser(Request $request) //ajax function
+    {
+        $input = $request->all();
+
+        return $this->activityRepository->getListOfActualsPerUser($input);
     }
 
     public function listOfLoadPerUserAjax(Request $request)

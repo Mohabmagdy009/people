@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-
 @section('style')
     <!-- CSS -->
     <!-- DataTables -->
@@ -61,9 +60,9 @@
       <div class="form-group row" style="width:400px;padding:5px ;font-size:15px">
         <div class="col-xs-6">
           <label for="year" class="control-label">Year</label>
-          <select class="form-control select2" id="year" name="year" data-placeholder="Select a year">
+          <select class="form-control" id="year" name="year" data-placeholder="Select a year">
             @foreach(config('select.year') as $key => $value)
-            <option value="{{ $key }}">
+            <option value="{{ $key }}" class="dropdown-item">
               {{ $value }}
             </option>
               @endforeach
@@ -73,7 +72,7 @@
           <label for="week" class="control-label">Weeks</label>
           <select class="form-control" id="week" name="week" data-placeholder="Select a week">
             @foreach(config('select.month_names') as $key => $value)
-            <option value="{{ $key }}">
+            <option value="{{ $key }}" class="dropdown-item">
               {{ $value }}
             </option>
               @endforeach
@@ -84,24 +83,26 @@
       <!-- Week and Year drop down menus ended -->
 
       <!-- Variables sent from Tools Controller -->
-      <input type="hidden" id="p_id" value="{{$project_id}}">
       <input type="hidden" id="u_id" value="{{$user_id}}">
       <input type="hidden" id="w" value="{{$week_no}}">
       <input type="hidden" id="y" value="{{$year}}">
-
+      <input type="hidden" id="readOnly" value="{{$read}}">
 
       <!-- Report Button -->
         <div class="clearfix">
           <h2 style="display:inline-block;"></h2>
-            <button type="button" id="actualsButton" class="btn btn-primary" style="float: right;">
+            <button type="button" id="actualsButton" class="btn btn-success" style="float: right;">
                           Actuals Activity Report
+            </button>
+            <button type="button" id="back" class="btn btn-success" style="float: right;">
+                     Back
             </button>
         </div> 
 
       <!-- Main table -->
       <table id="sub_activity" class="table table-striped table-hover table-bordered mytablee" width="100%">
         <thead>
-          <tr style="font-size: 18px; font-weight:bold">
+          <tr class="tableFont">
             <td style="width:40%">Project Name</td>
             <td style="width:39%">Activity</td>
             <td style="width:16%;" id="actuals">Actual Hours</td>
@@ -115,7 +116,7 @@
                 <select id="select-1" class="form-control projects">
                   <option value="empty" id="option-1">Select your Project ...</option>
                     @foreach( $projects as $key )
-                  <option value="{{$key->project_id}}">
+                  <option value="{{$key->project_id}}" class="dropdown-item">
                     {{$key->project_name}}
                   </option>
                     @endforeach
@@ -135,7 +136,7 @@
                 <select id="select-1" class="form-control projects">
                   <option value="{{$key1->project_id}}" id="option-1">{{$key1->project}}</option>
                    @foreach( $projects as $key )
-                  <option value="{{$key->project_id}}">
+                  <option value="{{$key->project_id}}" class="dropdown-item">
                     {{$key->project_name}}
                   </option>
                     @endforeach
@@ -157,7 +158,7 @@
                 <select id="select-1" class="form-control projects">
                   <option value="empty" id="option-1">Select your Project ...</option>
                     @foreach( $projects as $key )
-                  <option value="{{$key->project_id}}">
+                  <option value="{{$key->project_id}}" class="dropdown-item">
                     {{$key->project_name}}
                   </option>
                     @endforeach
@@ -172,11 +173,11 @@
             </tr>
           @endif
         </tbody>
-        <tfoot style="font-size: 18px; font-weight:bold">
+        <tfoot class="tableFont">
           <td>Total</td>
           <td></td>
           <td id="totals"></td>
-          <td></td>
+          <td colspan="2" class="empty"></td>
         </tfoot>
       </table>
       @stop
@@ -226,40 +227,37 @@ $(document).ready(function(){
 
   // Run the function to have the totals ready
   getTotals();
-
-  //Displays the actuals report bytton if we have entries
-  if($("#totals").html()!= 0){
-      $("#actualsButton").css("display","inline-block");
-  }
     
-  // var currentYear = getYear(new Date());
-  // var currentWeek = getWeek(new Date());
+  var currentYear = getYear(new Date());
+  var currentWeek = getWeek(new Date());
+
   //Lock any editing if the user is checking old data
-  // if(yearFromController < currentYear || weekFromController<currentWeek){
-  //   $(".database").prop("disabled", true);
-  //   $(".hour").prop("contenteditable",false);
-  //   $("#selectionRow").remove();
-  //   $("#actions").remove();
-  //   $("#oldData").remove();
-  // }
+  if($("#readOnly").val() == 1){
+    $(".projects, .ndatabase, #year, #week").prop("disabled", true);
+    $(".hour").prop("contenteditable",false);
+    $(".empty, #back, #oldData, #actions, #selectionRow").remove();
+  }
 
   //Make sure we have the correct subactivities of each project type
   $(document).on("change",".projects",function(){
     if($(this).val()==1813){
     $(this).closest("tr").find('.ndatabase').
-    html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $Account as $key )<option value='{{ $key->id }}'>{{ $key->name }}</option>@endforeach")
+    html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $Account as $key )<option value='{{ $key->id }}' class='dropdown-item'>{{ $key->name }}</option>@endforeach")
     }
     else if($(this).val()==1812){
       $(this).closest("tr").find('.ndatabase').
-      html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $General as $key )<option value='{{ $key->id }}'>{{ $key->name }}</option>@endforeach")
+      html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $General as $key )<option value='{{ $key->id }}' class='dropdown-item'>{{ $key->name }}</option>@endforeach")
     }
     else{ 
       $(this).closest("tr").find('.ndatabase').
-      html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $Opportunity as $key )<option value='{{ $key->id }}'>{{ $key->name }}</option>@endforeach")
+      html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $Opportunity as $key )<option value='{{ $key->id }}' class='dropdown-item'>{{ $key->name }}</option>@endforeach")
     }
   })
   $(document).on("click","#actualsButton",function(){
-      window.location.href = "{!! route('actualsView',['','','']) !!}/"+uid+"/"+weekFromController+"/"+yearFromController; 
+      window.location.href = "{!! route('actualsView',['','','','','']) !!}/"+uid+"/"+currentWeek+"/"+currentYear+"/"+weekFromController+"/"+yearFromController; 
+  })
+  $(document).on("click","#back",function(){
+      window.location.href = "{!! route('toolsActivities') !!}/"; 
   })
   //tooltip for the user if he has an empty record
   $(document).on("mouseover","#button",function(){
@@ -288,7 +286,7 @@ $(document).ready(function(){
     $('.padding').css("padding-left","45%");
     $('#tableBody').
     append(
-      "<tr id='selectionRow'><td cellpadding='0' cellspacing='0'><select id='select-1' class='form-control projects'><option value='empty' id='option-1'>Select your Project ...</option>@foreach( $projects as $key )<option value='{{$key->project_id}}''>{{$key->project_name}}</option>@endforeach</select></td><td cellpadding='0' cellspacing='0'><select id='select-1' class='form-control ndatabase'></select></td><td contenteditable='true' class='hour'></td><td class='removable'><button type='button' id='button' class='glyphicon glyphicon-plus' title='Kindly enter the actual hours'></button></td><td class='span'><button type='button' id='button2' class='glyphicon glyphicon-trash padding'></button></td></tr>");
+      "<tr id='selectionRow'><td cellpadding='0' cellspacing='0'><select id='select-1' class='form-control projects'><option value='empty' id='option-1'>Select your Project ...</option>@foreach( $projects as $key )<option value='{{$key->project_id}}'class='dropdown-item'>{{$key->project_name}}</option>@endforeach</select></td><td cellpadding='0' cellspacing='0'><select id='select-1' class='form-control ndatabase'></select></td><td contenteditable='true' class='hour'></td><td class='removable'><button type='button' id='button' class='glyphicon glyphicon-plus' title='Kindly enter the actual hours'></button></td><td class='span'><button type='button' id='button2' class='glyphicon glyphicon-trash padding'></button></td></tr>");
     }
   })
 
@@ -392,12 +390,12 @@ $(document).ready(function(){
   $(document).on('change','#week',function(){
     var new_week = $('select#week').val();
     var new_year = $('select#year').val();
-    window.location.href = "{!! route('getModalData',['','','','']) !!}/"+pid+"/"+uid+"/"+new_week+"/"+new_year;
+    window.location.href = "{!! route('getModalData',['','','','']) !!}/"+uid+"/"+new_week+"/"+new_year+"/"+0;
   })
   $(document).on('change','#year',function(){
     var new_week = $('select#week').val();
     var new_year = $('select#year').val();
-    window.location.href = "{!! route('getModalData',['','','','']) !!}/"+pid+"/"+uid+"/"+new_week+"/"+new_year;
+    window.location.href = "{!! route('getModalData',['','','','']) !!}/"+uid+"/"+new_week+"/"+new_year+"/"+0;
   })
 
   // Total Actual Hours calculated

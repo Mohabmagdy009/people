@@ -196,6 +196,10 @@ Route::group(['middleware' => ['auth', 'general','last_login']], function () {
     Route::patch('ProjectsRevenueUpdateAjax/{id}', ['uses' => 'ProjectController@updateRevenue', 'as' => 'ProjectsRevenueUpdateAjax', 'middleware' => ['permission:projectRevenue-edit']]);
     Route::get('projectRevenueDelete/{n}', ['uses' => 'ProjectController@deleteRevenue', 'as' => 'projectRevenueDelete', 'middleware' => ['permission:projectRevenue-delete']]);
     Route::post('listOfActivitiesPerUserAjax', ['uses' => 'ActivityController@listOfActivitiesPerUser', 'as' => 'listOfActivitiesPerUserAjax', 'middleware' => ['permission:tools-activity-view']]);
+    Route::post('listOfActualsPerUserAjax', ['uses' => 'ActivityController@listOfActualsPerUser', 'as' => 'listOfActualsPerUserAjax', 'middleware' => ['permission:tools-activity-view']]);
+    Route::get('hanaaCarfour', ['uses' => 'ActivityController@hanaaCarfour', 'as' => 'hanaaCarfour', 'middleware' => ['permission:tools-activity-view']]);
+
+
     Route::get('listOfProjectsMissingInfoAjax', ['uses' => 'ProjectController@listOfProjectsMissingInfo', 'as' => 'listOfProjectsMissingInfoAjax', 'middleware' => ['permission:tools-missing_info-view']]);
     Route::get('listOfProjectsMissingOTLAjax', ['uses' => 'ProjectController@listOfProjectsMissingOTL', 'as' => 'listOfProjectsMissingOTLAjax', 'middleware' => ['permission:tools-missing_info-view']]);
     Route::get('listOfProjectsLostAjax', ['uses' => 'ProjectController@listOfProjectsLost', 'as' => 'listOfProjectsLostAjax', 'middleware' => ['permission:tools-all_projects-view']]);
@@ -272,13 +276,13 @@ Route::group(['middleware' => ['auth', 'general','last_login']], function () {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
 // Route::get('updator',['uses'=>'UpdateTableController@updator', 'as'=>'updator']);
 
-Route::get('actualsView/{u_id}/{w_no}/{y_no}', ['uses' => 'ToolsController@getActuals', 'as' => 'actualsView', 'middleware' => ['permission:tools-activity-view']]);
+Route::get('actualsView/{u_id}/{w_no}/{y_no}/{w_no2}/{y_no2}', ['uses' => 'ToolsController@getActuals', 'as' => 'actualsView', 'middleware' => ['permission:tools-activity-view']]);
 
 Route::post('import', ['uses' => 'UserController@UploadExcelToCreateOrUpdateUsers', 'as' => 'UploadExcelToCreateOrUpdateUsers', 'middleware' => ['permission:user-view|user-create|user-edit|user-delete']]);
-Route::get('getModalData/{p_id}/{u_id}/{week}/{year}',['uses' => 'ToolsController@getModalData', 'as' => 'getModalData']);
+Route::get('getModalData/{u_id}/{week}/{year}/{read}',['uses' => 'ToolsController@getModalData', 'as' => 'getModalData']);
+Route::get('getForecast/{u_id}/{week}/{year}',['uses' => 'ToolsController@getForecastDetail', 'as' => 'getForecast']);
 Route::get('uploadfile','ToolsController@uploadFileView');
 Route::post('uploadfile','ToolsController@importActivities');
 Route::get('tests','ToolsController@t');

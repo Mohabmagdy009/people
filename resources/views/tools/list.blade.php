@@ -69,7 +69,7 @@
             <label for="month" class="control-label">Week</label>
             <div id="month-by" name="month" class="form-control select2"></div>
           </div>
-          <div class="col-xs-2">
+          <div class="col-xs-2" style="width:10%">
             <label for="started-by" class="control-label">Start Date</label>
             <div id="started-by" name="started-by" class="form-control select2"></div>
           </div>
@@ -85,7 +85,7 @@
               @endforeach
             </select>
           </div>
-          <div class="col-xs-3">
+          <div class="col-xs-3 userFilter">
             <label for="user" class="control-label">User</label>
             <select class="form-control select2" id="user" name="user" data-placeholder="Select a user" multiple="multiple">
               @foreach($authUsersForDataView->user_list as $key => $value)
@@ -97,10 +97,15 @@
               @endforeach
             </select>
           </div>
-          <div class="col-xs-1">
+          <div class="col-xs-1 Hide" style="margin-right:110px">
             <label for="closed" class="control-label">Hide closed</label>
             <input name="closed" type="checkbox" id="closed" class="form-group js-switch-small" checked /> 
           </div>
+          <div class="col-xs-1">
+            <button type="button" id="actualsView" class="btn btn-success" style="float: right; margin-top: 20px;">
+                          Activity Actuals
+            </button>
+        </div> 
         </div>
         <!-- Selections for the table -->
         <!-- Create new button -->
@@ -116,16 +121,18 @@
           <thead>
               <tr>
               @if($isManager == 1)
-              <th>User Name</th>
+              <th class="tableFont" style="font-size: 13px;">User Name</th>
               @endif
-              <th>Customer name</th>
-              <th>Project name</th>
-              <th>Project type</th>
-              <th>CL ID</th>
+              @if($isManager==0)
+              <th class="tableFont" style="font-size: 13px;">Customer name</th>
+              <th class="tableFont" style="font-size: 13px;">Project name</th> 
+              <th class="tableFont" style="font-size: 13px;">Project type</th>
+              <th class="tableFont" style="font-size: 13px;">CL ID</th>
+              @endif
               @foreach(config('select.data_shown') as $key => $month)
-              <th id="table_month_{{$key}}" onmouseover="getID(this.id)"></th>
-              <th>ID</th>
-              <th>OTL</th>
+              <th id="table_month_{{$key}}" onmouseover="getID(this.id)" class="tableFont" style="font-size: 13px;"></th>
+              <th class="tableFont" style="font-size: 13px;">ID</th>
+              <th class="tableFont" style="font-size: 13px;">OTL</th>
               @endforeach
             </tr>
           </thead>
@@ -134,10 +141,12 @@
               @if($isManager == 1)
               <th></th>
               @endif
+              @if($isManager == 0)
               <th></th>
               <th></th>
               <th></th>
               <th></th>
+              @endif
               @foreach(config('select.data_shown') as $key => $month)
               <th></th>
               <th></th>
@@ -146,6 +155,34 @@
             </tr>
           </tfoot>
         </table>
+        <!-- Main table -->
+
+         <!-- Main table -->
+        <!-- <table id="actualsTable" class="table table-striped table-hover table-bordered mytable" width="100%">
+           <thead>
+              <tr>
+              @if($isManager == 1)
+              <th class="tableFont" style="font-size: 13px;">User Name</th>
+              @endif
+              <th class="tableFont" style="font-size: 13px;">Project name</th>
+              <th class="tableFont" style="font-size: 13px;">Manager name</th>
+              @foreach(config('select.data_shown') as $key => $month)
+              <th id="table_month_{{$key}}" onmouseover="getID(this.id)" class="tableFont" style="font-size: 13px;"></th>
+              @endforeach
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              @if($isManager == 1)
+              <th></th>
+              @endif
+              @foreach(config('select.data_shown') as $key => $month)
+              <th></th>
+          
+              @endforeach
+            </tr>
+          </tfoot>
+        </table> -->
         <!-- Main table -->
       </div>
       <!-- Window content -->
@@ -206,7 +243,7 @@ function getID(id){ //To get the week number from the table header id
   console.log("asas");
   };
 }
-
+//Some Functions and variables
 function getMonday(d) { // This function is to get the Week number of the current week
   d = new Date(d); // Today's date
   var day = d.getDay(); // Today's day in 0-6 (2)
@@ -271,7 +308,6 @@ function ajaxData(){
   };
   return obj;
 }
-
 // This is the function that will set the values in the select2 boxes with info from Cookies
 function fill_select(select_id){
   array_to_use = [];
@@ -306,15 +342,24 @@ function fill_select(select_id){
   }
   return array_to_use;
 }
+//end functions and variables
+
+if($('body').hasClass("nav-md")){
+      $("#actualsView").css('margin-right',"-210px");
+}else{
+      $("#actualsView").css('margin-right',"0px");
+  }
+
+if($("#isManager").val()==1){
+  $(".userFilter").css('visibility','hidden');
+}
 
 $(document).ready(function() {
-
   $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
-  // First we define the select2 boxes
 
   //Init select2 boxes
   $("#year").select2({
@@ -331,7 +376,6 @@ $(document).ready(function() {
     allowClear: false,
     disabled: {{ $authUsersForDataView->user_select_disabled }}
   });
-
 
   manager = fill_select('manager');
   user = fill_select('user');
@@ -381,11 +425,9 @@ $(document).ready(function() {
     activitiesTable.ajax.reload();
   });
 
-    // SELECTIONS END
-    //endregion
 
   if(isManager == 1){
-    month_col = [5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38];
+    month_col = [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34];
   }
   else{
     month_col = [4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37];
@@ -404,7 +446,9 @@ $(document).ready(function() {
     else {
       @can('tools-activity-edit')
       $(td).addClass("editable");
+      @if(Auth::user()->is_manager != 1)
       $(td).attr('contenteditable', true);
+      @endif
       $(td).attr('data-id', id);
       $(td).attr('data-colonne', colonne);
       $(td).attr('data-project_id', project_id);
@@ -451,20 +495,21 @@ $(document).ready(function() {
         $('#table_month_'+index).empty().html(months_from_selection[index-1]);
       }
   }
-  
-  $.ajax({
-      type: 'POST',
-      url: "{!! route('listOfActivitiesPerUserAjax') !!}",
-      dataType: 'json',
-      data: ajaxData(),
-      success: function(data) {
-        console.log("bold");
-        console.log(data);
-      },
-      error: function (jqXhr, textStatus, errorMessage) { // error callback 
-        console.log('Error: ' + errorMessage);
-      }
-    });
+
+  // $.ajax({
+  //     type: 'POST',
+  //     url: "{!! route('listOfActivitiesPerUserAjax') !!}",
+  //     dataType: 'json',
+  //     data: ajaxData(),
+  //     success: function(data) {
+  //       console.log("bold");
+  //       console.log(data);
+  //     },
+  //     error: function (jqXhr, textStatus, errorMessage) { // error callback 
+  //       console.log('Error: ' + errorMessage);
+  //     }
+  //   });
+
   activitiesTable = $('#activitiesTable').DataTable({
     scrollX: true,
     @if(isset($table_height))
@@ -484,8 +529,9 @@ $(document).ready(function() {
     },
     columns: [
       @if($isManager==1)  
-        { name: 'u.name', data: 'user_name' , className: "dt-nowrap"},
+        { name: 'u.name', data: 'user_name' , className: "dt-nowrap"}
       @endif
+      @if($isManager==0)
       { name: 'c.name', data: 'customer_name' , className: "dt-nowrap",
         render: function(data, type, row) {
           if (type === 'display') {
@@ -500,7 +546,7 @@ $(document).ready(function() {
         render: function(data, type, row) {
           if (type === 'display') {
             if(data == 'General Activities' || data == 'Account Level Activities'){
-              return '<span style="color:green; font-weight:bold";>'+data+'</span>';
+              return '<span style="color:#0A6E31; font-size:14px; font-weight:bold";>'+data+'</span>';
             }
           }
           return data;
@@ -510,13 +556,14 @@ $(document).ready(function() {
         render: function(data, type, row) {
           if (type === 'display') {
             if(data == 'Account' || data == 'General'){
-              return '<span style="color:green; font-weight:bold";>'+data+'</span>';
+              return '<span style="color:#0A6E31; font-size:14px; font-weight:bold";>'+data+'</span>';
             }
           }
           return data;
         }
       },
       { name: 'p.samba_id', data: 'samba_id' , searchable: true , className: "dt-nowrap",orderable:false}
+      @endif
       @foreach(config('select.data_shown') as $key => $month),
       { name: 'm{{$key}}_com', data: 'm{{$key}}_com', 
         createdCell: function (td, cellData, rowData, row, col) { color_for_month_value(rowData.m{{$key}}_com,rowData.m{{$key}}_from_otl,rowData.m{{$key}}_id,{{$key}},rowData.project_id,rowData.user_id,td);
@@ -577,7 +624,7 @@ $(document).ready(function() {
 
         // Update footer
         $( api.column( value ).footer() ).html(
-          '<div style="font-size: 120%;">'+pageTotal.toFixed(1)+'</div>'
+          '<div style="font-size: 120%; color: #000000">'+pageTotal.toFixed(1)+'</div>'
         );
       });
     },
@@ -615,6 +662,7 @@ $(document).ready(function() {
       }
     }
   });
+  
   //Create LoE
   @can('projectLoe-create')
   $('#activitiesTable').on('click','.create_loe', function() {
@@ -655,24 +703,17 @@ $(document).ready(function() {
   @endcan
 
   @can('tools-activity-edit')
-  $('#activitiesTable').on('click', 'tbody td', function() {
+  $("#actualsView").on('click',function(){
     var table = activitiesTable;
-    var tr = $(this).closest('tr');
-    var row = table.row(tr);
-    //get the initialization options
-    var columns = table.settings().init().columns;
-    //get the index of the clicked cell
-    var colIndex = table.cell(this).index().column;
     var week = $("#month-by").html();
     var year = $("#year-by").html();
-    console.log(week);
-    if (columns[colIndex].name == 'p.project_name') {
-      var week = $("#month-by").html();
-      window.location.href = "{!! route('getModalData',['','','','']) !!}/"+row.data().project_id+"/"+row.data().user_id+"/"+week+"/"+year;
-    }
+    var tr = $(".dt-nowrap").closest('tr');
+    var row = table.row(tr);
+      window.location.href = "{!! route('getModalData',['','','','']) !!}/"+row.data().user_id+"/"+week+"/"+year+"/"+0;
   });
 
   var editable_old_value = ''
+
   // This is to select the text when you click inside a td that is editable
   $(document).on('focus', 'td.editable', function() {
     var range = document.createRange();
@@ -690,10 +731,20 @@ $(document).ready(function() {
     }
   });
 
-
   $(document).on('keyup', '.editable', function(e){
     update_activity($(this));
   });
+
+  $(document).on('click','.editable',function(){
+    @if(Auth::user()->is_manager == 1)
+    var number = $(this).data("colonne")-1;
+    var week_no = parseInt($("#month-by").html())+number;
+    var year = $("#year-by").html();
+    var tr = $(this).closest('tr');
+    var row = activitiesTable.row(tr);
+    window.location.href = "{!! route('getForecast',['','','']) !!}/"+row.data().user_id+"/"+week_no+"/"+year;
+    @endif
+  })
 
   function update_activity(td) {
     if (td.html() != editable_old_value) {
@@ -763,6 +814,30 @@ $(document).ready(function() {
   $(document).on('click', '#legendButton', function () {
   $('#legendModal').modal();
   });
+
+  $(document).on('click', ".fa-bars",function(){
+    var rightMargin = $("#actualsView").css('margin-right');
+    if($('body').hasClass("nav-md")){
+      $("#actualsView").css('margin-right',"-210px");
+    }else{
+      $("#actualsView").css('margin-right',"0px");
+    }
+  })
+  @if($isManager==0)
+    $(".nav_title").css('background','#b0b0b0');
+    $(document).scroll(function(){
+      var value=$(document).scrollTop();
+      console.log(value);
+      if(value>=57){
+        $(".nav_title").css('background','#f7f7f7');
+      }else{
+        $(".nav_title").css('background','#b0b0b0');
+      }
+    })
+  @else
+    $("#actualsView").css('visibility','hidden');
+    $(".Hide").css('visibility','hidden');
+  @endif
 });
 </script>
 @stop

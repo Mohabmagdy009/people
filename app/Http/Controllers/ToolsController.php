@@ -48,7 +48,7 @@ class ToolsController extends Controller
         $table_height = Auth::user()->table_height;
         $isManager = Auth::user()->is_manager;
 
-        return view('tools/list', compact('authUsersForDataView', 'table_height','isManager'));
+        return view('tools/list', compact('authUsersForDataView','table_height','isManager'));
     }
 
     public function projectsAssignedAndNot()
@@ -721,7 +721,7 @@ class ToolsController extends Controller
         return $activities;
     }
 
-      public function getModalData($project_id,$user_id,$week_no,$year)
+      public function getModalData($user_id,$week_no,$year,$read)
     {
         //Get the projects assigned to the user
         $projects = DB::table('activities as a')
@@ -751,7 +751,6 @@ class ToolsController extends Controller
             ->join('users as u','a.user_id','=','u.id')
             ->join('projects as p','a.project_id','=','p.id')
             ->select('u.name as user','p.project_name as project')
-            ->where('a.project_id',$project_id)
             ->where('a.user_id',$user_id)
             ->take(1)->get();
         }
@@ -761,7 +760,22 @@ class ToolsController extends Controller
         $General = DB::table('subactivitytypes')->where('type','General')->select('id','name')->get();
         $Opportunity = DB::table('subactivitytypes')->where('type','Opportunity')->select('id','name')->get();    
          
-        return view('tools/actuals',compact('data','week_no','project_id','user_id','year','projects','Account','General','Opportunity','empty'));
+        return view('tools/actuals',compact('data','week_no','user_id','year','projects','Account','General','Opportunity','empty','read'));
+    }
+
+    public function getForecastDetail($user_id,$week_no,$year)
+    {
+        //Get the projects assigned to the user
+        $projects = DB::table('activities as a')
+                    ->join('projects as p', 'a.project_id', '=','p.id')
+                    ->join('users as u', 'a.user_id','=','u.id')
+                    ->join('customers as c','p.customer_id','=','c.id')
+                    ->select('p.project_name','p.project_type','c.name as customer_name','u.name','a.task_hour')
+                    ->where('a.user_id',$user_id)
+                    ->where('a.month',$week_no)
+                    ->where('a.year',$year)
+                    ->get();
+        return view('activity/forecastDetail',compact('projects','week_no','year'));
     }
 
     public function addNew(Request $request)
@@ -791,9 +805,9 @@ class ToolsController extends Controller
         return json_encode("done");
     }   
 
-    public function getActuals($user_id,$week_no,$year){
+    public function getActuals($user_id,$week_no,$year,$oldWeek_no,$oldYear_no){
 
-         if($week_no<12){
+        if($week_no<12){
             $pastYearWeeks = 12 - $week_no;
             for ($i=1; $i<$week_no ; $i++) {
                 $j = $i+1;
@@ -822,7 +836,7 @@ class ToolsController extends Controller
                 ->groupBy('p.project_name')
                 ->get();
 
-                return view('tools/actualsView',compact('user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12'));
+                return view('tools/actualsView',compact('user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12','oldWeek_no','oldYear_no'));
     }
     public function deleteActivity(Request $request){
 
@@ -836,17 +850,14 @@ class ToolsController extends Controller
         }
         return json_encode("Deleted");
     } 
-
     public function uploadFileView(){
         $feedBack = "";
         $color="blue";
         return view('uploadfile',compact('feedBack','color'));
     }
-
     public function importActivities(Request $request){
         //Get the file from the request
         $file = $request->file;
-
         //Check if the file is valid
         if($file->isValid()){
         $filePath = $request->file->getClientOriginalName(); 
@@ -865,21 +876,17 @@ class ToolsController extends Controller
             }
         }
     }
-
     //Test Function
-    public function t($week_no = 8){
-        if($week_no<12){
-            $pastYearWeeks = 12 - $week_no;
-            for ($i=1; $i<$week_no ; $i++) {
-                $j = $i+1;
-            ${'week_' . $j} = $week_no - $i;
-            array_push($weeks_n,${'week_' . $j});
+    public function t(){
+        for($i=8, $j=0;$i<69;$i+=6,$j++){
+            if($j==12) {
+                $j=0;
             }
-
-            for($i=0; $i<$pastYearWeeks;$i++){
-                $j = $week_no + 1 + $i;
-                ${'week_' . $j} = 52 - $i;    
-            }
+            echo "{".'"'."Column".$i.'"'.",".'"'."Rejected_Calls".$j.'"'."}".",";
         }
+    }
+    public function getActualss(){
+        $user = User::all();
+        return $user;
     }
 }

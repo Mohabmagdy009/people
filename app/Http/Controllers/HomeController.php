@@ -24,6 +24,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $user = User::find(Auth::user()->id);
@@ -31,6 +32,7 @@ class HomeController extends Controller
             $employee_list = $user->employees()->select('name', 'last_login', 'last_activity_update')->orderBy('last_activity_update', 'DESC')->get();
         } else {
             $employee_list = null;
+            return redirect('/toolsActivities');
         }
         //dd($employee_list);
         return view('home', compact('employee_list'));

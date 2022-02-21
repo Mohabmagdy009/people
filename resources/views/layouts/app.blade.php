@@ -12,33 +12,21 @@
 
   <!-- All styles -->
   <!-- Bootstrap core CSS -->
-  <link href="{{ asset('/plugins/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('/plugins/gentelella/vendors/bootstrap/dist/css/bootstrap.css') }}" rel="stylesheet">
   <!-- NProgress -->
   <link href="{{ asset('/plugins/gentelella/vendors/nprogress/nprogress.css') }}" rel="stylesheet">
   <!-- Font Awesome -->
   <link href="{{ asset('/plugins/gentelella/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
   <!-- Custom Theme Style -->
-  <link href="{{ asset('/plugins/gentelella/build/css/custom.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('/plugins/gentelella/build/css/custom.css') }}" rel="stylesheet">
   @if(env('APP_DEBUG') == 'true') <link href="{{ asset('/css/debug.css') }}" rel="stylesheet"> @endif
   <link href="{{ asset('/css/animate.css') }}" rel="stylesheet">
   <link href="{{ asset('/css/alert.css') }}" rel="stylesheet">
   @yield('style')
-  <!-- END All styles -->
-
-
-  <!--[if lt IE 9]>
-  <script src="../assets/js/ie8-responsive-file-warning.js"></script>
-  <![endif]-->
-
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
 </head>
 
 
-<body id="main_body" class="@if(isset($_COOKIE['left_menu_minimized']) && $_COOKIE['left_menu_minimized'] == 1) nav-sm @else nav-md @endif footer_fixed">
+<body id="main_body" class="@if(Request::segment(1)  != 'login') @if(Auth::user()->is_manager ==1) @if(isset($_COOKIE['left_menu_minimized']) && $_COOKIE['left_menu_minimized'] == 1) nav-sm @else nav-md @endif @else nav-sm @endif @else @if(isset($_COOKIE['left_menu_minimized']) && $_COOKIE['left_menu_minimized'] == 1) nav-sm @else nav-md @endif  @endif footer_fixed">
   <div class="container body">
     <div class="main_container">
 
@@ -56,7 +44,11 @@
           <br /><br />
 
           <!-- sidebar menu -->
-          @if(Auth::user())
+          @if(Request::segment(1)  != "login")
+          @if(Auth::user()->is_manager == 1)
+          @include('includes.sidebar')
+          @endif
+          @elseif(Auth::user())
           @include('includes.sidebar')
           @endif
           <!-- /sidebar menu -->
@@ -143,6 +135,14 @@
   <script>
     $(document).ready(function() {
 
+      @if(Request::segment(1)!= "login")
+      @if(Auth::user()->is_manager != 1)
+        $("#menu_toggle").hide();
+        $(".left_col").css("background-color","#f7f7f7");
+        $(".navbar").css("margin-bottom","7px");
+      @endif
+      @endif
+
       @if($message = Session::get('success'))
       $('#flash-success').delay(2000).queue(function() {
         $(this).addClass('animated flipOutX')
@@ -172,6 +172,23 @@
       });
 
     });
+    @if(Request::segment(1)  != 'login')
+    @if(Auth::user()->is_manager ==0)
+    $(".nav_title").css('background','#b0b0b0');
+    $(document).scroll(function(){
+      var value=$(document).scrollTop();
+      console.log(value);
+      if(value>=57){
+        $(".nav_title").css('background','#f7f7f7');
+      }else{
+        $(".nav_title").css('background','#b0b0b0');
+      }
+    })
+  @else
+    $("#actualsView").css('visibility','hidden');
+    $(".Hide").css('visibility','hidden');
+  @endif
+  @endif
   </script>
   <!-- END All scripts -->
 

@@ -50,7 +50,9 @@
 @section('content')
 <!-- Page title -->
 <div class="page-title">
-  <div class="title_left"></div>
+  <div class="title_left">
+    <h3>{{$data[0]->user}}</h3>
+  </div>
 </div>
 <div class="clearfix"></div>
 <div class="row">
@@ -69,50 +71,55 @@
         </div>
       </div>
 
-      <div class="clearfix"><h2>{{$data[0]->user}}</h2></div> <!-- Project Name -->
-      <div class="clearfix"><h2 style="text-align: center;">Your 12 Weeks Summarization</h2></div> <!-- Project Name -->
+      <div class="clearfix">
+        <button type="button" id="back" class="btn btn-success" style="float: right;">
+                     Back
+            </button>
+      </div> <!-- Project Name -->
+
+      <div class="clearfix tableTitle">Your 12 Weeks Summarization</div> <!-- Project Name -->
 
       <!-- Main table -->
       <table id="sub_activity" class="table table-striped table-hover table-bordered mytablee2" width="100%">
         <thead>
-          <tr style="font-size: 18px; font-weight:bold">
+          <tr class="tableFont">
             <td style="width:15%">Project Name</td>
             <td style="width:10%;">Project Type</td>
-              <td class="font">Week {{$week_12}} </td>
-              <td class="font">Week {{$week_11}} </td>
-              <td class="font">Week {{$week_10}} </td>
-              <td class="font">Week {{$week_9}} </td>
-              <td class="font">Week {{$week_8}} </td>
-              <td class="font">Week {{$week_7}} </td>
-              <td class="font">Week {{$week_6}} </td>
-              <td class="font">Week {{$week_5}} </td>
-              <td class="font">Week {{$week_4}} </td>
-              <td class="font">Week {{$week_3}} </td>
-              <td class="font">Week {{$week_2}} </td>
-              <td class="font">Week {{$week_no}} </td>
+            <td id="clickable" class="font last" data-v="{{$week_no}}">Week {{$week_no}}</td>
+            <td id="clickable" class="font" data-v="{{$week_2}}">Week {{$week_2}}</td>
+            <td id="clickable" class="font" data-v="{{$week_3}}">Week {{$week_3}}</td>
+            <td id="clickable" class="font" data-v="{{$week_4}}">Week {{$week_4}}</td>
+            <td id="clickable" class="font" data-v="{{$week_5}}">Week {{$week_5}}</td>
+            <td id="clickable" class="font" data-v="{{$week_6}}">Week {{$week_6}}</td>
+            <td id="clickable" class="font" data-v="{{$week_7}}">Week {{$week_7}}</td>
+            <td id="clickable" class="font" data-v="{{$week_8}}">Week {{$week_8}}</td>
+            <td id="clickable" class="font" data-v="{{$week_9}}">Week {{$week_9}}</td>
+            <td id="clickable" class="font" data-v="{{$week_10}}">Week {{$week_10}}</td>
+            <td id="clickable" class="font" data-v="{{$week_11}}">Week {{$week_11}}</td>
+            <td id="clickable" class="font" data-v="{{$week_12}}">Week {{$week_12}}</td>
           </tr>
         </thead>
         <tbody id='tableBody'>
           @foreach($data as $key => $value)
-            <tr id="selectionRow">
+            <tr id="selectionRow" class="tableInfo">
             <td>{{$data[$key]->project}}</td>
             <td>{{$data[$key]->project_type}}</td>
-            <td class="one font">{{$data[$key]->$week_12}}</td>
-            <td class="two font">{{$data[$key]->$week_11}}</td>
-            <td class="three font">{{$data[$key]->$week_10}}</td>
-            <td class="four font">{{$data[$key]->$week_9}}</td>
-            <td class="five font">{{$data[$key]->$week_8}}</td>
-            <td class="six font">{{$data[$key]->$week_7}}</td>
-            <td class="seven font">{{$data[$key]->$week_6}}</td>
-            <td class="eight font">{{$data[$key]->$week_5}}</td>
-            <td class="nine font">{{$data[$key]->$week_4}}</td>
-            <td class="ten font">{{$data[$key]->$week_3}}</td>
-            <td class="eleven font">{{$data[$key]->$week_2}}</td>
-            <td class="twelve font">{{$data[$key]->$week_no}}</td>
+            <td class="one font">{{$data[$key]->$week_no}}</td>
+            <td class="two font">{{$data[$key]->$week_2}}</td>
+            <td class="three font">{{$data[$key]->$week_3}}</td>
+            <td class="four font">{{$data[$key]->$week_4}}</td>
+            <td class="five font">{{$data[$key]->$week_5}}</td>
+            <td class="six font">{{$data[$key]->$week_6}}</td>
+            <td class="seven font">{{$data[$key]->$week_7}}</td>
+            <td class="eight font">{{$data[$key]->$week_8}}</td>
+            <td class="nine font">{{$data[$key]->$week_9}}</td>
+            <td class="ten font">{{$data[$key]->$week_10}}</td>
+            <td class="eleven font">{{$data[$key]->$week_11}}</td>
+            <td class="twelve font">{{$data[$key]->$week_12}}</td>
             </tr>
           @endforeach
         </tbody>
-        <tfoot style="font-size: 18px; font-weight:bold">
+        <tfoot class="tableFont">
           <td>Total</td>
           <td class="font" id="totals"></td>
           @foreach(config('select.totals') as $key => $month)
@@ -124,8 +131,24 @@
     </div>
   </div>  
 </div>
+
+<input type="hidden" id="u_id" value="{{$user_id}}">
+<input type="hidden" id="w" value="{{$oldWeek_no}}">
+<input type="hidden" id="y" value="{{$oldYear_no}}">
+
 @section('script')
 <script>
+var yearFromActuals = $('#y').val();
+var weekFromActuals = $('#w').val();
+var uid = $('#u_id').val();
+
+$(document).ready(function(){
+  $.ajaxSetup({
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  }
+});  
+
   function getTotals(){
     const totall =["one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve"];
     totall.forEach(function(element){
@@ -138,7 +161,23 @@
     $('#sub_activity tfoot').find('#'+element).html(total);
     });
   };
+  $(document).on("click","#back",function(){
+      window.location.href = "{!! route('getModalData',['','','','']) !!}/"+uid+"/"+weekFromActuals+"/"+yearFromActuals+"/"+0; 
+  })
+  $(document).on("click","#clickable",function(){
+      const week = $(this).data("v");
+      const lastWeek = $(".last").data("v");
+      var diff = lastWeek-week;
+      var year = 0;
+      if(diff<0){
+        year = yearFromActuals-1;
+      }else{
+        year = yearFromActuals;
+      }
+      window.location.href = "{!! route('getModalData',['','','','']) !!}/"+uid+"/"+week+"/"+year+"/"+1;
+  })
   //Run the function to get the totals
   getTotals();
+});
 </script>
 @stop

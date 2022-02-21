@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,3 +14,9 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post('login', 'Auth\LoginController@loginApi');
+
+Route::group(['middleware' => ['auth:api']], function () {
+	Route::get("actuals","ToolsController@getActualss");
+
+});
