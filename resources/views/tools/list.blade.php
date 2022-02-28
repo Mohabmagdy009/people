@@ -103,7 +103,11 @@
           </div>
           <div class="col-xs-1">
             <button type="button" id="actualsView" class="btn btn-success" style="float: right; margin-top: 20px;">
-                          Activity Actuals
+              @if($isManager == 1)
+                Show History
+              @else
+                Activity Actuals
+              @endif
             </button>
         </div> 
         </div>
@@ -709,7 +713,11 @@ $(document).ready(function() {
     var year = $("#year-by").html();
     var tr = $(".dt-nowrap").closest('tr');
     var row = table.row(tr);
-      window.location.href = "{!! route('getModalData',['','','','']) !!}/"+row.data().user_id+"/"+week+"/"+year+"/"+0;
+      @if(Auth::user()->is_manager == 1)
+      window.location.href = "{!! route('actualDetails',['','','']) !!}/"+row.data().user_id+"/"+week+"/"+year;
+      @else
+      window.location.href = "{!! route('getModalData',['','','','','']) !!}/"+0+"/"+row.data().user_id+"/"+week+"/"+year+"/"+0;
+      @endif
   });
 
   var editable_old_value = ''
@@ -835,7 +843,6 @@ $(document).ready(function() {
       }
     })
   @else
-    $("#actualsView").css('visibility','hidden');
     $(".Hide").css('visibility','hidden');
   @endif
 });

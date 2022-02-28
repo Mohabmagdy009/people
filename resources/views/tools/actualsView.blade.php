@@ -135,6 +135,7 @@
 <input type="hidden" id="u_id" value="{{$user_id}}">
 <input type="hidden" id="w" value="{{$oldWeek_no}}">
 <input type="hidden" id="y" value="{{$oldYear_no}}">
+<input type="hidden" id="read" value="{{$read}}">
 
 @section('script')
 <script>
@@ -162,7 +163,11 @@ $(document).ready(function(){
     });
   };
   $(document).on("click","#back",function(){
-      window.location.href = "{!! route('getModalData',['','','','']) !!}/"+uid+"/"+weekFromActuals+"/"+yearFromActuals+"/"+0; 
+      if($("#read").val()==1){
+      window.location.href = "{!! route('getModalData',['','','','','']) !!}/"+0+"/"+uid+"/"+weekFromActuals+"/"+yearFromActuals+"/"+1; 
+      }else{
+        window.location.href = "{!! route('getModalData',['','','','','']) !!}/"+0+"/"+uid+"/"+weekFromActuals+"/"+yearFromActuals+"/"+0;
+      }
   })
   $(document).on("click","#clickable",function(){
       const week = $(this).data("v");
@@ -174,7 +179,7 @@ $(document).ready(function(){
       }else{
         year = yearFromActuals;
       }
-      window.location.href = "{!! route('getModalData',['','','','']) !!}/"+uid+"/"+week+"/"+year+"/"+1;
+      window.location.href = "{!! route('getModalData',['','','','','']) !!}/"+0+"/"+uid+"/"+week+"/"+year+"/"+1;
   })
   //Run the function to get the totals
   getTotals();

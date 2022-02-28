@@ -184,9 +184,12 @@
     </div>
   </div>  
 </div>
+<!-- Varibales sent from the controller -->
+<input type="hidden" id="mid" value="{{$user_id}}">
 @section('script')
 <script>
 // Variables From Controller 
+var mid = $('#mid').val();
 var yearFromController = $('#y').val();
 var weekFromController = $('#w').val();
 var pid = $('#p_id').val();
@@ -235,7 +238,7 @@ $(document).ready(function(){
   if($("#readOnly").val() == 1){
     $(".projects, .ndatabase, #year, #week").prop("disabled", true);
     $(".hour").prop("contenteditable",false);
-    $(".empty, #back, #oldData, #actions, #selectionRow").remove();
+    $(".empty, #oldData, #actions, #selectionRow").remove();
   }
 
   //Make sure we have the correct subactivities of each project type
@@ -254,10 +257,15 @@ $(document).ready(function(){
     }
   })
   $(document).on("click","#actualsButton",function(){
-      window.location.href = "{!! route('actualsView',['','','','','']) !!}/"+uid+"/"+currentWeek+"/"+currentYear+"/"+weekFromController+"/"+yearFromController; 
+      var read = $("#readOnly").val();
+      window.location.href = "{!! route('actualsView',['','','','','','']) !!}/"+uid+"/"+currentWeek+"/"+currentYear+"/"+weekFromController+"/"+yearFromController+"/"+read; 
   })
   $(document).on("click","#back",function(){
+    if($("#readOnly").val() == 1){
+       window.location.href = "{!! route('actualDetails',['','','']) !!}/"+mid+"/"+currentWeek+"/"+currentYear; 
+    }else{
       window.location.href = "{!! route('toolsActivities') !!}/"; 
+    }
   })
   //tooltip for the user if he has an empty record
   $(document).on("mouseover","#button",function(){
@@ -390,12 +398,12 @@ $(document).ready(function(){
   $(document).on('change','#week',function(){
     var new_week = $('select#week').val();
     var new_year = $('select#year').val();
-    window.location.href = "{!! route('getModalData',['','','','']) !!}/"+uid+"/"+new_week+"/"+new_year+"/"+0;
+    window.location.href = "{!! route('getModalData',['','','','','']) !!}/"+mid+"/"+uid+"/"+new_week+"/"+new_year+"/"+0;
   })
   $(document).on('change','#year',function(){
     var new_week = $('select#week').val();
     var new_year = $('select#year').val();
-    window.location.href = "{!! route('getModalData',['','','','']) !!}/"+uid+"/"+new_week+"/"+new_year+"/"+0;
+    window.location.href = "{!! route('getModalData',['','','','','']) !!}/"+mid+"/"+uid+"/"+new_week+"/"+new_year+"/"+0;
   })
 
   // Total Actual Hours calculated

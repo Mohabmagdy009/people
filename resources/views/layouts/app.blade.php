@@ -185,7 +185,6 @@
       }
     })
   @else
-    $("#actualsView").css('visibility','hidden');
     $(".Hide").css('visibility','hidden');
   @endif
   @endif

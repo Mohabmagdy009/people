@@ -721,7 +721,7 @@ class ToolsController extends Controller
         return $activities;
     }
 
-      public function getModalData($user_id,$week_no,$year,$read)
+      public function getModalData($manager_id,$user_id,$week_no,$year,$read)
     {
         //Get the projects assigned to the user
         $projects = DB::table('activities as a')
@@ -760,7 +760,7 @@ class ToolsController extends Controller
         $General = DB::table('subactivitytypes')->where('type','General')->select('id','name')->get();
         $Opportunity = DB::table('subactivitytypes')->where('type','Opportunity')->select('id','name')->get();    
          
-        return view('tools/actuals',compact('data','week_no','user_id','year','projects','Account','General','Opportunity','empty','read'));
+        return view('tools/actuals',compact('manager_id','data','week_no','user_id','year','projects','Account','General','Opportunity','empty','read'));
     }
 
     public function getForecastDetail($user_id,$week_no,$year)
@@ -805,7 +805,7 @@ class ToolsController extends Controller
         return json_encode("done");
     }   
 
-    public function getActuals($user_id,$week_no,$year,$oldWeek_no,$oldYear_no){
+    public function getActuals($user_id,$week_no,$year,$oldWeek_no,$oldYear_no,$read){
 
         if($week_no<12){
             $pastYearWeeks = 12 - $week_no;
@@ -836,7 +836,48 @@ class ToolsController extends Controller
                 ->groupBy('p.project_name')
                 ->get();
 
-                return view('tools/actualsView',compact('user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12','oldWeek_no','oldYear_no'));
+                return view('tools/actualsView',compact('read','user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12','oldWeek_no','oldYear_no'));
+    }
+    public function getActualsDetails($user_id,$week_no,$year){
+
+        if($week_no<12){
+            $pastYearWeeks = 12 - $week_no;
+            for ($i=1; $i<$week_no ; $i++) {
+                $j = $i+1;
+            ${'week_' . $j} = $week_no - $i;
+            ${'year_'.$j} = $year;
+            }
+
+            for($i=0; $i<$pastYearWeeks;$i++){
+                $j = $week_no + 1 + $i;
+                ${'week_' . $j} = 52 - $i;    
+                ${'year_'.$j} = $year - 1;
+            }
+        }else{
+            for ($i=1; $i <12 ; $i++) { 
+                $j = $i+1;
+                ${'week_'.$j} = $week_no - $i;
+                ${'year_'.$j} = $year;
+            }
+            
+        }
+        $managerObject= DB::table('users_users as uu')->select(DB::raw('manager_id'))->where('uu.user_id',$user_id)->get();
+        $manager_id = $managerObject[0]->manager_id;
+        $manager_name=DB::table('users as u')->select(DB::raw('name'))->where('u.id',$manager_id)->get();
+        $user = DB::table('users_users as uu')->select(DB::raw('user_id'))->where('uu.manager_id',$manager_id)->get();
+        $arr = [];
+            foreach($user as $key => $val){
+                array_push($arr,$val->user_id);
+            }
+        $data = DB::table('subactivityactuals as ss')
+                ->join('users as u','ss.user_id','=','u.id')
+                ->select('u.name as user','ss.user_id as user_id',DB::raw("SUM(CASE when ss.week='$week_no' AND ss.year='$year' then ss.task_hour else 0 end) as '$week_no', SUM(CASE when ss.week='$week_2' AND ss.year='$year_2' then ss.task_hour else 0 end) as '$week_2', SUM(CASE when ss.week='$week_3' AND ss.year='$year_3' then ss.task_hour else 0 end) as '$week_3', SUM(CASE when ss.week='$week_4' AND ss.year='$year_4' then ss.task_hour else 0 end) as '$week_4', SUM(CASE when ss.week='$week_5' AND ss.year='$year_5' then ss.task_hour else 0 end) as '$week_5', SUM(CASE when ss.week='$week_6' AND ss.year='$year_6' then ss.task_hour else 0 end) as '$week_6', SUM(CASE when ss.week='$week_7' AND ss.year='$year_7' then ss.task_hour else 0 end) as '$week_7', SUM(CASE when ss.week='$week_8' AND ss.year='$year_8' then ss.task_hour else 0 end) as '$week_8', SUM(CASE when ss.week='$week_9' AND ss.year='$year_9' then ss.task_hour else 0 end) as '$week_9', SUM(CASE when ss.week='$week_10' AND ss.year='$year_10' then ss.task_hour else 0 end) as '$week_10', SUM(CASE when ss.week='$week_11' AND ss.year='$year_11' then ss.task_hour else 0 end) as '$week_11', SUM(CASE when ss.week='$week_12' AND ss.year='$year_12' then ss.task_hour else 0 end) as '$week_12'"))
+                ->whereIn('ss.user_id',$arr)
+                ->groupBy('ss.user_id')
+                ->get();
+                // return $data;
+                return view('actualsDetails',compact('manager_name','user_id','data','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12'));
+                // return view('tools/actualsView',compact('user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12','oldWeek_no','oldYear_no'));
     }
     public function deleteActivity(Request $request){
 

@@ -278,13 +278,14 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // Route::get('updator',['uses'=>'UpdateTableController@updator', 'as'=>'updator']);
 
-Route::get('actualsView/{u_id}/{w_no}/{y_no}/{w_no2}/{y_no2}', ['uses' => 'ToolsController@getActuals', 'as' => 'actualsView', 'middleware' => ['permission:tools-activity-view']]);
+Route::get('actualsView/{u_id}/{w_no}/{y_no}/{w_no2}/{y_no2}/{read}', ['uses' => 'ToolsController@getActuals', 'as' => 'actualsView', 'middleware' => ['permission:tools-activity-view']]);
 
 Route::post('import', ['uses' => 'UserController@UploadExcelToCreateOrUpdateUsers', 'as' => 'UploadExcelToCreateOrUpdateUsers', 'middleware' => ['permission:user-view|user-create|user-edit|user-delete']]);
-Route::get('getModalData/{u_id}/{week}/{year}/{read}',['uses' => 'ToolsController@getModalData', 'as' => 'getModalData']);
+Route::get('getModalData/{m_id}/{u_id}/{week}/{year}/{read}',['uses' => 'ToolsController@getModalData', 'as' => 'getModalData']);
 Route::get('getForecast/{u_id}/{week}/{year}',['uses' => 'ToolsController@getForecastDetail', 'as' => 'getForecast']);
 Route::get('uploadfile','ToolsController@uploadFileView');
 Route::post('uploadfile','ToolsController@importActivities');
+Route::get('actualDetails/{mid}/{week}/{year}',['uses' => 'ToolsController@getActualsDetails', 'as' => 'actualDetails']);
 Route::get('tests','ToolsController@t');
 // Route::get('export', 'UpdateTableController@export');
 // Route::get('import',['uses'=>'UpdateTableController@show', 'as' =>'show']);
