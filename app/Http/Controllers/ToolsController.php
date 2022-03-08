@@ -935,7 +935,7 @@ class ToolsController extends Controller
      * Get an access token - requires refresh every hour
      * Get trouble tickets from Oceane using the fetched access token
      */
-    
+
     public function getData()
     {
         $tokenUrl = 'https://inside01.api.intraorange/oauth/v3/token';
@@ -963,6 +963,7 @@ class ToolsController extends Controller
         curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $tokenHeaders);
 
         $query = curl_exec($curl_handle);
+        curl_error($curl_handle);
         curl_close($curl_handle);
         
         $tokenJson = json_decode($query, true);
