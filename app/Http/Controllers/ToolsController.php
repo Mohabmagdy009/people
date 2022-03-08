@@ -930,4 +930,10 @@ class ToolsController extends Controller
         $user = User::all();
         return $user;
     }
+    public function mahmoud(){
+        $user = new \stdClass();
+        $user->name = "mahmoud";
+        $myjson = json_encode($user);
+        return $myjson;
+    }
 }
