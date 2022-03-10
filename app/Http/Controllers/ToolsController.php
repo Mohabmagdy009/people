@@ -936,9 +936,9 @@ class ToolsController extends Controller
      * Get trouble tickets from Oceane using the fetched access token
      */
 
-    public function getData()
+     public function getData()
     {
-        $tokenUrl = "https://inside01.api.intraorange/oauth/v3/token";
+        $tokenUrl = 'https://inside01.api.intraorange/oauth/v3/token';
         $tokenUsername = 'k6RucjPMxs0H14VrAOVCN2GM6X7RZHWX';
         $tokenPassword = 'Rv5qkzHTDRfQaNqg';
         $tokenHeaders = array(
@@ -963,12 +963,11 @@ class ToolsController extends Controller
         curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $tokenHeaders);
 
         $query = curl_exec($curl_handle);
-        curl_error($curl_handle);
+        //echo(curl_error($curl_handle));
+        //echo ($query);
         curl_close($curl_handle);
-        
         $tokenJson = json_decode($query, true);
         $accessToken = $tokenJson['token_type'] . ' ' . $tokenJson['access_token'];
-
         //==========================================================================================
 
         $dataUrl = 'https://inside01.api.intraorange/troubleticket_sandbox_b2b/v1/troubleTicket';
@@ -982,10 +981,10 @@ class ToolsController extends Controller
         );
         $dataParams = array(
             'offset' => '0',
-            'limit' => '100',
+            'limit' => '1',
             'fields' => 'name,description,externalId,creationDateTime,criticity,detectionDateTime',
-            'creationDateTime.gte' => '2020-02-03T00:00:00Z',
-            'creationDateTime.lte' => '2022-03-03T00:00:00Z'
+            'creationDateTime.gte' => '2020-03-03T00:00:00Z',
+            'creationDateTime.lte' => '2022-03-03T03:00:00Z'
         );
 
         $curl_handle=curl_init();
@@ -996,12 +995,11 @@ class ToolsController extends Controller
         curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl_handle, CURLOPT_USERAGENT, 'PostmanRuntime/7.29.0');
         curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $dataHeaders);
-        
+
         $query = curl_exec($curl_handle);
         curl_close($curl_handle);
-        
-        $dataJson= json_encode($query);
-        ECHO $dataJson;
+
+        ECHO $query;
     }
 
     public function mahmoud(){
@@ -1016,9 +1014,11 @@ class ToolsController extends Controller
         echo $query;
     }
 
+
     public function getMohab(){
         $table = DB::table('infopan_sql')->get();
 
         return $table;
     }
 }
+
