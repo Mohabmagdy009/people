@@ -938,7 +938,7 @@ class ToolsController extends Controller
 
     public function getData()
     {
-        $tokenUrl = 'https://inside01.api.intraorange/oauth/v3/token';
+        $tokenUrl = "https://inside01.api.intraorange/oauth/v3/token";
         $tokenUsername = 'k6RucjPMxs0H14VrAOVCN2GM6X7RZHWX';
         $tokenPassword = 'Rv5qkzHTDRfQaNqg';
         $tokenHeaders = array(
@@ -1014,5 +1014,11 @@ class ToolsController extends Controller
         curl_close($curl_handle);
 
         echo $query;
+    }
+
+    public function getMohab(){
+        $table = DB::table('infopan_sql')->get();
+
+        return $table;
     }
 }
