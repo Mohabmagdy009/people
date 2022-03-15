@@ -936,83 +936,83 @@ class ToolsController extends Controller
      * Get trouble tickets from Oceane using the fetched access token
      */
 
-     public function getData()
-    {
-        $tokenUrl = 'https://inside01.api.intraorange/oauth/v3/token';
-        $tokenUsername = 'k6RucjPMxs0H14VrAOVCN2GM6X7RZHWX';
-        $tokenPassword = 'Rv5qkzHTDRfQaNqg';
-        $tokenHeaders = array(
-            'Authorization: Basic azZSdWNqUE14czBIMTRWckFPVkNOMkdNNlg3UlpIV1g6UnY1cWt6SFREUmZRYU5xZw==',
-            'Content-Type: application/x-www-form-urlencoded',
-            'Accept: application/json',
-        );
-        $tokenBody = array(
-           'grant_type' => 'client_credentials',
-           'Token Name' => 'access_token'
-        );
+    //  public function getData()
+    // {
+    //     $tokenUrl = 'https://inside01.api.intraorange/oauth/v3/token';
+    //     $tokenUsername = 'k6RucjPMxs0H14VrAOVCN2GM6X7RZHWX';
+    //     $tokenPassword = 'Rv5qkzHTDRfQaNqg';
+    //     $tokenHeaders = array(
+    //         'Authorization: Basic azZSdWNqUE14czBIMTRWckFPVkNOMkdNNlg3UlpIV1g6UnY1cWt6SFREUmZRYU5xZw==',
+    //         'Content-Type: application/x-www-form-urlencoded',
+    //         'Accept: application/json',
+    //     );
+    //     $tokenBody = array(
+    //        'grant_type' => 'client_credentials',
+    //        'Token Name' => 'access_token'
+    //     );
 
-        $curl_handle=curl_init();
-        curl_setopt($curl_handle, CURLOPT_URL, $tokenUrl);
-        curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
-        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($curl_handle, CURLOPT_POST, 1);
-        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, http_build_query($tokenBody));
-        curl_setopt($curl_handle, CURLOPT_USERAGENT, 'PostmanRuntime/7.29.0');
-        curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $tokenHeaders);
+    //     $curl_handle=curl_init();
+    //     curl_setopt($curl_handle, CURLOPT_URL, $tokenUrl);
+    //     curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+    //     curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+    //     curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, 0);
+    //     curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, 0);
+    //     curl_setopt($curl_handle, CURLOPT_POST, 1);
+    //     curl_setopt($curl_handle, CURLOPT_POSTFIELDS, http_build_query($tokenBody));
+    //     curl_setopt($curl_handle, CURLOPT_USERAGENT, 'PostmanRuntime/7.29.0');
+    //     curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $tokenHeaders);
 
-        $query = curl_exec($curl_handle);
-        //echo(curl_error($curl_handle));
-        //echo ($query);
-        curl_close($curl_handle);
-        $tokenJson = json_decode($query, true);
-        $accessToken = $tokenJson['token_type'] . ' ' . $tokenJson['access_token'];
-        //==========================================================================================
+    //     $query = curl_exec($curl_handle);
+    //     //echo(curl_error($curl_handle));
+    //     //echo ($query);
+    //     curl_close($curl_handle);
+    //     $tokenJson = json_decode($query, true);
+    //     $accessToken = $tokenJson['token_type'] . ' ' . $tokenJson['access_token'];
+    //     //==========================================================================================
 
-        $dataUrl = 'https://inside01.api.intraorange/troubleticket_sandbox_b2b/v1/troubleTicket';
-        $dataHeaders = array(
-            'User-Agent: PostmanRuntime/7.29.0',
-            'Accept: */*',
-            'Connection: close',
-            'Authorization: ' . $accessToken,
-            'X-OAPI-Application-Id: vsgMz9F24VWCy4sJ',
-            'X-Client-User-Id: MMMM2876'
-        );
-        $dataParams = array(
-            'offset' => '0',
-            'limit' => '1',
-            'fields' => 'name,description,externalId,creationDateTime,criticity,detectionDateTime',
-            'creationDateTime.gte' => '2020-03-03T00:00:00Z',
-            'creationDateTime.lte' => '2022-03-03T03:00:00Z'
-        );
+    //     $dataUrl = 'https://inside01.api.intraorange/troubleticket_sandbox_b2b/v1/troubleTicket';
+    //     $dataHeaders = array(
+    //         'User-Agent: PostmanRuntime/7.29.0',
+    //         'Accept: */*',
+    //         'Connection: close',
+    //         'Authorization: ' . $accessToken,
+    //         'X-OAPI-Application-Id: vsgMz9F24VWCy4sJ',
+    //         'X-Client-User-Id: MMMM2876'
+    //     );
+    //     $dataParams = array(
+    //         'offset' => '0',
+    //         'limit' => '1',
+    //         'fields' => 'name,description,externalId,creationDateTime,criticity,detectionDateTime',
+    //         'creationDateTime.gte' => '2020-03-03T00:00:00Z',
+    //         'creationDateTime.lte' => '2022-03-03T03:00:00Z'
+    //     );
 
-        $curl_handle=curl_init();
-        curl_setopt($curl_handle, CURLOPT_URL, $dataUrl . '?' . http_build_query($dataParams));
-        curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
-        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl_handle, CURLOPT_USERAGENT, 'PostmanRuntime/7.29.0');
-        curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $dataHeaders);
+    //     $curl_handle=curl_init();
+    //     curl_setopt($curl_handle, CURLOPT_URL, $dataUrl . '?' . http_build_query($dataParams));
+    //     curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+    //     curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, 0);
+    //     curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, 0);
+    //     curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+    //     curl_setopt($curl_handle, CURLOPT_USERAGENT, 'PostmanRuntime/7.29.0');
+    //     curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $dataHeaders);
 
-        $query = curl_exec($curl_handle);
-        curl_close($curl_handle);
+    //     $query = curl_exec($curl_handle);
+    //     curl_close($curl_handle);
 
-        ECHO $query;
-    }
+    //     ECHO $query;
+    // }
 
-    public function mahmoud(){
-       $curl_handle=curl_init();
-        curl_setopt($curl_handle, CURLOPT_URL,'https://petstore.swagger.io/v2/pet/4');
-        curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
-        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl_handle, CURLOPT_USERAGENT, 'PostmanRuntime/7.29.0');
-        $query = curl_exec($curl_handle);
-        curl_close($curl_handle);
+    // public function mahmoud(){
+    //    $curl_handle=curl_init();
+    //     curl_setopt($curl_handle, CURLOPT_URL,'https://petstore.swagger.io/v2/pet/4');
+    //     curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+    //     curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+    //     curl_setopt($curl_handle, CURLOPT_USERAGENT, 'PostmanRuntime/7.29.0');
+    //     $query = curl_exec($curl_handle);
+    //     curl_close($curl_handle);
 
-        echo $query;
-    }
+    //     echo $query;
+    // }
 
 
     public function getMohab(){

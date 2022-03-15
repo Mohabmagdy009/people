@@ -14,9 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login', 'Auth\LoginController@loginApi');
+Route::get('login', 'Auth\LoginController@loginApi');
 
 Route::group(['middleware' => ['auth:api']], function () {
 	Route::get("actuals","ToolsController@getActualss");
-
 });
