@@ -218,7 +218,7 @@ class ToolsController extends Controller
     {
         $inputs = $request->all();
 
-        //dd($inputs);
+        // dd($inputs);
         $start_end_date = explode(' - ', $inputs['estimated_date']);
         $inputs['estimated_start_date'] = trim($start_end_date[0]);
         $inputs['estimated_end_date'] = trim($start_end_date[1]);
@@ -227,17 +227,19 @@ class ToolsController extends Controller
 
         // Here I will test if a user has been selected or not
         if (! empty($inputs['user_id'])) {
+            foreach ($inputs['user_id'] as $key => $user) {
             foreach ($inputs['month'] as $key => $value) {
-                $inputsActivities = [
+            $inputsActivities = [
           'year' => $inputs['year'],
           'month' => $key,
           'project_id' => $project->id,
-          'user_id' => $inputs['user_id'],
+          'user_id' => $user,
           'task_hour' => $value,
           'from_otl' => 0,
-        ];
+            ];
                 $activity = $this->activityRepository->create($inputsActivities);
             }
+        }
         }
 
         // Here I will test if there is a comment
@@ -734,6 +736,14 @@ class ToolsController extends Controller
     
         //If there are actuals on the project, get the user and the project name
         $empty = "false";
+
+        DB::table('subactivityactuals')
+            ->insert(['year'=>2022,'week'=>1,'project_id'=>1812,'user_id'=>$user_id,'task_hour'=>0,'sub_id'=>53]);
+        
+        DB::table('subactivityactuals')
+            ->where('sub_id',53)
+            ->delete();
+
         $data = DB::table('subactivityactuals as actuals') 
                 ->join('projects as p', 'actuals.project_id','=','p.id')
                 ->join('subactivitytypes as ss','actuals.sub_id','=','ss.id')

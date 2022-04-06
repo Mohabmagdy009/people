@@ -100,7 +100,7 @@
             <li><a href="{!!route('projectsLost')!!}">Projects lost</a></li>
             @endcan
             @can('tools-usersskills')
-            <li><a href="{!!route('toolsUsersSkills')!!}">Users skills</a></li>
+            <li style="display:none;"><a href="{!!route('toolsUsersSkills')!!}">Users skills</a></li>
             @endcan
           </ul>
         </li>

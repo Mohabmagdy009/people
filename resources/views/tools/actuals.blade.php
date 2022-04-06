@@ -245,7 +245,7 @@ $(document).ready(function(){
   $(document).on("change",".projects",function(){
     if($(this).val()==1813){
     $(this).closest("tr").find('.ndatabase').
-    html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $Account as $key )<option value='{{ $key->id }}' class='dropdown-item'>{{ $key->name }}</option>@endforeach")
+    html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $Account as $key ) @if($key->name != 'Zero')<option value='{{ $key->id }}' class='dropdown-item'>{{ $key->name }}</option>@endif @endforeach")
     }
     else if($(this).val()==1812){
       $(this).closest("tr").find('.ndatabase').

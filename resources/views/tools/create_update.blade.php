@@ -204,7 +204,7 @@ h3:after {
                       @endif
                     </div>
                     <div class="col-md-11">
-                      <select class="form-control select2" style="width: 100%;" id="user_id" name="user_id" data-placeholder="Select a user to be assigned">
+                      <select class="form-control select2" style="width: 100%;" id="user_id" name="user_id[]" data-placeholder="Select a user to be assigned" multiple="multiple">
                         <option value="" ></option>
                         @foreach($user_list as $key => $value)
                         <option value="{{ $key }}"

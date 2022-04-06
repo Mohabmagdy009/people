@@ -142,20 +142,20 @@
           </thead>
           <tfoot>
             <tr>
-              @if($isManager == 1)
+              <!-- @if($isManager == 1)
               <th></th>
-              @endif
+              @endif -->
               @if($isManager == 0)
               <th></th>
               <th></th>
               <th></th>
               <th></th>
-              @endif
               @foreach(config('select.data_shown') as $key => $month)
               <th></th>
               <th></th>
               <th></th>
               @endforeach
+              @endif
             </tr>
           </tfoot>
         </table>
@@ -460,11 +460,26 @@ $(document).ready(function() {
       $(td).attr('data-value', value);
 
       @endcan
-      if (value == 0) {
+      if($("#isManager").val() == 1) {
+        if (value == 0) {
         $(td).addClass("zero");
-      } 
+        }
+        else if (value <= 20){
+          $(td).addClass("green");
+        } 
+        else if (value <= 35){
+          $(td).addClass("amber");
+        }
+        else {
+          $(td).addClass("red");
+        } 
+        }else{
+        if (value == 0) {
+          $(td).addClass("zero");
+        } 
       else {
         $(td).addClass("forecast");
+      }
       } 
     }
   }
