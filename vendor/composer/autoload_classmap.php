@@ -100,6 +100,7 @@ return array(
     'App\\Repositories\\ProjectRepository' => $baseDir . '/app/Repositories/ProjectRepository.php',
     'App\\Repositories\\ProjectTableRepository' => $baseDir . '/app/Repositories/ProjectTableRepository.php',
     'App\\Repositories\\ProjectTableRepositoryV2' => $baseDir . '/app/Repositories/ProjectTableRepositoryV2.php',
+    'App\\Repositories\\ProjectTableRepositoryV3' => $baseDir . '/app/Repositories/ProjectTableRepositoryV3.php',
     'App\\Repositories\\ProjectTableRepositoryVload' => $baseDir . '/app/Repositories/ProjectTableRepositoryVload.php',
     'App\\Repositories\\RevenueRepository' => $baseDir . '/app/Repositories/RevenueRepository.php',
     'App\\Repositories\\UserRepository' => $baseDir . '/app/Repositories/UserRepository.php',

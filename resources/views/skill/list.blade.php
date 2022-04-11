@@ -71,6 +71,7 @@
                         <th>technology</th>
                         <th>Skill</th>
                         <th>Certification</th>
+                        <th>Created Date</th>
                         <th>
                             <a href="{{ route('skillFormCreate') }}" class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New</span></a>
                         </th>
@@ -78,6 +79,7 @@
                 </thead>
                 <tfoot>
                     <tr>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -127,6 +129,7 @@
                     { name: 'technology', data: 'technology' },
                     { name: 'skill', data: 'skill' },
                     { name: 'certification', data: 'certification' },
+                    { name: 'created_at', data: 'created_at' },
                     {
                         name: 'actions',
                         data: null,

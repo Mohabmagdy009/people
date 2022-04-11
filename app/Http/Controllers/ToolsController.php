@@ -736,14 +736,7 @@ class ToolsController extends Controller
     
         //If there are actuals on the project, get the user and the project name
         $empty = "false";
-
-        DB::table('subactivityactuals')
-            ->insert(['year'=>2022,'week'=>1,'project_id'=>1812,'user_id'=>$user_id,'task_hour'=>0,'sub_id'=>53]);
-        
-        DB::table('subactivityactuals')
-            ->where('sub_id',53)
-            ->delete();
-
+       
         $data = DB::table('subactivityactuals as actuals') 
                 ->join('projects as p', 'actuals.project_id','=','p.id')
                 ->join('subactivitytypes as ss','actuals.sub_id','=','ss.id')
@@ -768,7 +761,8 @@ class ToolsController extends Controller
         //Distribute the subactivities on their types to have dynamics dropdown menues
         $Account = DB::table('subactivitytypes')->where('type','Account')->select('id','name')->get();
         $General = DB::table('subactivitytypes')->where('type','General')->select('id','name')->get();
-        $Opportunity = DB::table('subactivitytypes')->where('type','Opportunity')->select('id','name')->get();    
+        $Opportunity = DB::table('subactivitytypes')->where('type','Opportunity')->select('id','name')->get();   
+
          
         return view('tools/actuals',compact('manager_id','data','week_no','user_id','year','projects','Account','General','Opportunity','empty','read'));
     }
@@ -838,6 +832,10 @@ class ToolsController extends Controller
             }
             
         }
+
+        DB::table('subactivityactuals')
+            ->insert(['year'=>2022,'week'=>1,'project_id'=>1812,'user_id'=>$user_id,'task_hour'=>0,'sub_id'=>53]);
+
         $data = DB::table('subactivityactuals as ss') 
                 ->join('projects as p', 'ss.project_id','=','p.id')
                 ->join('users as u','ss.user_id','=','u.id')
@@ -845,6 +843,10 @@ class ToolsController extends Controller
                 ->where('ss.user_id',$user_id)
                 ->groupBy('p.project_name')
                 ->get();
+
+        DB::table('subactivityactuals')
+            ->where('sub_id',53)
+            ->delete();
 
                 return view('tools/actualsView',compact('read','user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12','oldWeek_no','oldYear_no'));
     }

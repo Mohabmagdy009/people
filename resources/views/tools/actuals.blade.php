@@ -239,6 +239,7 @@ $(document).ready(function(){
     $(".projects, .ndatabase, #year, #week").prop("disabled", true);
     $(".hour").prop("contenteditable",false);
     $(".empty, #oldData, #actions, #selectionRow").remove();
+    $("#actualsButton").css("display","none");
   }
 
   //Make sure we have the correct subactivities of each project type

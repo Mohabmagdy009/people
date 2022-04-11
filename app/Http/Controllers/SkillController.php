@@ -23,7 +23,7 @@ class SkillController extends Controller
 
     public function listOfSkills()
     {
-        $skillList = Skill::select('id', 'domain', 'subdomain', 'technology', 'skill', 'certification');
+        $skillList = Skill::select('id', 'domain', 'subdomain', 'technology', 'skill', 'certification','created_at');
         $data = Datatables::of($skillList)->make(true);
 
         return $data;
@@ -51,6 +51,8 @@ class SkillController extends Controller
     public function postFormCreate(skillCreateRequest $request)
     {
         $inputs = $request->only('domain', 'subdomain', 'technology', 'skill', 'certification');
+        $date=time();
+        $inputs += ['created_at' => date("Y-m-d h:i:sa", $date)];
         Skill::create($inputs);
 
         return redirect('skillList')->with('success', 'Record created successfully');
