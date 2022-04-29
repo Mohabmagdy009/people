@@ -233,15 +233,15 @@ h3:after {
               </div>
 
               <!-- Row with months and values -->
-              <div class="row_months user_selected">
-                <div class="col-md-12">
+              <div class="row_months user_selected"  style="display:none">
+                <div class="col-md-12" style="display:none">
                   Number of days for each month.
                 </div>
               </div>
-              <div class="row_months user_selected">
+              <div class="row_months user_selected"  style="display:none">
                 @if($action == 'create')
                 @for($i = 1; $i <= 12; $i++)
-                <div class="form-group {!! $errors->has('month['.$i.']') ? 'has-error' : '' !!} col-md-1">
+                <div class="form-group {!! $errors->has('month['.$i.']') ? 'has-error' : '' !!} col-md-1"  style="display:none">
                   {!! Form::label('month['.$i.']', config('select.month_names')[$i], ['class' => 'control-label']) !!}
                   {!! Form::text('month['.$i.']',0, ['class' => 'form-control', 'placeholder' => config('select.month_names')[$i]]) !!}
                   {!! $errors->first('month['.$i.']', '<small class="help-block">:message</small>') !!}
@@ -249,7 +249,7 @@ h3:after {
                 @endfor
                 @elseif($action == 'update')
                 @for($i = 1; $i <= 12; $i++)
-                <div class="form-group {!! $errors->has('month['.$i.']') ? 'has-error' : '' !!} col-md-1">
+                <div class="form-group {!! $errors->has('month['.$i.']') ? 'has-error' : '' !!} col-md-1"  style="display:none">
                   {!! Form::label('month['.$i.']', config('select.month_names')[$i], ['class' => 'control-label']) !!}
                   {!! Form::text('month['.$i.']',isset($activities[$i]) ? $activities[$i] : 0, ['class' => 'form-control', 'placeholder' => config('select.month_names')[$i],!empty($from_otl[$i]) ? 'disabled' : '']) !!}
                   {!! $errors->first('month['.$i.']', '<small class="help-block">:message</small>') !!}
@@ -265,6 +265,21 @@ h3:after {
               <div class="row">
                 <div class="col-md-6">
                   <div class="row">
+                    <div class="form-group {!! $errors->has('opportunity_id') ? 'has-error' : '' !!} col-md-12">
+                      <div class="col-md-3">
+                        {!! Form::label('opportunity_id', 'Opportunity ID', ['class' => 'control-label']) !!}
+                      </div>
+                      <div class="col-md-9">
+                        {!! Form::text('opportunity_id', (isset($project->opportunity_id)) ? $project->opportunity_id : '', 
+                        ['class' => 'form-control', 
+                        'placeholder' => 'Opportunity ID',
+                        $opportunity_id
+                        ]) !!}
+                        {!! $errors->first('opportunity_id', '<small class="help-block">:message</small>') !!}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
                     <div class="form-group {!! $errors->has('project_name') ? 'has-error' : '' !!} col-md-12">
                       <div class="col-md-3">
                         {!! Form::label('project_name', 'Project name *', ['class' => 'control-label']) !!}
@@ -272,7 +287,7 @@ h3:after {
                       <div class="col-md-9">
                         {!! Form::text('project_name', (isset($project->project_name)) ? $project->project_name : '', 
                         ['class' => 'form-control mandatory', 
-                        'placeholder' => 'project name',
+                        'placeholder' => 'Project Name',
                         'title' => "<p>The only mandatory fields to save the project have a * next to them and are:</BR>
                                       <ul>
                                         <li>Project name</li>
@@ -290,10 +305,19 @@ h3:after {
                   <div class="row">
                     <div class="form-group {!! $errors->has('customer_id') ? 'has-error' : '' !!} col-md-12">
                       <div class="col-md-3">
-                        {!! Form::label('customer_id', 'Customer name *', ['class' => 'control-label']) !!}
+                        {!! Form::label('customer_idd', 'Customer name *', ['class' => 'control-label']) !!}
                       </div>
+                      <!-- <div class="col-md-9">
+                        {!! Form::text('customer_id', (isset($project->customer_id)) ? $project->customer_id : '', 
+                        ['class' => 'form-control', 
+                        'placeholder' => 'Customer Name'
+                        
+                        
+                        ]) !!}
+                        {!! $errors->first('customer_id', '<small class="help-block">:message</small>') !!}
+                      </div> -->
                       <div class="col-md-9">
-                        <select class="form-control select2" style="width: 100%;" id="customer_id" name="customer_id" data-placeholder="Select a customer name">
+                        <select class="form-control mandatory select2" style="width: 100%;" id="customer_id" name="customer_id" data-placeholder="Select a customer name">
                           @foreach($customers_list as $key => $value)
                           <option value="{{ $key }}"
                             @if (old('customer_id') == $key) selected
@@ -308,7 +332,7 @@ h3:after {
                     </div>
                   </div>
                   <div class="row">
-                    <div class="form-group {!! $errors->has('otl_project_code') ? 'has-error' : '' !!} col-md-12">
+                    <div class="form-group {!! $errors->has('otl_project_code') ? 'has-error' : '' !!} col-md-12" style="display:none">
                       <div class="col-md-3">
                         {!! Form::label('otl_project_code', 'Prime project code', ['class' => 'control-label']) !!}
                         <a id="help_otl" href="#">(?)</a>
@@ -331,7 +355,7 @@ h3:after {
                     </div>
                   </div>
                   <div class="row">
-                    <div class="form-group {!! $errors->has('meta_activity') ? 'has-error' : '' !!} col-md-12">
+                    <div class="form-group {!! $errors->has('meta_activity') ? 'has-error' : '' !!} col-md-12" style="display:none">
                       <div class="col-md-3">
                         {!! Form::label('meta_activity', 'Meta-activity', ['class' => 'control-label']) !!}
                       </div>
@@ -352,7 +376,7 @@ h3:after {
                     </div>
                   </div>
                   <div class="row">
-                    <div class="form-group {!! $errors->has('project_type') ? 'has-error' : '' !!} col-md-12">
+                    <div class="form-group {!! $errors->has('project_type') ? 'has-error' : '' !!} col-md-12" >
                       <div class="col-md-3">
                         {!! Form::label('project_type', 'Project type', ['class' => 'control-label']) !!}
                       </div>
@@ -372,8 +396,29 @@ h3:after {
                       </div>
                     </div>
                   </div>
+                   <div class="row">
+                    <div class="form-group {!! $errors->has('solution_complexity') ? 'has-error' : '' !!} col-md-12" >
+                      <div class="col-md-3">
+                        {!! Form::label('solution_complexity', 'Solution Complexity', ['class' => 'control-label']) !!}
+                      </div>
+                      <div class="col-md-9">
+                        <select class="form-control select2" style="width: 100%;" id="solution_complexity" name="solution_complexity" data-placeholder="Select a Solution Complexity">
+                          <option value="" ></option>
+                          @foreach(config('select.solution_complexity') as $key => $value)
+                          <option value="{{ $key }}"
+                            @if (old('solution_complexity') == $key) selected
+                            @elseif (isset($project->solution_complexity) && $value == $project->solution_complexity) selected
+                            @endif>
+                            {{ $value }}
+                          </option>
+                          @endforeach
+                        </select>
+                        {!! $errors->first('solution_complexity', '<small class="help-block">:message</small>') !!}
+                      </div>
+                    </div>
+                  </div>
                   <div class="row">
-                    <div class="form-group {!! $errors->has('project_subtype') ? 'has-error' : '' !!} col-md-12">
+                    <div class="form-group {!! $errors->has('project_subtype') ? 'has-error' : '' !!} col-md-12" style="display:none">
                       <div class="col-md-3">
                         {!! Form::label('project_subtype', ' ', ['class' => 'control-label']) !!}
                       </div>
@@ -394,7 +439,7 @@ h3:after {
                     </div>
                   </div>
                   <div class="row">
-                    <div class="form-group {!! $errors->has('activity_type') ? 'has-error' : '' !!} col-md-12">
+                    <div class="form-group {!! $errors->has('activity_type') ? 'has-error' : '' !!} col-md-12" style="display:none">
                       <div class="col-md-3">
                         {!! Form::label('activity_type', 'Activity type', ['class' => 'control-label']) !!}
                       </div>
@@ -415,7 +460,7 @@ h3:after {
                     </div>
                   </div>
                   <div id="project_status_row" class="row">
-                    <div class="form-group {!! $errors->has('project_status') ? 'has-error' : '' !!} col-md-12">
+                    <div class="form-group {!! $errors->has('project_status') ? 'has-error' : '' !!} col-md-12" style="display:none">
                       <div class="col-md-3">
                         {!! Form::label('project_status', 'Project status', ['class' => 'control-label']) !!}
                       </div>
@@ -478,7 +523,7 @@ h3:after {
                     </div>
                   </div>
                   <div class="row">
-                    <div class="form-group {!! $errors->has('customer_location') ? 'has-error' : '' !!} col-md-12">
+                    <div class="form-group {!! $errors->has('customer_location') ? 'has-error' : '' !!} col-md-12" style="display:none">
                       <div class="col-md-3">
                         {!! Form::label('customer_location', 'Customer location', ['class' => 'control-label']) !!}
                       </div>
@@ -489,7 +534,7 @@ h3:after {
                     </div>
                   </div>
                   <div class="row">
-                    <div class="form-group {!! $errors->has('technology') ? 'has-error' : '' !!} col-md-12">
+                    <div class="form-group {!! $errors->has('technology') ? 'has-error' : '' !!} col-md-12" style="display:none">
                       <div class="col-md-3">
                         {!! Form::label('technology', 'Technology', ['class' => 'control-label']) !!}
                       </div>
@@ -500,7 +545,7 @@ h3:after {
                     </div>
                   </div>
                   <div class="row">
-                    <div class="form-group {!! $errors->has('description') ? 'has-error' : '' !!} col-md-12">
+                    <div class="form-group {!! $errors->has('description') ? 'has-error' : '' !!} col-md-12" style="display:none">
                       <div class="col-md-3">
                         {!! Form::label('description', 'description', ['class' => 'control-label']) !!}
                       </div>
@@ -511,7 +556,7 @@ h3:after {
                     </div>
                   </div>
                   <div class="row">
-                    <div class="form-group {!! $errors->has('comments') ? 'has-error' : '' !!} col-md-12">
+                    <div class="form-group {!! $errors->has('comments') ? 'has-error' : '' !!} col-md-12" style="display:none">
                       <div class="col-md-3">
                         {!! Form::label('comments', 'Comments', ['class' => 'control-label']) !!}
                       </div>
@@ -586,7 +631,7 @@ h3:after {
                     </div>
                   </div>
                   <div id="gold_order_row" class="row">
-                    <div class="form-group {!! $errors->has('gold_order_number') ? 'has-error' : '' !!} col-md-12">
+                    <div class="form-group {!! $errors->has('gold_order_number') ? 'has-error' : '' !!} col-md-12" style="display:none">
                       <div class="col-md-3">
                         {!! Form::label('gold_order_number', 'Gold order', ['class' => 'control-label', 'id' => 'gold_order_text']) !!}
                       </div>
@@ -1251,6 +1296,11 @@ $(document).ready(function() {
   $("#project_type").select2({
     allowClear: true,
     disabled: {{ $project_type_select_disabled }}
+  });
+
+  $("#solution_complexity").select2({
+    allowClear: true,
+    disabled: {{ $solution_complexity }}
   });
 
   $("#project_subtype").select2({

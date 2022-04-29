@@ -157,7 +157,9 @@ class ToolsController extends Controller
         $product_code_disabled = '';
         $revenue_disabled = '';
         $win_ratio_disabled = '';
-        $show_change_button = false;
+        $show_change_button = 'false';
+        $solution_complexity = "false";
+        $opportunity_id = 'false';
 
         $user_selected = '';
 
@@ -181,6 +183,8 @@ class ToolsController extends Controller
         //dd($customers_list);
 
         $num_of_comments = 0;
+
+        // return $customers_list;
 
         return view('tools/create_update', compact('year', 'customers_list',
       'user_list', 'user_selected', 'created_by_user_id',
@@ -209,7 +213,7 @@ class ToolsController extends Controller
       'revenue_disabled',
       'win_ratio_disabled',
       'show_change_button',
-      'num_of_comments', 'tab'
+      'num_of_comments', 'tab','solution_complexity','opportunity_id'
       ))
       ->with('action', 'create');
     }

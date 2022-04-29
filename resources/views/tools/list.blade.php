@@ -142,9 +142,7 @@
           </thead>
           <tfoot>
             <tr>
-              <!-- @if($isManager == 1)
-              <th></th>
-              @endif -->
+
               @if($isManager == 0)
               <th></th>
               <th></th>
@@ -159,35 +157,7 @@
             </tr>
           </tfoot>
         </table>
-        <!-- Main table -->
 
-         <!-- Main table -->
-        <!-- <table id="actualsTable" class="table table-striped table-hover table-bordered mytable" width="100%">
-           <thead>
-              <tr>
-              @if($isManager == 1)
-              <th class="tableFont" style="font-size: 13px;">User Name</th>
-              @endif
-              <th class="tableFont" style="font-size: 13px;">Project name</th>
-              <th class="tableFont" style="font-size: 13px;">Manager name</th>
-              @foreach(config('select.data_shown') as $key => $month)
-              <th id="table_month_{{$key}}" onmouseover="getID(this.id)" class="tableFont" style="font-size: 13px;"></th>
-              @endforeach
-            </tr>
-          </thead>
-          <tfoot>
-            <tr>
-              @if($isManager == 1)
-              <th></th>
-              @endif
-              @foreach(config('select.data_shown') as $key => $month)
-              <th></th>
-          
-              @endforeach
-            </tr>
-          </tfoot>
-        </table> -->
-        <!-- Main table -->
       </div>
       <!-- Window content -->
     </div>
@@ -238,14 +208,8 @@ function getID(id){ //To get the week number from the table header id
   ID = colID[2];
   i = new Date();
   i.setDate(i.getDate()+(7*ID));
-  console.log(getWeek(i));
   $("#table_month_"+ID).prop('title',getWeek(i));
   getMonday(new Date());
-  k = $("#first").val();
-  console.log(k);
-  if ($("#first").val() === "Druck"){
-  console.log("asas");
-  };
 }
 //Some Functions and variables
 function getMonday(d) { // This function is to get the Week number of the current week
@@ -514,21 +478,19 @@ $(document).ready(function() {
         $('#table_month_'+index).empty().html(months_from_selection[index-1]);
       }
   }
-
-  // $.ajax({
-  //     type: 'POST',
-  //     url: "{!! route('listOfActivitiesPerUserAjax') !!}",
-  //     dataType: 'json',
-  //     data: ajaxData(),
-  //     success: function(data) {
-  //       console.log("bold");
-  //       console.log(data);
-  //     },
-  //     error: function (jqXhr, textStatus, errorMessage) { // error callback 
-  //       console.log('Error: ' + errorMessage);
-  //     }
+   // $.ajax({  
+  //     type: 'POST',  
+  //     url: "{!! route('listOfActivitiesPerUserAjax') !!}", 
+  //     dataType: 'json',  
+  //     data: ajaxData(),  
+  //     success: function(data) {  
+  //       console.log("bold"); 
+  //       console.log(data); 
+  //     }, 
+  //     error: function (jqXhr, textStatus, errorMessage) { // error callback  
+  //       console.log('Error: ' + errorMessage); 
+  //     }  
   //   });
-
   activitiesTable = $('#activitiesTable').DataTable({
     scrollX: true,
     @if(isset($table_height))
@@ -747,14 +709,7 @@ $(document).ready(function() {
     editable_old_value = $(this).html();
   });
 
-  $(document).on('keypress', '.editable', function(e){
-    if (e.which  == 13) { //Enter key's keycode
-      update_activity($(this));
-      return false;
-    }
-  });
-
-  $(document).on('keyup', '.editable', function(e){
+  $(document).on('keyup', '.editable', function(){
     update_activity($(this));
   });
 
@@ -846,11 +801,10 @@ $(document).ready(function() {
       $("#actualsView").css('margin-right',"0px");
     }
   })
-  @if($isManager==0)
+  @if($isManager == 0)
     $(".nav_title").css('background','#b0b0b0');
     $(document).scroll(function(){
       var value=$(document).scrollTop();
-      console.log(value);
       if(value>=57){
         $(".nav_title").css('background','#f7f7f7');
       }else{

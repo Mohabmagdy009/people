@@ -50,11 +50,24 @@ return [
         'CF' => 'CF',
     ],
     'project_status' => [
+        'Open' => 'Open',
+        'Closed' => 'Closed',
+    ],
+    'project_status_Consult' => [
         'Pipeline' => 'Pipeline',
         'Started' => 'Started',
         'Closed' => 'Closed',
     ],
+    'solution_complexity' => [
+        'Low' => 'Low',
+        'Medium' => 'Medium',
+        'High' => 'High',
+    ],
     'project_type' => [
+        'Local' => 'Local',
+        'Regional' => 'Regional',
+    ],
+    'project_type_consult' => [
         'Baseline' => 'Baseline',
         'Project' => 'Project',
         'Pre-sales' => 'Pre-sales',

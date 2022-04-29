@@ -62,7 +62,7 @@ class ProjectRepository
     {
         $project = new $this->project;
         $inputs['created_by_user_id'] = Auth::user()->id;
-        //dd($inputs);
+        // dd($inputs);
         return $this->save($project, $inputs);
     }
 
@@ -176,10 +176,18 @@ class ProjectRepository
             $project->created_by_user_id = $inputs['created_by_user_id'];
         }
 
+        if (array_key_exists('solution_complexity', $inputs)) {
+            $project->solution_complexity = $inputs['solution_complexity'];
+        }
+
+        if (array_key_exists('opportunity_id', $inputs)) {
+            $project->opportunity_id = $inputs['opportunity_id'];
+        }
         // Boolean
         if (array_key_exists('otl_validated', $inputs)) {
             $project->otl_validated = $inputs['otl_validated'];
         }
+
 
         $project->save();
 

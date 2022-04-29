@@ -179,7 +179,7 @@ $(document).ready(function(){
       }else{
         year = yearFromActuals;
       }
-      window.location.href = "{!! route('getModalData',['','','','','']) !!}/"+0+"/"+uid+"/"+week+"/"+year+"/"+1;
+      window.location.href = "{!! route('getModalData',['','','','','']) !!}/"+0+"/"+uid+"/"+week+"/"+year+"/"+2;
   })
   //Run the function to get the totals
   getTotals();

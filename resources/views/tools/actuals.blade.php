@@ -56,48 +56,50 @@
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
       <!-- Window content -->
-      <div class="x_content">    
-      <div class="form-group row" style="width:400px;padding:5px ;font-size:15px">
-        <div class="col-xs-6">
-          <label for="year" class="control-label">Year</label>
-          <select class="form-control" id="year" name="year" data-placeholder="Select a year">
-            @foreach(config('select.year') as $key => $value)
-            <option value="{{ $key }}" class="dropdown-item">
-              {{ $value }}
-            </option>
-              @endforeach
-          </select>
-        </div>
-        <div class="col-xs-6">
-          <label for="week" class="control-label">Weeks</label>
-          <select class="form-control" id="week" name="week" data-placeholder="Select a week">
-            @foreach(config('select.month_names') as $key => $value)
-            <option value="{{ $key }}" class="dropdown-item">
-              {{ $value }}
-            </option>
-              @endforeach
-          </select>
+      <div class="x_content">
+        <!-- Weeks and Year DropDown menues -->
+        <div class="form-group row" style="width:400px;padding:5px ;font-size:15px">
+          <div class="col-xs-6">
+            <label for="year" class="control-label">Year</label>
+            <select class="form-control" id="year" name="year" data-placeholder="Select a year">
+              @foreach(config('select.year') as $key => $value)
+              <option value="{{ $key }}" class="dropdown-item">
+                {{ $value }}
+              </option>
+                @endforeach
+            </select>
+          </div>
+          <div class="col-xs-6">
+            <label for="week" class="control-label">Weeks</label>
+            <select class="form-control" id="week" name="week" data-placeholder="Select a week">
+              @foreach(config('select.month_names') as $key => $value)
+              <option value="{{ $key }}" class="dropdown-item">
+                {{ $value }}
+              </option>
+                @endforeach
+            </select>
+          </div>
         </div>
       </div>
-
-      <!-- Week and Year drop down menus ended -->
+      <!-- Weeks and Year DropDown menues ended -->
 
       <!-- Variables sent from Tools Controller -->
       <input type="hidden" id="u_id" value="{{$user_id}}">
       <input type="hidden" id="w" value="{{$week_no}}">
       <input type="hidden" id="y" value="{{$year}}">
       <input type="hidden" id="readOnly" value="{{$read}}">
+      <input type="hidden" id="mid" value="{{$user_id}}">
 
       <!-- Report Button -->
-        <div class="clearfix">
-          <h2 style="display:inline-block;"></h2>
-            <button type="button" id="actualsButton" class="btn btn-success" style="float: right;">
-                          Actuals Activity Report
-            </button>
-            <button type="button" id="back" class="btn btn-success" style="float: right;">
-                     Back
-            </button>
-        </div> 
+      <div class="clearfix">
+        <h2 style="display:inline-block;"></h2>
+          <button type="button" id="actualsButton" class="btn btn-success" style="float: right;">
+            Actuals Activity Report
+          </button>
+          <button type="button" id="back" class="btn btn-success" style="float: right;">
+            Back
+          </button>
+      </div> 
 
       <!-- Main table -->
       <table id="sub_activity" class="table table-striped table-hover table-bordered mytablee" width="100%">
@@ -110,67 +112,67 @@
           </tr>
         </thead>
         <tbody id='tableBody'>
-          @if($empty == "true")
+        @if($empty == "true")
           <tr id="selectionRow">
-               <td cellpadding="0" cellspacing="0">        
-                <select id="select-1" class="form-control projects">
-                  <option value="empty" id="option-1">Select your Project ...</option>
-                    @foreach( $projects as $key )
-                  <option value="{{$key->project_id}}" class="dropdown-item">
-                    {{$key->project_name}}
-                  </option>
-                    @endforeach
-                </select>
-              </td>
-              <td cellpadding="0" cellspacing="0">        
-                <select id="select-1" class="form-control ndatabase"></select>
-              </td>
-              <td contenteditable='true' class='hour'></td>
-              <td class="removable"><button type="button" id="button" class="glyphicon glyphicon-plus" title="Kindly enter the actual hours"></button></td>
-              <td class="span"><button type="button" id="button2" class="glyphicon glyphicon-trash padding"></button></td>
-            </tr>
-          @else
-          @foreach($data as $key1)
-            <tr>
-              <td cellpadding="0" cellspacing="0">        
-                <select id="select-1" class="form-control projects">
-                  <option value="{{$key1->project_id}}" id="option-1">{{$key1->project}}</option>
-                   @foreach( $projects as $key )
-                  <option value="{{$key->project_id}}" class="dropdown-item">
-                    {{$key->project_name}}
-                  </option>
-                    @endforeach
-                </select>
-              </td>
-              <td cellpadding="0" cellspacing="0">        
-                <select id="select-1" class="form-control ndatabase">
-                    <option value="{{$key1->id}}">{{$key1->name}}</option>
-                  </select> 
-              </td>
-              <td contenteditable='true' class='hour'>{{$key1->task_hour}}</td>
-              <td colspan="2" id="oldData">
-                <button type="button" id="button2" class="glyphicon glyphicon-trash"style="padding-left: 45%;"></button>
-              </td>
-            </tr>
-          @endforeach  
-            <tr id="selectionRow">
-               <td cellpadding="0" cellspacing="0">        
-                <select id="select-1" class="form-control projects">
-                  <option value="empty" id="option-1">Select your Project ...</option>
-                    @foreach( $projects as $key )
-                  <option value="{{$key->project_id}}" class="dropdown-item">
-                    {{$key->project_name}}
-                  </option>
-                    @endforeach
-                </select>
-              </td>
-              <td cellpadding="0" cellspacing="0">        
-                <select id="select-1" class="form-control ndatabase"></select>
-              </td>
-              <td contenteditable='true' class='hour'></td>
-              <td class="removable"><button type="button" id="button" class="glyphicon glyphicon-plus" title="Kindly enter the actual hours"></button></td>
-              <td class="span"><button type="button" id="button2" class="glyphicon glyphicon-trash padding"></button></td>
-            </tr>
+            <td cellpadding="0" cellspacing="0">        
+              <select id="select-1" class="form-control projects">
+                <option value="empty" id="option-1">Select your Project ...</option>
+                  @foreach( $projects as $key )
+                <option value="{{$key->project_id}}" class="dropdown-item">
+                  {{$key->project_name}}
+                </option>
+                  @endforeach
+              </select>
+            </td>
+            <td cellpadding="0" cellspacing="0">        
+              <select id="select-1" class="form-control ndatabase"></select>
+            </td>
+            <td contenteditable='true' class='hour'></td>
+            <td class="removable"><button type="button" id="button" class="glyphicon glyphicon-plus" title="Kindly enter the actual hours"></button></td>
+            <td class="span"><button type="button" id="button2" class="glyphicon glyphicon-trash padding"></button></td>
+          </tr>
+        @else
+        @foreach($data as $key1)
+          <tr>
+            <td cellpadding="0" cellspacing="0">        
+              <select id="select-1" class="form-control projects">
+                <option value="{{$key1->project_id}}" id="option-1">{{$key1->project}}</option>
+                 @foreach( $projects as $key )
+                <option value="{{$key->project_id}}" class="dropdown-item">
+                  {{$key->project_name}}
+                </option>
+                  @endforeach
+              </select>
+            </td>
+            <td cellpadding="0" cellspacing="0">        
+              <select id="select-1" class="form-control ndatabase">
+                  <option value="{{$key1->id}}">{{$key1->name}}</option>
+                </select> 
+            </td>
+            <td contenteditable='true' class='hour'>{{$key1->task_hour}}</td>
+            <td colspan="2" id="oldData">
+              <button type="button" id="button2" class="glyphicon glyphicon-trash"style="padding-left: 45%;"></button>
+            </td>
+          </tr>
+        @endforeach  
+          <tr id="selectionRow">
+             <td cellpadding="0" cellspacing="0">        
+              <select id="select-1" class="form-control projects">
+                <option value="empty" id="option-1">Select your Project ...</option>
+                  @foreach( $projects as $key )
+                <option value="{{$key->project_id}}" class="dropdown-item">
+                  {{$key->project_name}}
+                </option>
+                  @endforeach
+              </select>
+            </td>
+            <td cellpadding="0" cellspacing="0">        
+              <select id="select-1" class="form-control ndatabase"></select>
+            </td>
+            <td contenteditable='true' class='hour'></td>
+            <td class="removable"><button type="button" id="button" class="glyphicon glyphicon-plus" title="Kindly enter the actual hours"></button></td>
+            <td class="span"><button type="button" id="button2" class="glyphicon glyphicon-trash padding"></button></td>
+          </tr>
           @endif
         </tbody>
         <tfoot class="tableFont">
@@ -184,8 +186,7 @@
     </div>
   </div>  
 </div>
-<!-- Varibales sent from the controller -->
-<input type="hidden" id="mid" value="{{$user_id}}">
+
 @section('script')
 <script>
 // Variables From Controller 
@@ -227,7 +228,6 @@ $(document).ready(function(){
     }
   });
 
-
   // Run the function to have the totals ready
   getTotals();
     
@@ -241,12 +241,19 @@ $(document).ready(function(){
     $(".empty, #oldData, #actions, #selectionRow").remove();
     $("#actualsButton").css("display","none");
   }
+  else if($("#readOnly").val() == 2){
+    $(".projects, .ndatabase, #year, #week").prop("disabled", true);
+    $(".hour").prop("contenteditable",false);
+    $(".empty, #oldData, #actions, #selectionRow").remove();
+    $("#actualsButton").css("display","none");
+    $("#readOnly").val(0);
+  }
 
   //Make sure we have the correct subactivities of each project type
   $(document).on("change",".projects",function(){
     if($(this).val()==1813){
-    $(this).closest("tr").find('.ndatabase').
-    html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $Account as $key ) @if($key->name != 'Zero')<option value='{{ $key->id }}' class='dropdown-item'>{{ $key->name }}</option>@endif @endforeach")
+      $(this).closest("tr").find('.ndatabase').
+      html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $Account as $key ) @if($key->name != 'Zero')<option value='{{ $key->id }}' class='dropdown-item'>{{ $key->name }}</option>@endif @endforeach")
     }
     else if($(this).val()==1812){
       $(this).closest("tr").find('.ndatabase').
@@ -257,9 +264,10 @@ $(document).ready(function(){
       html("<option value= 'empty' id='option-1'>Select your activity ...</option>@foreach( $Opportunity as $key )<option value='{{ $key->id }}' class='dropdown-item'>{{ $key->name }}</option>@endforeach")
     }
   })
+
   $(document).on("click","#actualsButton",function(){
-      var read = $("#readOnly").val();
-      window.location.href = "{!! route('actualsView',['','','','','','']) !!}/"+uid+"/"+currentWeek+"/"+currentYear+"/"+weekFromController+"/"+yearFromController+"/"+read; 
+    var read = $("#readOnly").val();
+    window.location.href = "{!! route('actualsView',['','','','','','']) !!}/"+uid+"/"+currentWeek+"/"+currentYear+"/"+weekFromController+"/"+yearFromController+"/"+read; 
   })
   $(document).on("click","#back",function(){
     if($("#readOnly").val() == 1){
@@ -268,7 +276,8 @@ $(document).ready(function(){
       window.location.href = "{!! route('toolsActivities') !!}/"; 
     }
   })
-  //tooltip for the user if he has an empty record
+
+  //Tooltip for the user if he has an empty record on the Add button in the Actions Column
   $(document).on("mouseover","#button",function(){
     var projectCol = $(this).closest('tr').find('.projects').val();
     var empty_th = $(this).closest('tr').find('.hour').html();
@@ -281,6 +290,7 @@ $(document).ready(function(){
     } 
   })
 
+  //Add Button Action
   $(document).on("click","#button",function(){
     var projectCol = $(this).closest('tr').find('.projects').val();
     var empty_th = $(this).closest('tr').find('.hour').html();
@@ -307,55 +317,60 @@ $(document).ready(function(){
     if(taskh != '' && projectCol!='empty'){
       $(this).closest('tr').find('#button').tooltip('disable');
     }
-    data ={
-            'uid':uid,
-            'pid':projectCol,
-            'taskId':taskId,
-            'taskHour':taskh,
-            'week':weekFromController,
-            'year':yearFromController
+    data =
+      {
+        'uid':uid,
+        'pid':projectCol,
+        'taskId':taskId,
+        'taskHour':taskh,
+        'week':weekFromController,
+        'year':yearFromController
       };
-      $.ajax({
-          type: 'POST',
-          url: "{!! route('addNew') !!}",
-          data:data,
-          dataType: 'json',
-          success: function(data) {
-            getTotals();
-          }
-    });
-     
+    $.ajax(
+      {
+        type: 'POST',
+        url: "{!! route('addNew') !!}",
+        data:data,
+        dataType: 'json',
+        success: function(data) {
+          getTotals();
+        }
+      }
+    );
   })
 
-  //Sent data if the user enters any hour
+  //Sent data if the user enters anything in the Actual Hours Column
   $(document).on("keyup",".hour",function(){
     var projectCol = $(this).closest('tr').find('.projects').val();
     var taskHour = $(this).html();
     var taskId2 = $(this).closest('tr').find('.ndatabase').val(); //If user filled the task hour while empty drop down menu
     if(taskId2 != null && projectCol != 'empty' && taskId2 != 'empty') {
       $(this).closest('tr').find('#button').tooltip('disable');
-      data ={
-        'uid':uid,
-        'pid':projectCol,
-        'taskId':taskId2,
-        'taskHour':taskHour,
-        'week':weekFromController,
-        'year':yearFromController
-      };
-      $.ajax({
-        type: 'POST',
-        url: "{!! route('addNew') !!}",
-        data:data,
-        dataType: 'json',
-        success: function(data) {
-          $('.hour').addClass('update_success');
-          setTimeout(function () {
-            $('.hour').removeClass('update_success');
-          }, 1000);
-          getTotals();
-          $("#actualsButton").fadeIn(3000);
+      data =
+        {
+          'uid':uid,
+          'pid':projectCol,
+          'taskId':taskId2,
+          'taskHour':taskHour,
+          'week':weekFromController,
+          'year':yearFromController
+        };
+      $.ajax(
+        {
+          type: 'POST',
+          url: "{!! route('addNew') !!}",
+          data:data,
+          dataType: 'json',
+          success: function(data) {
+            $('.hour').addClass('update_success');
+            setTimeout(function () {
+              $('.hour').removeClass('update_success');
+            }, 1000);
+            getTotals();
+            $("#actualsButton").fadeIn(3000);
+          }
         }
-      });
+      );
     }
     else{
       return;
@@ -368,29 +383,33 @@ $(document).ready(function(){
     var taskh = $(this).closest('tr').find('.hour').html();
     var taskId = $(this).closest('tr').find('.ndatabase').val();
     if(taskh != '' && taskId != 'empty' && projectCol!='empty'&&taskId != null){ 
-    data={
-      'uid':uid,
-      'pid':projectCol,
-      'taskId':taskId,
-      'taskHour':taskh,
-      'week':weekFromController,
-      'year':yearFromController
-    }
-    $.ajax({
+    data = 
+      {
+        'uid':uid,
+        'pid':projectCol,
+        'taskId':taskId,
+        'taskHour':taskh,
+        'week':weekFromController,
+        'year':yearFromController
+      }
+    $.ajax(
+      {
         type: 'POST',
         url: "{!! route('delete') !!}",
         data:data,
         dataType: 'json',
         success: function() {
-        location.reload();
+         location.reload();
         }
-      });
-    }else{
+      }
+    );
+    }
+    else {
       return;
     }
   })
 
-  // Avoid user to write letters
+  // Avoid user to write letters inside the Actual Hours Column
   $(document).on('keypress','.hour',(function(e){
     if(isNaN(String.fromCharCode(e.which))) e.preventDefault(); 
   }));
