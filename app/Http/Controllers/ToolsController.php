@@ -891,9 +891,8 @@ class ToolsController extends Controller
                 ->whereIn('ss.user_id',$arr)
                 ->groupBy('ss.user_id')
                 ->get();
-                // return $data;
+
                 return view('actualsDetails',compact('manager_name','user_id','data','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12'));
-                // return view('tools/actualsView',compact('user_id','data','year','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12','oldWeek_no','oldYear_no'));
     }
     public function deleteActivity(Request $request){
 

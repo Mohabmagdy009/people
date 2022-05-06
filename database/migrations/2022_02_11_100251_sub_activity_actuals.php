@@ -13,7 +13,7 @@ class SubActivityActuals extends Migration
      */
     public function up()
     {
-        Schema::create('SubActivityActuals', function (Blueprint $table) {
+        Schema::create('subactivityactuals', function (Blueprint $table) {
             $table->id();
             $table->integer('year');
             $table->integer('week');
@@ -32,6 +32,6 @@ class SubActivityActuals extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('SubActivityActuals');
+        Schema::dropIfExists('subactivityactuals');
     }
 }

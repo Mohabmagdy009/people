@@ -13,7 +13,7 @@ class SubActivityTypes extends Migration
      */
     public function up()
     {
-        Schema::create('SubActivityTypes', function (Blueprint $table) {
+        Schema::create('subactivitytypes', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
             $table->string('type',255);
@@ -28,6 +28,6 @@ class SubActivityTypes extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('SubActivityTypes');
+        Schema::dropIfExists('subactivitytypes');
     }
 }
