@@ -273,7 +273,7 @@ h3:after {
                         {!! Form::text('opportunity_id', (isset($project->opportunity_id)) ? $project->opportunity_id : '', 
                         ['class' => 'form-control', 
                         'placeholder' => 'Opportunity ID',
-                        $opportunity_id
+                        
                         ]) !!}
                         {!! $errors->first('opportunity_id', '<small class="help-block">:message</small>') !!}
                       </div>
@@ -1296,11 +1296,6 @@ $(document).ready(function() {
   $("#project_type").select2({
     allowClear: true,
     disabled: {{ $project_type_select_disabled }}
-  });
-
-  $("#solution_complexity").select2({
-    allowClear: true,
-    disabled: {{ $solution_complexity }}
   });
 
   $("#project_subtype").select2({

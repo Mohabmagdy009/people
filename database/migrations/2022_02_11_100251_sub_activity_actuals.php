@@ -32,6 +32,6 @@ class SubActivityActuals extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subactivityactuals');
+        Schema::dropIfExists('SubActivityActuals');
     }
 }

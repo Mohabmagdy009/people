@@ -159,7 +159,7 @@ class ToolsController extends Controller
         $win_ratio_disabled = '';
         $show_change_button = 'false';
         $solution_complexity = "false";
-        $opportunity_id = 'false';
+        $opportunity_id_disable = '';
 
         $user_selected = '';
 
@@ -213,7 +213,7 @@ class ToolsController extends Controller
       'revenue_disabled',
       'win_ratio_disabled',
       'show_change_button',
-      'num_of_comments', 'tab','solution_complexity','opportunity_id'
+      'num_of_comments', 'tab','solution_complexity','opportunity_id_disable'
       ))
       ->with('action', 'create');
     }
@@ -297,7 +297,7 @@ class ToolsController extends Controller
         $product_code_disabled = 'disabled';
         $revenue_disabled = 'disabled';
         $win_ratio_disabled = 'disabled';
-        $show_change_button = false;
+        $show_change_button = 'false';
 
         // Here we find the information about the project
         $project = $this->projectRepository->getById($project_id);
