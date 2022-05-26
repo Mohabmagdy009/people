@@ -47,9 +47,15 @@
 @section('content')
 <!-- Page title -->
 <div class="page-title">
+  @if($isManager == 1)
+  <div class="title_left">
+    <h3>Team Activity Forecast</small></h3><button id="legendButton" class="btn btn-success btn-sm">Legend</button>
+  </div>
+  @else
   <div class="title_left">
     <h3>Activity Forecast</small></h3><button id="legendButton" class="btn btn-success btn-sm">Legend</button>
   </div>
+  @endif
 </div>
 <div class="clearfix"></div>
 <!-- Page title -->

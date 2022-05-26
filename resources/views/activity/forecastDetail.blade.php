@@ -84,9 +84,9 @@
       <table id="sub_activity" class="table table-striped table-hover table-bordered mytablee2" width="100%">
         <thead>
           <tr class="tableFont">
-          	<td style="width:15%">Customer Name</td>
-            <td style="width:15%">Project Name</td>
-            <td style="width:10%;">Project Type</td>
+          	<td style="width:15%">Project Name</td>
+            <td style="width:15%">Project Type</td>
+            <td style="width:10%;">Customer Name</td>
             <td class="font last" data-v="{{$week_no}}">Week {{$week_no}}</td>
           </tr>
         </thead>

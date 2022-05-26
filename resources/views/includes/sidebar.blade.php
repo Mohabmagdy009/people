@@ -109,7 +109,7 @@
 
       @canany(['tools-unassigned-view','tools-missing_info-view'])
       <ul class="nav side-menu">
-        <li><a><i class="fa fa-server"></i>Maintenance<span class="fa fa-chevron-down"></span></a>
+        <!-- <li><a><i class="fa fa-server"></i>Maintenance<span class="fa fa-chevron-down"></span></a> -->
           <ul class="nav child_menu">
             @can('tools-unassigned-view')
             <li><a href="{!!route('projectsAssignedAndNot')!!}">Unassigned projects</a></li>

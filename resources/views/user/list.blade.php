@@ -56,7 +56,7 @@
       <!-- Window title -->
       <div class="x_title">
         <div class="col-sm-1"><h2>List</small></h2></div>
-        <div class="col-sm-2">Exclude contractors  <input name="exclude_contractors" type="checkbox" id="exclude_contractors" class="form-group js-switch-small" /></div>
+        <div style="display: none;"class="col-sm-2">Exclude contractors  <input name="exclude_contractors" type="checkbox" id="exclude_contractors" class="form-group js-switch-small" /></div>
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
         </ul>

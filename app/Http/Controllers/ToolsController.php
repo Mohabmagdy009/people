@@ -734,7 +734,7 @@ class ToolsController extends Controller
                     ->join('projects as p', 'a.project_id', '=','p.id')
                     ->select('p.project_name','a.project_id')
                     ->where('a.user_id',$user_id)
-                    ->where('a.month',$week_no)
+                    ->where('a.month',1)
                     ->where('a.year',$year)
                     ->get();
     

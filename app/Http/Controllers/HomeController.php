@@ -30,6 +30,7 @@ class HomeController extends Controller
         $user = User::find(Auth::user()->id);
         if ($user->is_manager == 1) {
             $employee_list = $user->employees()->select('name', 'last_login', 'last_activity_update')->orderBy('last_activity_update', 'DESC')->get();
+            return redirect('/toolsActivities');
         } else {
             $employee_list = null;
             return redirect('/toolsActivities');

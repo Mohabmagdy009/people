@@ -81,15 +81,15 @@
                       <th>ID</th>
                       <th>Customer name</th>
                       <th>Project name</th>
-                      <th>OTL project code</th>
-                      <th>Meta-activity</th>
+                      <!-- <th>OTL project code</th> -->
+                      <!-- <th>Meta-activity</th> -->
                       <th>CL ID</th>
                       <th>Project type</th>
-                      <th>Activity type</th>
+                      <!-- <th>Activity type</th> -->
                       <th>Project status</th>
                       <th>Region</th>
                       <th>Country</th>
-                      <th>Technology</th>
+                      <!-- <th>Technology</th> -->
                       <th>Description</th>
                       <th>Estimated start date</th>
                       <th>Estimated end date</th>
@@ -106,10 +106,10 @@
                 </thead>
                 <tfoot>
                     <tr>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
+                      <!-- <th></th> -->
+                      <!-- <th></th> -->
+                      <!-- <th></th> -->
+                      <!-- <th></th> -->
                       <th></th>
                       <th></th>
                       <th></th>
@@ -167,8 +167,8 @@
                     { name: 'projects.id', data: 'id', searchable: false , visible: false },
                     { name: 'customers.name', data: 'customer_name' },
                     { name: 'projects.project_name', data: 'project_name' },
-                    { name: 'projects.otl_project_code', data: 'otl_project_code' },
-                    { name: 'projects.meta_activity', data: 'meta_activity'},
+                    // { name: 'projects.otl_project_code', data: 'otl_project_code' },
+                    // { name: 'projects.meta_activity', data: 'meta_activity'},
                     { name: 'projects.samba_id', data: 'samba_id', searchable: true , visible: true},
                     { name: 'projects.project_type', data: 'project_type',
                       render: function (data,type, rowData) {
@@ -184,11 +184,11 @@
                         return data;
                       }
                     },
-                    { name: 'projects.activity_type', data: 'activity_type'},
+                    // { name: 'projects.activity_type', data: 'activity_type'},
                     { name: 'projects.project_status', data: 'project_status'},
                     { name: 'projects.region', data: 'region'  , visible: false},
                     { name: 'projects.country', data: 'country'  , visible: false},
-                    { name: 'projects.technology', data: 'technology' },
+                    // { name: 'projects.technology', data: 'technology' },
                     { name: 'projects.description', data: 'description' , visible: false },
                     { name: 'projects.estimated_start_date', data: 'estimated_start_date' , visible: false },
                     { name: 'projects.estimated_end_date', data: 'estimated_end_date' , visible: false },
