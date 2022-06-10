@@ -28,12 +28,11 @@
     </ul>
     @endcan
 
-    @canany(['user-view','role-view','project-view','activity-view','activity-edit','activity-create','activity-delete',
-    'skills-addnew','backup-download'
-    ])
+    
+    @canany(['tools-activity-view','tools-all_projects-view','tools-usersskills','projects-lost','tools-user-summary'])
     <ul class="nav side-menu">
-      <li><a><i class="fa fa-edit"></i>DB Management <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
+      <li><a href="{!!route('toolsActivities')!!}"><i class="fa fa-home"></i>Home</a>
+        <!-- <ul class="nav child_menu">
           @canany(['user-view','user-edit','user-create','user-delete'])
           <li><a href="{!!route('userList')!!}">Users list</a></li>
           @endcan
@@ -55,9 +54,19 @@
           @canany(['backup-create','backup-download','backup-delete'])
           <li><a href="{!!route('backupList')!!}">Backups list</a></li>
           @endcan
-        </ul>
+        </ul> -->
       </li>
     </ul>
+    @endcan
+
+    @canany(['user-view','role-view','project-view','activity-view','activity-edit','activity-create','activity-delete',
+    'skills-addnew','backup-download'
+    ])
+    <ul class="nav side-menu">
+      <li><a href="{!!route('userList')!!}"><i class="fa fa-user"></i>Users List</a>
+      </li>
+    </ul>
+
     @endcan
 
       @canany(['dashboard-view','cluster-view'])
@@ -88,8 +97,8 @@
 
       @canany(['tools-activity-view','tools-all_projects-view','tools-usersskills','projects-lost','tools-user-summary'])
       <ul class="nav side-menu">
-        <li><a><i class="fa fa-wrench"></i>Tools<span class="fa fa-chevron-down"></span></a>
-          <ul class="nav child_menu">
+        <li><a href="{!!route('projectsAll')!!}"><i class="fa fa-wrench"></i>Project List</a>
+          <!-- <ul class="nav child_menu">
             @can('tools-activity-view')
             <li><a href="{!!route('toolsActivities')!!}">Activity list per project</a></li>
             @endcan
@@ -102,7 +111,7 @@
             @can('tools-usersskills')
             <li style="display:none;"><a href="{!!route('toolsUsersSkills')!!}">Users skills</a></li>
             @endcan
-          </ul>
+          </ul> -->
         </li>
       </ul>
       @endcan
