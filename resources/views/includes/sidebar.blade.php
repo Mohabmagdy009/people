@@ -63,7 +63,7 @@
     'skills-addnew','backup-download'
     ])
     <ul class="nav side-menu">
-      <li><a href="{!!route('userList')!!}"><i class="fa fa-user"></i>Users List</a>
+      <li><a href="{!!route('userList')!!}"><i class="fa fa-user"></i>Manage Users</a>
       </li>
     </ul>
 
@@ -97,7 +97,7 @@
 
       @canany(['tools-activity-view','tools-all_projects-view','tools-usersskills','projects-lost','tools-user-summary'])
       <ul class="nav side-menu">
-        <li><a href="{!!route('projectsAll')!!}"><i class="fa fa-wrench"></i>Project List</a>
+        <li><a href="{!!route('projectsAll')!!}"><i class="fa fa-wrench"></i>Manage Projects</a>
           <!-- <ul class="nav child_menu">
             @can('tools-activity-view')
             <li><a href="{!!route('toolsActivities')!!}">Activity list per project</a></li>
