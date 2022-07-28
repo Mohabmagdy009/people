@@ -62,11 +62,11 @@
         </ul>
         <div class="clearfix"></div>
       </div>
-    <!--   <div class="container">
+      <div class="container">
         <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card" style="padding: 12px;">
-          <div class="card-header">This Field Uses to Update Users and cretae new user by uploading ExcelSheet (Ex. CaC Manager, Cac User) <br> Note: Upload Managers before Users</div>
+          <div class="card-header">This Field Uses to Update Users and create new user by uploading ExcelSheet (Ex. CaC Manager, Cac User) <br> Note: Upload Managers before Users</div>
           <div class="card-body">
             @if(session('status'))
               <div class="alert alert-sucess" role="alert">
@@ -87,7 +87,7 @@
       </div>
       
     </div>
-      </div> -->
+      </div>
       <!-- Window title -->
 
       <!-- Window content -->

@@ -142,13 +142,12 @@
               @foreach(config('select.data_shown') as $key => $month)
               <th id="table_month_{{$key}}" onmouseover="getID(this.id)" class="tableFont" style="font-size: 13px;"></th>
               <th class="tableFont" style="font-size: 13px;">ID</th>
-              <th class="tableFont" style="font-size: 13px;">OTL</th>
+              <!-- <th class="tableFont" style="font-size: 13px;">OTL</th> -->
               @endforeach
             </tr>
           </thead>
           <tfoot>
             <tr>
-
               @if($isManager == 0)
               <th></th>
               <th></th>
@@ -401,7 +400,7 @@ $(document).ready(function() {
 
 
   if(isManager == 1){
-    month_col = [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34];
+    month_col = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23];
   }
   else{
     month_col = [4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37];
@@ -480,23 +479,10 @@ $(document).ready(function() {
 
     // We change the title of the months as it varies in function of the year and month selected
     for (let index = 1; index <= 52; index++) {
-        console.log(index);
         $('#table_month_'+index).empty().html(months_from_selection[index-1]);
       }
   }
-   // $.ajax({  
-  //     type: 'POST',  
-  //     url: "{!! route('listOfActivitiesPerUserAjax') !!}", 
-  //     dataType: 'json',  
-  //     data: ajaxData(),  
-  //     success: function(data) {  
-  //       console.log("bold"); 
-  //       console.log(data); 
-  //     }, 
-  //     error: function (jqXhr, textStatus, errorMessage) { // error callback  
-  //       console.log('Error: ' + errorMessage); 
-  //     }  
-  //   });
+
   activitiesTable = $('#activitiesTable').DataTable({
     scrollX: true,
     @if(isset($table_height))
@@ -547,7 +533,7 @@ $(document).ready(function() {
             }
           }
           return data;
-        }
+        // }
       },
       { name: 'p.samba_id', data: 'samba_id' , searchable: true , className: "dt-nowrap",orderable:false}
       @endif
@@ -556,8 +542,8 @@ $(document).ready(function() {
         createdCell: function (td, cellData, rowData, row, col) { color_for_month_value(rowData.m{{$key}}_com,rowData.m{{$key}}_from_otl,rowData.m{{$key}}_id,{{$key}},rowData.project_id,rowData.user_id,td);
         }, 
         width: '55px', searchable: false, visible: true, orderable: false},
-        { name: 'm{{$key}}_id', data: 'm{{$key}}_id', width: '10px', searchable: false , visible: false, orderable: false},
-        { name: 'm{{$key}}_from_otl', data: 'm{{$key}}_from_otl', width: '10px', searchable: false , visible: false, orderable: false}
+        { name: 'm{{$key}}_id', data: 'm{{$key}}_id', width: '10px', searchable: false , visible: false, orderable: false}
+        // { name: 'm{{$key}}_from_otl', data: 'm{{$key}}_from_otl', width: '10px', searchable: false , visible: false, orderable: false}
       @endforeach
     ],
     lengthMenu: [

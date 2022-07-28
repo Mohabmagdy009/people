@@ -388,13 +388,14 @@ class UserController extends Controller
         $efl = $employes_file_list[0];
 
          $man_emp_mail    ='';
-         $man_emp_name    ='';
+         $man_emp_fname    ='';
+         $man_emp_lname    ='';
          $man_emp_pimsid  ='';
          $man_emp_ftid    ='';
          $man_emp_region  ='';
          $man_emp_country ='';
          $man_emp_mc      ='';
-         $man_emp_type    ='';
+         // $man_emp_type    ='';
          $is_manager      ='';
          $man_emp_domain  ='';
          $man_emp_job_role='';
@@ -409,12 +410,13 @@ class UserController extends Controller
          for($i=0;$i<sizeof($efl);$i++)
         {
             $man_emp_region    = $efl[$i]['region'];
-            $man_emp_name      = $efl[$i]['name'];
+            $man_emp_fname      = $efl[$i]['first_name'];
+            $man_emp_lname      = $efl[$i]['last_name'];
             $man_emp_email     = $efl[$i]['email'];
             $man_emp_pimsid    = $efl[$i]['pims_id'];
             $man_emp_ftid      = $efl[$i]['ft_id'];
             $man_emp_country   = $efl[$i]['country'];
-            $man_emp_type      = $efl[$i]['type'];
+            // $man_emp_type      = $efl[$i]['type'];
             $man_emp_mc        = $efl[$i]['management_code'];
             $man_emp_activty   = 'active';
             $man_emp_is_manager= $efl[$i]['is_manager'];
@@ -424,12 +426,12 @@ class UserController extends Controller
             $cac_create_user = 
             [
                 'email'             => $man_emp_email,
-                'name'              => $man_emp_name,
+                'name'              => $man_emp_lname . "," .  $man_emp_fname,
                 'pimsid'            => $man_emp_pimsid,
                 'ftid'              => $man_emp_ftid,
                 'region'            => $man_emp_region,
                 'country'           => $man_emp_country,
-                'employee_type'     => $man_emp_type,
+                // 'employee_type'     => $man_emp_type,
                 'activity_status'   => $man_emp_activty
             ];
             

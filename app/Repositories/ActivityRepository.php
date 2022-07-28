@@ -193,9 +193,9 @@ class ActivityRepository
             
         
         $activityList->select('uu.manager_id AS manager_id', 'm.name AS manager_name', 'temp_a.user_id AS user_id', 'u.name AS user_name', 'u.country AS user_country', 'u.employee_type AS user_employee_type', 'u.domain AS user_domain','temp_a.project_id AS project_id','p.project_name AS project_name','p.otl_project_code AS otl_project_code', 'p.meta_activity AS meta_activity', 'p.project_subtype AS project_subtype','p.technology AS technology', 'p.samba_id AS samba_id', 'p.pullthru_samba_id AS pullthru_samba_id','p.revenue AS project_revenue', 'p.samba_consulting_product_tcv AS samba_consulting_product_tcv', 'p.samba_pullthru_tcv AS samba_pullthru_tcv','p.samba_opportunit_owner AS samba_opportunit_owner', 'p.samba_lead_domain AS samba_lead_domain', 'p.samba_stage AS samba_stage','p.estimated_start_date AS estimated_start_date', 'p.estimated_end_date AS estimated_end_date','p.gold_order_number AS gold_order_number', 'p.win_ratio AS win_ratio','c.name AS customer_name', 'c.cluster_owner AS customer_cluster_owner', 'c.country_owner AS customer_country_owner','p.activity_type AS activity_type', 'p.project_status AS project_status', 'p.project_type AS project_type','mm.created_at AS created_at',
-            'm1_id','m1_com', 'm1_from_otl','m2_id','m2_com', 'm2_from_otl','m3_id','m3_com', 'm3_from_otl','m4_id','m4_com', 'm4_from_otl','m5_id','m5_com', 'm5_from_otl','m6_id','m6_com', 'm6_from_otl','m7_id','m7_com', 'm7_from_otl','m8_id','m8_com', 'm8_from_otl','m9_id','m9_com', 'm9_from_otl','m10_id','m10_com', 'm10_from_otl','m11_id','m11_com', 'm11_from_otl','m12_id','m12_com', 'm12_from_otl','m13_id','m13_com','m13_from_otl','m14_id','m14_com', 'm14_from_otl','m15_id','m15_com', 'm15_from_otl','m16_id','m16_com', 'm16_from_otl','m17_id','m17_com', 'm17_from_otl','m18_id','m18_com', 'm18_from_otl','m19_id','m19_com', 'm19_from_otl','m20_id','m20_com', 'm20_from_otl','m21_id','m21_com', 'm21_from_otl','m22_id','m22_com', 'm22_from_otl','m23_id','m23_com', 'm23_from_otl','m24_id','m24_com', 'm24_from_otl','m25_id','m25_com', 'm25_from_otl','m26_id','m26_com','m26_from_otl', 'm27_id','m27_com', 'm27_from_otl','m28_id','m28_com', 'm28_from_otl','m29_id','m29_com', 'm29_from_otl','m30_id','m30_com', 'm30_from_otl','m31_id','m31_com', 'm31_from_otl','m32_id','m32_com', 'm32_from_otl','m33_id','m33_com', 'm33_from_otl','m34_id','m34_com', 'm34_from_otl','m35_id','m35_com', 'm35_from_otl','m36_id','m36_com', 'm36_from_otl','m37_id','m37_com', 'm37_from_otl','m38_id','m38_com', 'm38_from_otl','m39_id','m39_com','m39_from_otl','m40_id','m40_com', 'm40_from_otl','m41_id','m41_com', 'm41_from_otl','m42_id','m42_com', 'm42_from_otl','m43_id','m43_com', 'm43_from_otl','m44_id','m44_com', 'm44_from_otl','m45_id','m45_com', 'm45_from_otl','m46_id','m46_com', 'm46_from_otl','m47_id','m47_com', 'm47_from_otl','m48_id','m48_com', 'm48_from_otl','m49_id','m49_com', 'm49_from_otl','m50_id','m50_com', 'm50_from_otl','m51_id','m51_com', 'm51_from_otl','m52_id','m52_com','m52_from_otl'
+            'm1_id','m1_com','m2_id','m2_com', 'm3_id','m3_com', 'm4_id','m4_com', 'm5_id','m5_com', 'm6_id','m6_com', 'm7_id','m7_com', 'm8_id','m8_com', 'm9_id','m9_com', 'm10_id','m10_com', 'm11_id','m11_com', 'm12_id','m12_com','m13_id','m13_com','m14_id','m14_com', 'm15_id','m15_com','m16_id','m16_com','m17_id','m17_com','m18_id','m18_com','m19_id','m19_com','m20_id','m20_com','m21_id','m21_com','m22_id','m22_com','m23_id','m23_com','m24_id','m24_com','m25_id','m25_com','m26_id','m26_com', 'm27_id','m27_com','m28_id','m28_com','m29_id','m29_com','m30_id','m30_com','m31_id','m31_com','m32_id','m32_com','m33_id','m33_com','m34_id','m34_com','m35_id','m35_com','m36_id','m36_com','m37_id','m37_com','m38_id','m38_com','m39_id','m39_com','m40_id','m40_com','m41_id','m41_com','m42_id','m42_com','m43_id','m43_com','m44_id','m44_com','m45_id','m45_com','m46_id','m46_com','m47_id','m47_com','m48_id','m48_com','m49_id','m49_com','m50_id','m50_com','m51_id','m51_com','m52_id','m52_com'
                 );
-                 $activityList->leftjoin('projects AS p', 'p.id', '=', 'temp_a.project_id');
+                $activityList->leftjoin('projects AS p', 'p.id', '=', 'temp_a.project_id');
                 $activityList->leftjoin('project_loe AS loe', 'temp_a.project_id', '=', 'loe.project_id');
                 $activityList->leftjoin('users AS u', 'temp_a.user_id', '=', 'u.id');
                 $activityList->leftjoin('users_users AS uu', 'u.id', '=', 'uu.user_id');
@@ -203,7 +203,6 @@ class ActivityRepository
                 $activityList->leftjoin('customers AS c', 'c.id', '=', 'p.customer_id');
                 $activityList->leftjoin('activities AS mm', 'mm.project_id', '=', 'temp_a.project_id');
                 $activityList->orderBy('created_at','asc');
-
 
 
         // Removing customers
@@ -331,7 +330,7 @@ class ActivityRepository
             
         
         $activityList->select('uu.manager_id AS manager_id', 'm.name AS manager_name', 'temp_a.user_id AS user_id', 'u.name AS user_name', 'u.country AS user_country', 'u.employee_type AS user_employee_type', 'u.domain AS user_domain','temp_a.project_id AS project_id','p.project_name AS project_name','p.otl_project_code AS otl_project_code', 'p.meta_activity AS meta_activity', 'p.project_subtype AS project_subtype','p.technology AS technology', 'p.samba_id AS samba_id', 'p.pullthru_samba_id AS pullthru_samba_id','p.revenue AS project_revenue', 'p.samba_consulting_product_tcv AS samba_consulting_product_tcv', 'p.samba_pullthru_tcv AS samba_pullthru_tcv','p.samba_opportunit_owner AS samba_opportunit_owner', 'p.samba_lead_domain AS samba_lead_domain', 'p.samba_stage AS samba_stage','p.estimated_start_date AS estimated_start_date', 'p.estimated_end_date AS estimated_end_date','p.gold_order_number AS gold_order_number', 'p.win_ratio AS win_ratio','c.name AS customer_name', 'c.cluster_owner AS customer_cluster_owner', 'c.country_owner AS customer_country_owner','p.activity_type AS activity_type', 'p.project_status AS project_status', 'p.project_type AS project_type',
-            'm1_id','m1_com', 'm1_from_otl','m2_id','m2_com', 'm2_from_otl','m3_id','m3_com', 'm3_from_otl','m4_id','m4_com', 'm4_from_otl','m5_id','m5_com', 'm5_from_otl','m6_id','m6_com', 'm6_from_otl','m7_id','m7_com', 'm7_from_otl','m8_id','m8_com', 'm8_from_otl','m9_id','m9_com', 'm9_from_otl','m10_id','m10_com', 'm10_from_otl','m11_id','m11_com', 'm11_from_otl','m12_id','m12_com', 'm12_from_otl','m13_id','m13_com','m13_from_otl','m14_id','m14_com', 'm14_from_otl','m15_id','m15_com', 'm15_from_otl','m16_id','m16_com', 'm16_from_otl','m17_id','m17_com', 'm17_from_otl','m18_id','m18_com', 'm18_from_otl','m19_id','m19_com', 'm19_from_otl','m20_id','m20_com', 'm20_from_otl','m21_id','m21_com', 'm21_from_otl','m22_id','m22_com', 'm22_from_otl','m23_id','m23_com', 'm23_from_otl','m24_id','m24_com', 'm24_from_otl','m25_id','m25_com', 'm25_from_otl','m26_id','m26_com','m26_from_otl', 'm27_id','m27_com', 'm27_from_otl','m28_id','m28_com', 'm28_from_otl','m29_id','m29_com', 'm29_from_otl','m30_id','m30_com', 'm30_from_otl','m31_id','m31_com', 'm31_from_otl','m32_id','m32_com', 'm32_from_otl','m33_id','m33_com', 'm33_from_otl','m34_id','m34_com', 'm34_from_otl','m35_id','m35_com', 'm35_from_otl','m36_id','m36_com', 'm36_from_otl','m37_id','m37_com', 'm37_from_otl','m38_id','m38_com', 'm38_from_otl','m39_id','m39_com','m39_from_otl','m40_id','m40_com', 'm40_from_otl','m41_id','m41_com', 'm41_from_otl','m42_id','m42_com', 'm42_from_otl','m43_id','m43_com', 'm43_from_otl','m44_id','m44_com', 'm44_from_otl','m45_id','m45_com', 'm45_from_otl','m46_id','m46_com', 'm46_from_otl','m47_id','m47_com', 'm47_from_otl','m48_id','m48_com', 'm48_from_otl','m49_id','m49_com', 'm49_from_otl','m50_id','m50_com', 'm50_from_otl','m51_id','m51_com', 'm51_from_otl','m52_id','m52_com','m52_from_otl'
+            'm1_id','m1_com','m2_id','m2_com', 'm3_id','m3_com', 'm4_id','m4_com', 'm5_id','m5_com', 'm6_id','m6_com', 'm7_id','m7_com', 'm8_id','m8_com', 'm9_id','m9_com', 'm10_id','m10_com', 'm11_id','m11_com', 'm12_id','m12_com','m13_id','m13_com','m14_id','m14_com', 'm15_id','m15_com','m16_id','m16_com','m17_id','m17_com','m18_id','m18_com','m19_id','m19_com','m20_id','m20_com','m21_id','m21_com','m22_id','m22_com','m23_id','m23_com','m24_id','m24_com','m25_id','m25_com','m26_id','m26_com', 'm27_id','m27_com','m28_id','m28_com','m29_id','m29_com','m30_id','m30_com','m31_id','m31_com','m32_id','m32_com','m33_id','m33_com','m34_id','m34_com','m35_id','m35_com','m36_id','m36_com','m37_id','m37_com','m38_id','m38_com','m39_id','m39_com','m40_id','m40_com','m41_id','m41_com','m42_id','m42_com','m43_id','m43_com','m44_id','m44_com','m45_id','m45_com','m46_id','m46_com','m47_id','m47_com','m48_id','m48_com','m49_id','m49_com','m50_id','m50_com','m51_id','m51_com','m52_id','m52_com'
                 );
                 $activityList->leftjoin('projects AS p', 'p.id', '=', 'temp_a.project_id');
                 $activityList->leftjoin('project_loe AS loe', 'temp_a.project_id', '=', 'loe.project_id');
@@ -442,37 +441,6 @@ class ActivityRepository
 
         return $data;
     }
-        // if (Auth::user()->is_manager == 1) {
-        //     $activityList->groupBy('mm.user_id');
-        //     $activityList->select('uu.manager_id AS manager_id', 'm.name AS manager_name', 'temp_a.user_id AS user_id', 'u.name AS user_name','u.employee_type AS user_employee_type','temp_a.project_id AS project_id','p.samba_id AS samba_id','p.project_name AS project_name','p.project_subtype AS project_subtype','p.estimated_start_date AS estimated_start_date','p.estimated_end_date AS estimated_end_date','c.name AS customer_name','p.activity_type AS activity_type', 'p.project_status AS project_status','p.project_type AS project_type','mm.created_at AS created_at',
-        //                         'm1_id',DB::raw("SUM(CASE when mm.month='6' then mm.task_hour else 0 end) as 'm1_com'"), 'm1_from_otl','m2_id','m2_com', 'm2_from_otl','m3_id','m3_com', 'm3_from_otl',
-        //                         'm4_id','m4_com', 'm4_from_otl','m5_id','m5_com', 'm5_from_otl','m6_id','m6_com', 'm6_from_otl',
-        //                         'm7_id','m7_com', 'm7_from_otl','m8_id','m8_com', 'm8_from_otl','m9_id','m9_com', 'm9_from_otl',
-        //                         'm10_id','m10_com', 'm10_from_otl','m11_id','m11_com', 'm11_from_otl','m12_id','m12_com', 'm12_from_otl','m13_id','m13_com',
-        //                         'm13_from_otl', 'm14_id','m14_com', 'm14_from_otl','m15_id','m15_com', 'm15_from_otl','m16_id','m16_com', 'm16_from_otl',
-        //                         'm17_id','m17_com', 'm17_from_otl','m18_id','m18_com', 'm18_from_otl','m19_id','m19_com', 'm19_from_otl',
-        //                         'm20_id','m20_com', 'm20_from_otl','m21_id','m21_com', 'm21_from_otl','m22_id','m22_com', 'm22_from_otl',
-        //                         'm23_id','m23_com', 'm23_from_otl','m24_id','m24_com', 'm24_from_otl','m25_id','m25_com', 'm25_from_otl','m26_id','m26_com',
-        //                         'm26_from_otl', 'm27_id','m27_com', 'm27_from_otl','m28_id','m28_com', 'm28_from_otl','m29_id','m29_com', 'm29_from_otl',
-        //                         'm30_id','m30_com', 'm30_from_otl','m31_id','m31_com', 'm31_from_otl','m32_id','m32_com', 'm32_from_otl',
-        //                         'm33_id','m33_com', 'm33_from_otl','m34_id','m34_com', 'm34_from_otl','m35_id','m35_com', 'm35_from_otl',
-        //                         'm36_id','m36_com', 'm36_from_otl','m37_id','m37_com', 'm37_from_otl','m38_id','m38_com', 'm38_from_otl','m39_id','m39_com',
-        //                         'm39_from_otl', 'm40_id','m40_com', 'm40_from_otl','m41_id','m41_com', 'm41_from_otl','m42_id','m42_com', 'm42_from_otl',
-        //                         'm43_id','m43_com', 'm43_from_otl','m44_id','m44_com', 'm44_from_otl','m45_id','m45_com', 'm45_from_otl',
-        //                         'm46_id','m46_com', 'm46_from_otl','m47_id','m47_com', 'm47_from_otl','m48_id','m48_com', 'm48_from_otl',
-        //                         'm49_id','m49_com', 'm49_from_otl','m50_id','m50_com', 'm50_from_otl','m51_id','m51_com', 'm51_from_otl','m52_id','m52_com',
-        //                         'm52_from_otl'
-        //     );
-        //     $activityList->leftjoin('projects AS p', 'p.id', '=', 'temp_a.project_id');
-        //     $activityList->leftjoin('project_loe AS loe', 'temp_a.project_id', '=', 'loe.project_id');
-        //     $activityList->leftjoin('users AS u', 'temp_a.user_id', '=', 'u.id');
-        //     $activityList->leftjoin('users_users AS uu', 'u.id', '=', 'uu.user_id');
-        //     $activityList->leftjoin('users AS m', 'm.id', '=', 'uu.manager_id');
-        //     $activityList->leftjoin('customers AS c', 'c.id', '=', 'p.customer_id');
-        //     $activityList->leftjoin('activities AS mm', 'mm.project_id', '=', 'temp_a.project_id');
-        //     // $activityList->groupBy('temp_a.project_id','temp_a.user_id');
-        //     $activityList->orderBy('created_at','asc');
-
 
     public function c($where = null) //ajax post
     {

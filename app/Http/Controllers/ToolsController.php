@@ -881,16 +881,42 @@ class ToolsController extends Controller
         $manager_id = $managerObject[0]->manager_id;
         $manager_name=DB::table('users as u')->select(DB::raw('name'))->where('u.id',$manager_id)->get();
         $user = DB::table('users_users as uu')->select(DB::raw('user_id'))->where('uu.manager_id',$manager_id)->get();
+        $managerTest = 2;
         $arr = [];
             foreach($user as $key => $val){
                 array_push($arr,$val->user_id);
             }
-        $data = DB::table('subactivityactuals as ss')
-                ->join('users as u','ss.user_id','=','u.id')
-                ->select('u.name as user','ss.user_id as user_id',DB::raw("SUM(CASE when ss.week='$week_no' AND ss.year='$year' then ss.task_hour else 0 end) as '$week_no', SUM(CASE when ss.week='$week_2' AND ss.year='$year_2' then ss.task_hour else 0 end) as '$week_2', SUM(CASE when ss.week='$week_3' AND ss.year='$year_3' then ss.task_hour else 0 end) as '$week_3', SUM(CASE when ss.week='$week_4' AND ss.year='$year_4' then ss.task_hour else 0 end) as '$week_4', SUM(CASE when ss.week='$week_5' AND ss.year='$year_5' then ss.task_hour else 0 end) as '$week_5', SUM(CASE when ss.week='$week_6' AND ss.year='$year_6' then ss.task_hour else 0 end) as '$week_6', SUM(CASE when ss.week='$week_7' AND ss.year='$year_7' then ss.task_hour else 0 end) as '$week_7', SUM(CASE when ss.week='$week_8' AND ss.year='$year_8' then ss.task_hour else 0 end) as '$week_8', SUM(CASE when ss.week='$week_9' AND ss.year='$year_9' then ss.task_hour else 0 end) as '$week_9', SUM(CASE when ss.week='$week_10' AND ss.year='$year_10' then ss.task_hour else 0 end) as '$week_10', SUM(CASE when ss.week='$week_11' AND ss.year='$year_11' then ss.task_hour else 0 end) as '$week_11', SUM(CASE when ss.week='$week_12' AND ss.year='$year_12' then ss.task_hour else 0 end) as '$week_12'"))
-                ->whereIn('ss.user_id',$arr)
-                ->groupBy('ss.user_id')
+        $test = DB::table('users_users as uu')
+                ->leftjoin('subactivityactuals as ss','uu.user_id','=','ss.user_id')
+                ->select('uu.user_id as user','uu.manager_id as manager','ss.task_hour as hours')
+                ->where('uu.manager_id',$managerTest)
                 ->get();
+            foreach($test as $key => $val){
+                
+                if($val ->hours == null){
+                    $val->hours = 0;
+
+                }
+
+                
+            }
+
+            $data = DB::table('users as u')
+                ->leftjoin('subactivityactuals as ss','u.id','=','ss.user_id')
+                ->select('u.name as user','u.id as user_id',DB::raw("SUM(CASE when ss.week='$week_no' AND ss.year='$year' then ss.task_hour else 0 end) as '$week_no', SUM(CASE when ss.week='$week_2' AND ss.year='$year_2' then ss.task_hour else 0 end) as '$week_2', SUM(CASE when ss.week='$week_3' AND ss.year='$year_3' then ss.task_hour else 0 end) as '$week_3', SUM(CASE when ss.week='$week_4' AND ss.year='$year_4' then ss.task_hour else 0 end) as '$week_4', SUM(CASE when ss.week='$week_5' AND ss.year='$year_5' then ss.task_hour else 0 end) as '$week_5', SUM(CASE when ss.week='$week_6' AND ss.year='$year_6' then ss.task_hour else 0 end) as '$week_6', SUM(CASE when ss.week='$week_7' AND ss.year='$year_7' then ss.task_hour else 0 end) as '$week_7', SUM(CASE when ss.week='$week_8' AND ss.year='$year_8' then ss.task_hour else 0 end) as '$week_8', SUM(CASE when ss.week='$week_9' AND ss.year='$year_9' then ss.task_hour else 0 end) as '$week_9', SUM(CASE when ss.week='$week_10' AND ss.year='$year_10' then ss.task_hour else 0 end) as '$week_10', SUM(CASE when ss.week='$week_11' AND ss.year='$year_11' then ss.task_hour else 0 end) as '$week_11', SUM(CASE when ss.week='$week_12' AND ss.year='$year_12' then ss.task_hour else 0 end) as '$week_12'"))
+                ->whereIn('u.id',$arr)
+                ->groupBy('u.id')
+                ->get();
+                // dd($dataa);
+            
+        // $data = DB::table('subactivityactuals as ss')
+        //         ->join('users as u','ss.user_id','=','u.id')
+        //         ->select('u.name as user','ss.user_id as user_id',DB::raw("SUM(CASE when ss.week='$week_no' AND ss.year='$year' then ss.task_hour else 0 end) as '$week_no', SUM(CASE when ss.week='$week_2' AND ss.year='$year_2' then ss.task_hour else 0 end) as '$week_2', SUM(CASE when ss.week='$week_3' AND ss.year='$year_3' then ss.task_hour else 0 end) as '$week_3', SUM(CASE when ss.week='$week_4' AND ss.year='$year_4' then ss.task_hour else 0 end) as '$week_4', SUM(CASE when ss.week='$week_5' AND ss.year='$year_5' then ss.task_hour else 0 end) as '$week_5', SUM(CASE when ss.week='$week_6' AND ss.year='$year_6' then ss.task_hour else 0 end) as '$week_6', SUM(CASE when ss.week='$week_7' AND ss.year='$year_7' then ss.task_hour else 0 end) as '$week_7', SUM(CASE when ss.week='$week_8' AND ss.year='$year_8' then ss.task_hour else 0 end) as '$week_8', SUM(CASE when ss.week='$week_9' AND ss.year='$year_9' then ss.task_hour else 0 end) as '$week_9', SUM(CASE when ss.week='$week_10' AND ss.year='$year_10' then ss.task_hour else 0 end) as '$week_10', SUM(CASE when ss.week='$week_11' AND ss.year='$year_11' then ss.task_hour else 0 end) as '$week_11', SUM(CASE when ss.week='$week_12' AND ss.year='$year_12' then ss.task_hour else 0 end) as '$week_12'"))
+        //         ->whereIn('ss.user_id',$arr)
+        //         ->groupBy('ss.user_id')
+        //         ->get();
+        //     // array_push($data[0],"aaa");
+        //         dd($data[0]);
 
                 return view('actualsDetails',compact('manager_name','user_id','data','week_no','week_2','week_3','week_4','week_5','week_6','week_7','week_8','week_9','week_10','week_11','week_12'));
     }
