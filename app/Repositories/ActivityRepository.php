@@ -176,11 +176,11 @@ class ActivityRepository
 
         $where['months'] = [];
 
-        for ($i=$where['month'][0]; $i <= 52 ; $i++) { 
+        for ($i=$where['month'][0]; $i <= $where['month'][0]+11 ; $i++) { 
             array_push($where['months'],['year' => $where['year'][0],'month'=>$i]);
         }
 
-        if ($where['month'][0] > 1) {
+        if ($where['month'][0] > 41) {
             for ($i=1; $i <= $where['month'][0]-1 ; $i++) { 
                 array_push($where['months'],['year' => $where['year'][0]+1,'month'=>$i]);
             }
@@ -193,7 +193,7 @@ class ActivityRepository
             
         
         $activityList->select('uu.manager_id AS manager_id', 'm.name AS manager_name', 'temp_a.user_id AS user_id', 'u.name AS user_name', 'u.country AS user_country', 'u.employee_type AS user_employee_type', 'u.domain AS user_domain','temp_a.project_id AS project_id','p.project_name AS project_name','p.otl_project_code AS otl_project_code', 'p.meta_activity AS meta_activity', 'p.project_subtype AS project_subtype','p.technology AS technology', 'p.samba_id AS samba_id', 'p.pullthru_samba_id AS pullthru_samba_id','p.revenue AS project_revenue', 'p.samba_consulting_product_tcv AS samba_consulting_product_tcv', 'p.samba_pullthru_tcv AS samba_pullthru_tcv','p.samba_opportunit_owner AS samba_opportunit_owner', 'p.samba_lead_domain AS samba_lead_domain', 'p.samba_stage AS samba_stage','p.estimated_start_date AS estimated_start_date', 'p.estimated_end_date AS estimated_end_date','p.gold_order_number AS gold_order_number', 'p.win_ratio AS win_ratio','c.name AS customer_name', 'c.cluster_owner AS customer_cluster_owner', 'c.country_owner AS customer_country_owner','p.activity_type AS activity_type', 'p.project_status AS project_status', 'p.project_type AS project_type','mm.created_at AS created_at',
-            'm1_id','m1_com','m2_id','m2_com', 'm3_id','m3_com', 'm4_id','m4_com', 'm5_id','m5_com', 'm6_id','m6_com', 'm7_id','m7_com', 'm8_id','m8_com', 'm9_id','m9_com', 'm10_id','m10_com', 'm11_id','m11_com', 'm12_id','m12_com','m13_id','m13_com','m14_id','m14_com', 'm15_id','m15_com','m16_id','m16_com','m17_id','m17_com','m18_id','m18_com','m19_id','m19_com','m20_id','m20_com','m21_id','m21_com','m22_id','m22_com','m23_id','m23_com','m24_id','m24_com','m25_id','m25_com','m26_id','m26_com', 'm27_id','m27_com','m28_id','m28_com','m29_id','m29_com','m30_id','m30_com','m31_id','m31_com','m32_id','m32_com','m33_id','m33_com','m34_id','m34_com','m35_id','m35_com','m36_id','m36_com','m37_id','m37_com','m38_id','m38_com','m39_id','m39_com','m40_id','m40_com','m41_id','m41_com','m42_id','m42_com','m43_id','m43_com','m44_id','m44_com','m45_id','m45_com','m46_id','m46_com','m47_id','m47_com','m48_id','m48_com','m49_id','m49_com','m50_id','m50_com','m51_id','m51_com','m52_id','m52_com'
+            'm1_id','m1_com','m2_id','m2_com', 'm3_id','m3_com', 'm4_id','m4_com', 'm5_id','m5_com', 'm6_id','m6_com', 'm7_id','m7_com', 'm8_id','m8_com', 'm9_id','m9_com', 'm10_id','m10_com', 'm11_id','m11_com', 'm12_id','m12_com'
                 );
                 $activityList->leftjoin('projects AS p', 'p.id', '=', 'temp_a.project_id');
                 $activityList->leftjoin('project_loe AS loe', 'temp_a.project_id', '=', 'loe.project_id');
@@ -203,24 +203,6 @@ class ActivityRepository
                 $activityList->leftjoin('customers AS c', 'c.id', '=', 'p.customer_id');
                 $activityList->leftjoin('activities AS mm', 'mm.project_id', '=', 'temp_a.project_id');
                 $activityList->orderBy('created_at','asc');
-
-
-        // Removing customers
-        if (! empty($where['except_customers'])) {
-            $activityList->where(function ($query) use ($where) {
-                foreach ($where['except_customers'] as $w) {
-                    $query->where('c.name', '!=', $w);
-                }
-            });
-        }
-        // Only customers
-        if (! empty($where['only_customers'])) {
-            $activityList->where(function ($query) use ($where) {
-                foreach ($where['only_customers'] as $w) {
-                    $query->orWhere('c.name', $w);
-                }
-            });
-        }
 
         // Project type
         if (! empty($where['project_type'])) {

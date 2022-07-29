@@ -35,7 +35,7 @@
         <div class="left_col scroll-view">
           <div class="navbar nav_title" style="border: 0;">
             <a href="{!!route('home')!!}" class="site_title"><img src="{{ asset("/img/dolphin-logo.png") }}">
-              <span>Dolphin @if(env('APP_DEBUG') == 'true') TEST @endif</span>
+              <span>Dolphin</span>
             </a>
           </div>
 

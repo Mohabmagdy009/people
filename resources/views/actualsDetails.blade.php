@@ -82,7 +82,7 @@
        <table id="sub_activity" class="table table-striped table-hover table-bordered mytablee2" width="100%">
         <thead>
           <tr class="tableFont">
-            <td style="width:15%">UserName Name</td>
+            <td style="width:15%">User Name</td>
             <td class="font last" id="{{$week_no}}">Week {{$week_no}}</td>
             <td class="font" data-v="{{$week_2}}" id="s">Week {{$week_2}}</td>
             <td class="font" data-v="{{$week_3}}">Week {{$week_3}}</td>

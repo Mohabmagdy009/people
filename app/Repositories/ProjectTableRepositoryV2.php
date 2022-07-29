@@ -65,100 +65,19 @@ class ProjectTableRepositoryV2
                     m11_id INT(10),
                     m11_com double(8,2) DEFAULT 0,
                     m12_id INT(10),
-                    m12_com double(8,2) DEFAULT 0,
-                    m13_id INT(10),
-                    m13_com double(8,2) DEFAULT 0,
-                    m14_id INT(10),
-                    m14_com double(8,2) DEFAULT 0,
-                    m15_id INT(10),
-                    m15_com double(8,2) DEFAULT 0,
-                    m16_id INT(10),
-                    m16_com double(8,2) DEFAULT 0,
-                    m17_id INT(10),
-                    m17_com double(8,2) DEFAULT 0,
-                    m18_id INT(10),
-                    m18_com double(8,2) DEFAULT 0,
-                    m19_id INT(10),
-                    m19_com double(8,2) DEFAULT 0,
-                    m20_id INT(10),
-                    m20_com double(8,2) DEFAULT 0,
-                    m21_id INT(10),
-                    m21_com double(8,2) DEFAULT 0,
-                    m22_id INT(10),
-                    m22_com double(8,2) DEFAULT 0,
-                    m23_id INT(10),
-                    m23_com double(8,2) DEFAULT 0,
-                    m24_id INT(10),
-                    m24_com double(8,2) DEFAULT 0,
-                    m25_id INT(10),
-                    m25_com double(8,2) DEFAULT 0,
-                    m26_id INT(10),
-                    m26_com double(8,2) DEFAULT 0,
-                    m27_id INT(10),
-                    m27_com double(8,2) DEFAULT 0,
-                    m28_id INT(10),
-                    m28_com double(8,2) DEFAULT 0,
-                    m29_id INT(10),
-                    m29_com double(8,2) DEFAULT 0,
-                    m30_id INT(10),
-                    m30_com double(8,2) DEFAULT 0,
-                    m31_id INT(10),
-                    m31_com double(8,2) DEFAULT 0,
-                    m32_id INT(10),
-                    m32_com double(8,2) DEFAULT 0,
-                    m33_id INT(10),
-                    m33_com double(8,2) DEFAULT 0,
-                    m34_id INT(10),
-                    m34_com double(8,2) DEFAULT 0,
-                    m35_id INT(10),
-                    m35_com double(8,2) DEFAULT 0,
-                    m36_id INT(10),
-                    m36_com double(8,2) DEFAULT 0,
-                    m37_id INT(10),
-                    m37_com double(8,2) DEFAULT 0,
-                    m38_id INT(10),
-                    m38_com double(8,2) DEFAULT 0,
-                    m39_id INT(10),
-                    m39_com double(8,2) DEFAULT 0,
-                    m40_id INT(10),
-                    m40_com double(8,2) DEFAULT 0,
-                    m41_id INT(10),
-                    m41_com double(8,2) DEFAULT 0,
-                    m42_id INT(10),
-                    m42_com double(8,2) DEFAULT 0,
-                    m43_id INT(10),
-                    m43_com double(8,2) DEFAULT 0,
-                    m44_id INT(10),
-                    m44_com double(8,2) DEFAULT 0,
-                    m45_id INT(10),
-                    m45_com double(8,2) DEFAULT 0,
-                    m46_id INT(10),
-                    m46_com double(8,2) DEFAULT 0,
-                    m47_id INT(10),
-                    m47_com double(8,2) DEFAULT 0,
-                    m48_id INT(10),
-                    m48_com double(8,2) DEFAULT 0,
-                    m49_id INT(10),
-                    m49_com double(8,2) DEFAULT 0,
-                    m50_id INT(10),
-                    m50_com double(8,2) DEFAULT 0,
-                    m51_id INT(10),
-                    m51_com double(8,2) DEFAULT 0,
-                    m52_id INT(10),
-                    m52_com double(8,2) DEFAULT 0
+                    m12_com double(8,2) DEFAULT 0
                                         );
             ')
         );
 
         $is_manager = Auth::user()->is_manager;
+        $manager_id = Auth::user()->id;
 
         if($is_manager == 1){
-
-            $years = [$where['months'][0]['year'],$where['months'][51]['year']];
-            $users = DB::table('activities');
-            $user = $users->select(DB::raw('distinct user_id'))->get();
+            $years = [$where['months'][0]['year'],$where['months'][11]['year']];
+            $users = DB::table('users_users')->where('manager_id', $manager_id)->get();
             $arr = [];
-            foreach($user as $key => $val){
+            foreach($users as $key => $val){
                 array_push($arr,$val->user_id);
             }
         
@@ -186,8 +105,8 @@ class ProjectTableRepositoryV2
                             UPDATE '.$table_name_cols.' t, activities a SET t.m'.$ref.'_com=(SELECT sum(task_hour) FROM `activities` where month ='.$month['month'].' and year ='.$month['year'].' and user_id = '.$x.'), t.m'.$ref.'_id=0 where t.user_id='.$x.';
                         ')
                     );
-                }
             }
+        }
             return;
         }else{
             DB::unprepared(
@@ -196,7 +115,7 @@ class ProjectTableRepositoryV2
             ')
         );
 
-        $years = [$where['months'][0]['year'],$where['months'][51]['year']];
+        $years = [$where['months'][0]['year'],$where['months'][11]['year']];
 
         DB::unprepared(
             DB::raw('
@@ -216,11 +135,11 @@ class ProjectTableRepositoryV2
             $ref = $key+1;
             DB::unprepared(
                 DB::raw('
-    
                     UPDATE '.$table_name_cols.' t, activities a SET t.m'.$ref.'_com=a.task_hour,t.m'.$ref.'_id=a.id WHERE a.year='.$month['year'].' AND t.project_id=a.project_id AND t.user_id=a.user_id AND a.month = '.$month['month'].';
-                    UPDATE '.$table_name_cols.' t, activities a SET t.m'.$ref.'_com=a.task_hour,t.m'.$ref.'_id=a.id WHERE a.year='.$month['year'].' AND t.project_id=a.project_id AND t.user_id=a.user_id AND a.month = '.$month['month'].';
+                    
                 ')
             );
+          
         }
         return;
         }

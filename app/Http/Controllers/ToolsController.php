@@ -1056,10 +1056,21 @@ class ToolsController extends Controller
     // }
 
 
-    public function getMohab(){
-        $table = DB::table('infopan_sql')->get();
+    public function getMohab($where = null){
 
-        return $table;
+        $where['months'] = [];
+
+        for ($i=$where['month'][0]; $i <= 52 ; $i++) { 
+            array_push($where['months'],['year' => $where['year'][0],'month'=>$i]);
+        }
+
+        if ($where['month'][0] > 1) {
+            for ($i=1; $i <= $where['month'][0]-1 ; $i++) { 
+                array_push($where['months'],['year' => $where['year'][0]+1,'month'=>$i]);
+            }
+
+        } 
+            return $where;
     }
 }
 

@@ -156,7 +156,6 @@
               @foreach(config('select.data_shown') as $key => $month)
               <th></th>
               <th></th>
-              <th></th>
               @endforeach
               @endif
             </tr>
@@ -403,7 +402,7 @@ $(document).ready(function() {
     month_col = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23];
   }
   else{
-    month_col = [4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37];
+    month_col = [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26];
   }
 
   // This is to color in case it comes from prime or if forecast
@@ -533,17 +532,16 @@ $(document).ready(function() {
             }
           }
           return data;
-        // }
+        }
       },
       { name: 'p.samba_id', data: 'samba_id' , searchable: true , className: "dt-nowrap",orderable:false}
       @endif
       @foreach(config('select.data_shown') as $key => $month),
       { name: 'm{{$key}}_com', data: 'm{{$key}}_com', 
-        createdCell: function (td, cellData, rowData, row, col) { color_for_month_value(rowData.m{{$key}}_com,rowData.m{{$key}}_from_otl,rowData.m{{$key}}_id,{{$key}},rowData.project_id,rowData.user_id,td);
+        createdCell: function (td, cellData, rowData, row, col) { color_for_month_value(rowData.m{{$key}}_com,rowData.m{{$key}}_id,rowData.m{{$key}}_from_otl,{{$key}},rowData.project_id,rowData.user_id,td);
         }, 
         width: '55px', searchable: false, visible: true, orderable: false},
         { name: 'm{{$key}}_id', data: 'm{{$key}}_id', width: '10px', searchable: false , visible: false, orderable: false}
-        // { name: 'm{{$key}}_from_otl', data: 'm{{$key}}_from_otl', width: '10px', searchable: false , visible: false, orderable: false}
       @endforeach
     ],
     lengthMenu: [
@@ -556,7 +554,12 @@ $(document).ready(function() {
         extend: "colvis",
         className: "btn-sm",
         collectionLayout: "one-column",
-        columns: [0,1,2,3,4]
+        @if($isManager==0)
+        columns: [0,1,2,3]
+        @endif
+        @if($isManager==1)
+        columns: [0]
+        @endif
       },
       {
         extend: "pageLength",
