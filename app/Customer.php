@@ -9,6 +9,7 @@ class Customer extends Model
     protected $table = 'customers';
     public $timestamps = false;
     protected $guarded = ['id'];
+    protected $fillable = ['name', 'cluster_owner','country_owner'];
 
     public function projects()
     {

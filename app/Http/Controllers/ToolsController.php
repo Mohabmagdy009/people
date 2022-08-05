@@ -27,6 +27,8 @@ use App\SubActivityActuals;
 use App\Actuals;
 use App\Imports\activitiesImport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\CustomersImport;
+use App\Imports\ProjectsImport;
 
 class ToolsController extends Controller
 {
@@ -951,10 +953,18 @@ class ToolsController extends Controller
                 return view('uploadfile',compact('feedBack',"color"));
             }
             else{
-                Excel::import(new activitiesImport, $file);
+                if ($filePath == "Customers.xlsx") {
+                Excel::import(new CustomersImport, $file);
+                $color="#07a64e";
+                $feedBack = "The loader has uploaded your data successfully";
+                return view('uploadfile',compact('feedBack','color'));    
+                }
+                elseif($filePath == "Projectss.xlsx"){
+                Excel::import(new ProjectsImport, $file);
                 $color="#07a64e";
                 $feedBack = "The loader has uploaded your data successfully";
                 return view('uploadfile',compact('feedBack','color'));
+                }
             }
         }
     }

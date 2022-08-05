@@ -9,7 +9,7 @@ use DB;
 class ProjectTableRepositoryV2
 {
     // We are going to create 1 temporary table and we need to protect them
-    // manke sure you use unset() on the object reference so that it will call destruct and free up memory
+    // make sure you use unset() on the object reference so that it will call destruct and free up memory
     private $table_name_cols;
     private $where;
 
@@ -66,7 +66,7 @@ class ProjectTableRepositoryV2
                     m11_com double(8,2) DEFAULT 0,
                     m12_id INT(10),
                     m12_com double(8,2) DEFAULT 0
-                                        );
+                    );
             ')
         );
 

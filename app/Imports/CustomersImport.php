@@ -2,12 +2,12 @@
 
 namespace App\Imports;
 
-use App\SubActivityTypes;
+use App\Customer;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 
-class activitiesImport implements ToModel,WithHeadingRow
+class CustomersImport implements ToModel,WithHeadingRow
 {
     /**
     * @param array $row
@@ -16,15 +16,18 @@ class activitiesImport implements ToModel,WithHeadingRow
     */
     public function model(array $row)
     {
-        SubActivityTypes::updateOrCreate(
+       if ($row['name'] != null) {
+           // code...
+        Customer::updateorCreate(
             [
             'name'=>$row['name'],
             ],
             [
             'name'=>$row['name'],    
-            'type'=>$row['type'],
+            'cluster_owner'=>$row['cluster'],
+            'country_owner'=>$row['country']
             ] 
         ); 
-        print_r($row);
+       }
     }
 }
