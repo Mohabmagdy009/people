@@ -29,6 +29,7 @@ use App\Imports\activitiesImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\CustomersImport;
 use App\Imports\ProjectsImport;
+use App\Imports\ProjectsUserImport;
 
 class ToolsController extends Controller
 {
@@ -945,6 +946,7 @@ class ToolsController extends Controller
         //Check if the file is valid
         if($file->isValid()){
         $filePath = $request->file->getClientOriginalName(); 
+        // return($filePath);
         $fileextension = $file->getClientOriginalExtension();
         //Check the file type
             if ($fileextension != 'xlsx'){
@@ -959,14 +961,20 @@ class ToolsController extends Controller
                 $feedBack = "The loader has uploaded your data successfully";
                 return view('uploadfile',compact('feedBack','color'));    
                 }
-                elseif($filePath == "Projectss.xlsx"){
+                elseif($filePath == "Projects.xlsx"){
                 Excel::import(new ProjectsImport, $file);
+                $color="#07a64e";
+                $feedBack = "The loader has uploaded your data successfully";
+                return view('uploadfile',compact('feedBack','color'));
+                }elseif($filePath == "UsersProjects.xlsx"){
+                Excel::import(new ProjectsUserImport, $file);
                 $color="#07a64e";
                 $feedBack = "The loader has uploaded your data successfully";
                 return view('uploadfile',compact('feedBack','color'));
                 }
             }
         }
+        return("Nothing");
     }
     //Test Function
     public function t(){
