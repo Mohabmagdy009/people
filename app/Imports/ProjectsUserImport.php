@@ -18,13 +18,20 @@ class ProjectsUserImport implements ToModel,WithHeadingRow
     {
         if ($row['project_id'] != null) {
             for ($i=1; $i <53 ; $i++) { 
-                Activity::create(
+                Activity::UpdateOrCreate(
                     [
-                    'project_id'=>$row['project_id'],
-                    'user_id'=>$row['user_id'],
-                    'task_hour'=>0,
-                    'year'=>2022,
-                    'month'=> $i
+                        'project_id'=>$row['project_id'],
+                        'user_id'=>$row['user_id'],
+                        'task_hour'=>0,
+                        'year'=>2022,
+                        'month'=> $i
+                    ],
+                    [
+                        'project_id'=>$row['project_id'],
+                        'user_id'=>$row['user_id'],
+                        'task_hour'=>0,
+                        'year'=>2022,
+                        'month'=> $i
                     ]
                 );
             }            
