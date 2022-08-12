@@ -538,7 +538,7 @@ $(document).ready(function() {
       @endif
       @foreach(config('select.data_shown') as $key => $month),
       { name: 'm{{$key}}_com', data: 'm{{$key}}_com', 
-        createdCell: function (td, cellData, rowData, row, col) { color_for_month_value(rowData.m{{$key}}_com,rowData.m{{$key}}_id,rowData.m{{$key}}_from_otl,{{$key}},rowData.project_id,rowData.user_id,td);
+        createdCell: function (td, cellData, rowData, row, col) { color_for_month_value(rowData.m{{$key}}_com,rowData.m{{$key}}_from_otl,rowData.m{{$key}}_id,{{$key}},rowData.project_id,rowData.user_id,td);
         }, 
         width: '55px', searchable: false, visible: true, orderable: false},
         { name: 'm{{$key}}_id', data: 'm{{$key}}_id', width: '10px', searchable: false , visible: false, orderable: false}
@@ -704,7 +704,7 @@ $(document).ready(function() {
     editable_old_value = $(this).html();
   });
 
-  $(document).on('keyup', '.editable', function(){
+  $(document).on('focusout', '.editable', function(){
     update_activity($(this));
   });
 
@@ -730,6 +730,7 @@ $(document).ready(function() {
         'month':header_months[td.data('colonne')-1].month,
         'task_hour':td.html()
     }
+    console.log(data);
       $.ajax({
         type: 'POST',
         url: "{!! route('updateActivityAjax') !!}",

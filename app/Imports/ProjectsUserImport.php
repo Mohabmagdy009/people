@@ -17,7 +17,7 @@ class ProjectsUserImport implements ToModel,WithHeadingRow
     public function model(array $row)
     {
         if ($row['project_id'] != null) {
-            for ($i=1; $i <53 ; $i++) { 
+            for ($i=30; $i <53 ; $i++) { 
                 Activity::UpdateOrCreate(
                     [
                         'project_id'=>$row['project_id'],
