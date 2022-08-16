@@ -1482,7 +1482,7 @@ td.details {
     width: 40%
 }
 div.dataTables_filter label{
-    margin-left: 25px;
+    margin-left: -35px;
 }
 .paging_full_numbers {
     width: 400px;

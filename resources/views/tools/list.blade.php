@@ -75,7 +75,7 @@
             <label for="month" class="control-label">Week</label>
             <div id="month-by" name="month" class="form-control select2"></div>
           </div>
-          <div class="col-xs-2" style="width:10%">
+          <div class="col-xs-2" style="width:18%">
             <label for="started-by" class="control-label">Start Date</label>
             <div id="started-by" name="started-by" class="form-control select2"></div>
           </div>
@@ -103,7 +103,7 @@
               @endforeach
             </select>
           </div>
-          <div class="col-xs-1 Hide" style="margin-right:110px">
+          <div class="col-xs-1 Hide" style="margin-right:100px">
             <label for="closed" class="control-label">Hide closed</label>
             <input name="closed" type="checkbox" id="closed" class="form-group js-switch-small" checked /> 
           </div>
@@ -317,7 +317,7 @@ function fill_select(select_id){
 //end functions and variables
 
 if($('body').hasClass("nav-md")){
-      $("#actualsView").css('margin-right',"-210px");
+      $("#actualsView").css('margin-right',"-125px");
 }else{
       $("#actualsView").css('margin-right',"0px");
   }
