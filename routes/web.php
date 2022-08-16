@@ -288,6 +288,11 @@ Route::post('uploadfile','ToolsController@importActivities');
 Route::get('actualDetails/{mid}/{week}/{year}',['uses' => 'ToolsController@getActualsDetails', 'as' => 'actualDetails']);
 Route::get('tests','ToolsController@t');
 Route::get('mohab','ToolsController@getmohab');
+
+/// API CALL TEST
+
+
+Route::get('api','ToolsController@callApi');
 //Route::get('mahmoud','ToolsController@getData');
 // Route::get('export', 'UpdateTableController@export');
 // Route::get('import',['uses'=>'UpdateTableController@show', 'as' =>'show']);

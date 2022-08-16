@@ -22,6 +22,7 @@ use Auth;
 use Datatables;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Session;
 use App\SubActivityActuals;
 use App\Actuals;
@@ -737,9 +738,10 @@ class ToolsController extends Controller
                     ->join('projects as p', 'a.project_id', '=','p.id')
                     ->select('p.project_name','a.project_id')
                     ->where('a.user_id',$user_id)
-                    ->where('a.month',1)
+                    ->where('a.month',$week_no)
                     ->where('a.year',$year)
                     ->get();
+                    return $projects;
     
         //If there are actuals on the project, get the user and the project name
         $empty = "false";
@@ -1089,6 +1091,14 @@ class ToolsController extends Controller
 
         } 
             return $where;
+    }
+
+
+    public function callApi(Request $request)
+    {
+        $response = Http::get('http://10.238.93.203');
+
+        return $response;
     }
 }
 
