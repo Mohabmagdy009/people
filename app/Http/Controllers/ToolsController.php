@@ -741,8 +741,6 @@ class ToolsController extends Controller
                     ->where('a.month',$week_no)
                     ->where('a.year',$year)
                     ->get();
-                    return $projects;
-    
         //If there are actuals on the project, get the user and the project name
         $empty = "false";
        
