@@ -1092,11 +1092,18 @@ class ToolsController extends Controller
     }
 
 
-    public function callApi(Request $request)
+    public function callApi()
     {
-        $response = Http::get('http://10.238.93.203');
-
-        return $response;
+        $serverName = "10.238.93.203\DB_TABULAR";
+        $info = array("Database"=>"MSBI_GOLD","UID"=>"AD\VRCB2527");
+        $conn = sqlsrv_connect($serverName,$info);
+        
+        if( $conn ) {
+            echo "Connection established.<br />";
+        }else{
+            echo "Connection could not be established.<br />";
+            die( print_r( sqlsrv_errors(), true));
+        }
     }
 }
 
