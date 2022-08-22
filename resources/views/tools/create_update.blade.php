@@ -240,7 +240,7 @@ h3:after {
               </div>
               <div class="row_months user_selected"  style="display:none">
                 @if($action == 'create')
-                @for($i = 1; $i <= 12; $i++)
+                @for($i = 1; $i <= 52; $i++)
                 <div class="form-group {!! $errors->has('month['.$i.']') ? 'has-error' : '' !!} col-md-1"  style="display:none">
                   {!! Form::label('month['.$i.']', config('select.month_names')[$i], ['class' => 'control-label']) !!}
                   {!! Form::text('month['.$i.']',0, ['class' => 'form-control', 'placeholder' => config('select.month_names')[$i]]) !!}
@@ -248,7 +248,7 @@ h3:after {
                 </div>
                 @endfor
                 @elseif($action == 'update')
-                @for($i = 1; $i <= 12; $i++)
+                @for($i = 1; $i <= 52; $i++)
                 <div class="form-group {!! $errors->has('month['.$i.']') ? 'has-error' : '' !!} col-md-1"  style="display:none">
                   {!! Form::label('month['.$i.']', config('select.month_names')[$i], ['class' => 'control-label']) !!}
                   {!! Form::text('month['.$i.']',isset($activities[$i]) ? $activities[$i] : 0, ['class' => 'form-control', 'placeholder' => config('select.month_names')[$i],!empty($from_otl[$i]) ? 'disabled' : '']) !!}

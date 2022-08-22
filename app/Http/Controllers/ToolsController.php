@@ -741,6 +741,8 @@ class ToolsController extends Controller
                     ->where('a.month',$week_no)
                     ->where('a.year',$year)
                     ->get();
+
+                    print_r($projects);
         //If there are actuals on the project, get the user and the project name
         $empty = "false";
        
@@ -1096,14 +1098,20 @@ class ToolsController extends Controller
     {
         $serverName = "10.238.93.203\DB_TABULAR";
         $info = array("Database"=>"MSBI_GOLD","UID"=>"AD\VRCB2527");
-        $conn = sqlsrv_connect($serverName,$info);
+        $conn = odbc_connect("Dolphin Local","root","");
+        // $query = odbc_exec($conn, "SELECT * FROM activities");
+        $query = odbc_exec($conn, "SELECT year, month FROM activities WHERE id = 28");
+while($row = odbc_fetch_array($query)){
+ print_r($row);
+}
+
         
-        if( $conn ) {
-            echo "Connection established.<br />";
-        }else{
-            echo "Connection could not be established.<br />";
-            die( print_r( sqlsrv_errors(), true));
-        }
+        // if( $conn ) {
+        //     echo $query;
+        // }else{
+        //     echo "Connection could not be established.<br />";
+        //     die( print_r( sqlsrv_errors(), true));
+        // }
     }
 }
 
