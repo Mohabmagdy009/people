@@ -476,6 +476,7 @@ class ToolsController extends Controller
               ->with('action', 'update');
             }
 
+
     public function postFormUpdate(ProjectUpdateRequest $request)
     {
         if (! empty(Session::get('url'))) {
@@ -504,11 +505,15 @@ class ToolsController extends Controller
         $project = $this->projectRepository->update($inputs['project_id'], $inputs);
 
         // if user_id_url = 0 then it is only project update and we don't need to add or update tasks
+        
         if ($inputs['user_id_url'] != 0 && Auth::user()->can('tools-user_assigned-change')) {
             // Let's check first if we changed the user
+
             if ($inputs['user_id_url'] != $inputs['user_id']) {
                 // Let's check if the user we changed to has already some activities on this project
                 $has_activities = $this->activityRepository->getNumberPerUserAndProject($inputs['user_id'], $inputs['project_id']);
+
+
                 if ($inputs['user_id'] == '') {
                     return redirect($redirect)->with('error', 'You must select at least a new user');
                 } elseif ($has_activities > 0) {
@@ -527,13 +532,33 @@ class ToolsController extends Controller
             }
         }
 
+
         if (! empty($inputs['user_id'])) {
-            foreach ($inputs['month'] as $key => $value) {
-                $inputs_new = $inputs;
-                $inputs_new['month'] = $key;
-                $inputs_new['task_hour'] = $value;
-                $inputs_new['from_otl'] = 0;
-                $activity = $this->activityRepository->createOrUpdate($inputs_new);
+            foreach($inputs['user_id'] as $key1 => $value1){
+                foreach($inputs['month'] as $key => $value) {
+                    $inputs_new = $inputs;
+                    $inputs_new['user_id'] = $value1;
+                    $inputs_new['month'] = $key;
+                    $inputs_new['task_hour'] = $value;
+                    $inputs_new['from_otl'] = 0;
+
+                    Activity::updateOrCreate(
+                        [
+                            'year' =>$inputs_new['year'],
+                            'month'=>$inputs_new['month'],
+                            'user_id'=>$inputs_new['user_id'],
+                            'project_id'=>$inputs_new['project_id']           
+                        ],
+                        [   
+                            'year'=>$inputs_new['year'],
+                            'month'=>$inputs_new['month'],
+                            'project_id'=>$inputs_new['project_id'] ,
+                            'user_id'=>$inputs_new['user_id'],
+                            'task_hour'=>$inputs_new['task_hour'],
+                            'from_otl'=>0
+                        ]
+                    );
+                }
             }
         }
 
@@ -554,6 +579,7 @@ class ToolsController extends Controller
 
         return redirect($redirect)->with('success', 'Project updated successfully');
     }
+
 
     public function getFormTransfer($user_id, $project_id)
     {

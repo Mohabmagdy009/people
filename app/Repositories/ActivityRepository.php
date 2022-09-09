@@ -71,25 +71,28 @@ class ActivityRepository
 
     public function createOrUpdate($inputs)
     {
+
         $activity = $this->activity
             ->where('year', $inputs['year'])
             ->where('month', $inputs['month'])
             ->where('project_id', $inputs['project_id'])
             ->where('user_id', $inputs['user_id'])
-            ->where('from_otl', '1')
+            ->where('from_otl', 0)
             ->first();
-
         if (! empty($activity)) {
             return $activity;
         } else {
+
             $activity = $this->activity
               ->where('year', $inputs['year'])
               ->where('month', $inputs['month'])
               ->where('project_id', $inputs['project_id'])
               ->where('user_id', $inputs['user_id'])
               ->first();
+
             if (empty($activity)) {
                 $activity = new $this->activity;
+
             }
 
             return $this->save($activity, $inputs);
