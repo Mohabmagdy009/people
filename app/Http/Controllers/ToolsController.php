@@ -51,8 +51,9 @@ class ToolsController extends Controller
         Session::put('url', 'toolsActivities');
         $table_height = Auth::user()->table_height;
         $isManager = Auth::user()->is_manager;
+        $isAdmin = Auth::user()->hasRole('Admin');
 
-        return view('tools/list', compact('authUsersForDataView','table_height','isManager'));
+        return view('tools/list', compact('authUsersForDataView','table_height','isManager','isAdmin'));
     }
 
     public function projectsAssignedAndNot()

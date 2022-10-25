@@ -179,12 +179,12 @@ class ActivityRepository
 
         $where['months'] = [];
 
-        for ($i=$where['month'][0]; $i <= $where['month'][0]+11 ; $i++) { 
+        for ($i=$where['month'][0]; $i <= $where['month'][0]+11 and $i <=52 ; $i++) { 
             array_push($where['months'],['year' => $where['year'][0],'month'=>$i]);
         }
 
         if ($where['month'][0] > 41) {
-            for ($i=1; $i <= $where['month'][0]-1 ; $i++) { 
+            for ($i=1; $i <= 12 - (52 - $where['month'][0] + 1) ; $i++) { 
                 array_push($where['months'],['year' => $where['year'][0]+1,'month'=>$i]);
             }
         } 

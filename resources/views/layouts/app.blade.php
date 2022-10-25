@@ -26,7 +26,7 @@
 </head>
 
 
-<body id="main_body" class="@if(Request::segment(1)  != 'login') @if(Auth::user()->is_manager ==1) @if(isset($_COOKIE['left_menu_minimized']) && $_COOKIE['left_menu_minimized'] == 1) nav-sm @else nav-md @endif @else nav-sm @endif @else @if(isset($_COOKIE['left_menu_minimized']) && $_COOKIE['left_menu_minimized'] == 1) nav-sm @else nav-md @endif  @endif footer_fixed">
+<body id="main_body" class="@if(Request::segment(1)  != 'login') @if(Auth::user()->is_manager ==1 || Auth::user()->hasRole('Admin')) @if(isset($_COOKIE['left_menu_minimized']) && $_COOKIE['left_menu_minimized'] == 1) nav-sm @else nav-md @endif @else nav-sm @endif @else @if(isset($_COOKIE['left_menu_minimized']) && $_COOKIE['left_menu_minimized'] == 1) nav-sm @else nav-md @endif  @endif footer_fixed">
   <div class="container body">
     <div class="main_container">
 
@@ -45,7 +45,7 @@
 
           <!-- sidebar menu -->
           @if(Request::segment(1)  != "login")
-          @if(Auth::user()->is_manager == 1)
+          @if(Auth::user()->is_manager == 1 || Auth::user()->hasRole('Admin'))
           @include('includes.sidebar')
           @endif
           @elseif(Auth::user())
@@ -136,7 +136,7 @@
     $(document).ready(function() {
 
       @if(Request::segment(1)!= "login")
-      @if(Auth::user()->is_manager != 1)
+      @if(Auth::user()->is_manager != 1 && Auth::user()->hasRole('Admin') == 0)
         $("#menu_toggle").hide();
         $(".left_col").css("background-color","#f7f7f7");
         $(".navbar").css("margin-bottom","7px");
@@ -173,7 +173,7 @@
 
     });
     @if(Request::segment(1)  != 'login')
-    @if(Auth::user()->is_manager ==0)
+    @if(Auth::user()->is_manager ==0 && Auth::user()->hasRole('Admin') == 0)
     $(".nav_title").css('background','#b0b0b0');
     $(document).scroll(function(){
       var value=$(document).scrollTop();

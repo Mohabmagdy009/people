@@ -47,7 +47,7 @@
 @section('content')
 <!-- Page title -->
 <div class="page-title">
-  @if($isManager == 1)
+  @if($isManager || $isAdmin)
   <div class="title_left">
     <h3>Team Activity Forecast</small></h3><button id="legendButton" class="btn btn-success btn-sm">Legend</button>
   </div>
@@ -109,7 +109,7 @@
           </div>
           <div class="col-xs-1">
             <button type="button" id="actualsView" class="btn btn-success" style="float: right; margin-top: 20px;">
-              @if($isManager == 1)
+              @if($isManager || $isAdmin)
                 Show History
               @else
                 Activity Actuals
@@ -130,10 +130,10 @@
         <table id="activitiesTable" class="table table-striped table-hover table-bordered mytable" width="100%">
           <thead>
               <tr>
-              @if($isManager == 1)
+              @if($isManager || $isAdmin)
               <th class="tableFont" style="font-size: 13px;">User Name</th>
               @endif
-              @if($isManager==0)
+              @if($isManager == 0 && $isAdmin == 0)
               <th class="tableFont" style="font-size: 13px;">Customer name</th>
               <th class="tableFont" style="font-size: 13px;">Project name</th> 
               <th class="tableFont" style="font-size: 13px;">Project type</th>
@@ -148,7 +148,7 @@
           </thead>
           <tfoot>
             <tr>
-              @if($isManager == 0)
+              @if($isManager == 0 && $isAdmin == 0)
               <th></th>
               <th></th>
               <th></th>
@@ -203,6 +203,7 @@
 <!-- Modal -->
 <!-- Variables sent from Tools Controller -->
 <input type="hidden" id="isManager" value="{{$isManager}}">
+<input type="hidden" id="isAdmin" value="{{$isAdmin}}">
 @stop
 
 @section('script')
@@ -322,9 +323,9 @@ if($('body').hasClass("nav-md")){
       $("#actualsView").css('margin-right',"0px");
   }
 
-if($("#isManager").val()==1){
+@if($isManager || $isAdmin)
   $(".userFilter").css('visibility','hidden');
-}
+@endif
 
 $(document).ready(function() {
   $.ajaxSetup({
@@ -352,6 +353,7 @@ $(document).ready(function() {
   manager = fill_select('manager');
   user = fill_select('user');
   isManager = $('#isManager').val();
+  isAdmin = $('#isAdmin').val();
 
   if (Cookies.get('checkbox_closed') != null) {
     if (Cookies.get('checkbox_closed') == 0) {
@@ -398,7 +400,7 @@ $(document).ready(function() {
   });
 
 
-  if(isManager == 1){
+  if(isManager || isAdmin){
     month_col = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23];
   }
   else{
@@ -418,7 +420,7 @@ $(document).ready(function() {
     else {
       @can('tools-activity-edit')
       $(td).addClass("editable");
-      @if(Auth::user()->is_manager != 1)
+      @if($isManager == 0 && $isAdmin == 0)
       $(td).attr('contenteditable', true);
       @endif
       $(td).attr('data-id', id);
@@ -428,7 +430,7 @@ $(document).ready(function() {
       $(td).attr('data-value', value);
 
       @endcan
-      if($("#isManager").val() == 1) {
+      if(isManager || isAdmin) {
         if (value == 0) {
         $(td).addClass("zero");
         }
@@ -500,10 +502,10 @@ $(document).ready(function() {
       dataType: "JSON"
     },
     columns: [
-      @if($isManager==1)  
+      @if($isManager || $isAdmin)  
         { name: 'u.name', data: 'user_name' , className: "dt-nowrap"}
       @endif
-      @if($isManager==0)
+      @if($isManager == 0 && $isAdmin == 0)
       { name: 'c.name', data: 'customer_name' , className: "dt-nowrap",
         render: function(data, type, row) {
           if (type === 'display') {
@@ -554,10 +556,10 @@ $(document).ready(function() {
         extend: "colvis",
         className: "btn-sm",
         collectionLayout: "one-column",
-        @if($isManager==0)
+        @if($isManager == 0 && $isAdmin == 0)
         columns: [0,1,2,3]
         @endif
-        @if($isManager==1)
+        @if($isManager || $isAdmin)
         columns: [0]
         @endif
       },
@@ -685,7 +687,7 @@ $(document).ready(function() {
     var year = $("#year-by").html();
     var tr = $(".dt-nowrap").closest('tr');
     var row = table.row(tr);
-      @if(Auth::user()->is_manager == 1)
+      @if($isManager || $isAdmin)
       window.location.href = "{!! route('actualDetails',['','','']) !!}/"+row.data().user_id+"/"+week+"/"+year;
       @else
       window.location.href = "{!! route('getModalData',['','','','','']) !!}/"+0+"/"+row.data().user_id+"/"+week+"/"+year+"/"+0;
@@ -709,7 +711,7 @@ $(document).ready(function() {
   });
 
   $(document).on('click','.editable',function(){
-    @if(Auth::user()->is_manager == 1)
+    @if($isManager || $isAdmin)
     var number = $(this).data("colonne")-1;
     var week_no = parseInt($("#month-by").html())+number;
     var year = $("#year-by").html();
@@ -797,7 +799,7 @@ $(document).ready(function() {
       $("#actualsView").css('margin-right',"0px");
     }
   })
-  @if($isManager == 0)
+  @if($isManager == 0 && $isAdmin == 0)
     $(".nav_title").css('background','#b0b0b0');
     $(document).scroll(function(){
       var value=$(document).scrollTop();

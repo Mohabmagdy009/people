@@ -28,7 +28,6 @@ class ProjectTableRepositoryV2
 
     public function create_temp_table_with_months_as_columns($table_name_cols,$where)
     {
-        
         DB::unprepared(
             DB::raw('
                 DROP TABLE IF EXISTS '.$table_name_cols.';
@@ -72,16 +71,24 @@ class ProjectTableRepositoryV2
 
         $is_manager = Auth::user()->is_manager;
         $manager_id = Auth::user()->id;
+        $is_admin = Auth::user()->hasRole('Admin');
 
-        if($is_manager == 1){
+        if($is_manager == 1 || $is_admin == 1){
             $years = [$where['months'][0]['year'],$where['months'][11]['year']];
-            $users = DB::table('users_users')->where('manager_id', $manager_id)->get();
-            $arr = [];
-            foreach($users as $key => $val){
-                array_push($arr,$val->user_id);
+            if($is_admin == 1){
+                $users = DB::table('users')->where('is_manager', 0)->get();
+                $arr = [];
+                foreach($users as $key => $val){
+                    array_push($arr,$val->id);
+                }
             }
-        
-
+            else{
+                $users = DB::table('users_users')->where('manager_id', $manager_id)->get();
+                $arr = [];
+                foreach($users as $key => $val){
+                    array_push($arr,$val->user_id);
+                }
+            }
             DB::unprepared(
                 DB::raw('
                     INSERT INTO '.$table_name_cols.' (`project_id`,`user_id`) (SELECT `project_id`,`user_id` FROM `activities` WHERE `year` = '.$years[0].' group by `user_id`);
@@ -101,7 +108,6 @@ class ProjectTableRepositoryV2
                 foreach($arr as $x){
                     DB::unprepared(
                         DB::raw('
-            
                             UPDATE '.$table_name_cols.' t, activities a SET t.m'.$ref.'_com=(SELECT sum(task_hour) FROM `activities` where month ='.$month['month'].' and year ='.$month['year'].' and user_id = '.$x.'), t.m'.$ref.'_id=0 where t.user_id='.$x.';
                         ')
                     );
